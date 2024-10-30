@@ -1,0 +1,4 @@
+
+in signup page we are using axios  to send a post request to the server with the user data
+
+write "sooner" in shadcn to get that component and under it we use "toast"
