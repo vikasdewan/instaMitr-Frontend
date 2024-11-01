@@ -32,6 +32,11 @@ const sideBarItems = [
 ];
 
 function LeftSideBar() {
+
+  const logoutHandler = async()=>{
+    
+  }
+
   return (
     <div className="bg-black text-white fixed top-0 z-10 left-0 px-4 border-r-4 border-grey-300 w-[16%] h-screen">
       <div className="flex flex-col  mt-6">
