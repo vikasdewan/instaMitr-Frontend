@@ -13,7 +13,6 @@ import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
- 
 
 const sideBarItems = [
   { icon: <Home />, text: "Home" },
@@ -36,27 +35,25 @@ const sideBarItems = [
 ];
 
 function LeftSideBar() {
-  
-  const navigate = useNavigate()
-  const logoutHandler = async()=>{
+  const navigate = useNavigate();
+  const logoutHandler = async () => {
     try {
-      
-      const res = await axios.get('http://localhost:8000/api/v1/user/logout',{withCredentials:true});
-      if(res.data.status){
+      const res = await axios.get("http://localhost:8000/api/v1/user/logout", {
+        withCredentials: true,
+      });
+      if (res.data.status) {
         navigate("/login");
         toast.success(res.data.message);
-      } 
-
+      }
     } catch (error) {
       toast.error(error.response.data.message);
     }
-  } 
+  };
 
-  const sidebarHandler = (textType)=>{
+  const sidebarHandler = (textType) => {
     console.log(`sidebarHandler called with textType: ${textType}`);
-     if(textType === 'Logout')  logoutHandler();
- 
-  }
+    if (textType === "Logout") logoutHandler();
+  };
 
   return (
     <div className="bg-black text-white fixed top-0 z-10 left-0 px-4 border-r-4 border-grey-300 w-[16%] h-screen">
@@ -70,7 +67,7 @@ function LeftSideBar() {
         {sideBarItems.map((item, index) => {
           return (
             <div
-            onClick={() => sidebarHandler(item.text)}
+              onClick={() => sidebarHandler(item.text)}
               key={index}
               className=" font-bold  p-3 ml-1 flex mt-3 relative hover:bg-gray-900 cursor-pointer rounded-xl  "
             >
