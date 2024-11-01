@@ -49,8 +49,6 @@ function Signup() {
   };
 
   return (
-  
-
     <div className="flex items-center w-screen h-screen justify-center bg-slate-900 text-white">
       <form
         onSubmit={signupHandler}
@@ -114,10 +112,14 @@ function Signup() {
         >
           SignUp
         </Button>
-        <span className="text-right font-bold text-sm mt-4">Already have an account? <Link to= "/login" className= "text-blue-600">Login</Link></span>
+        <span className="text-right font-bold text-sm mt-4">
+          Already have an account?{" "}
+          <Link to="/login" className="text-blue-600">
+            Login
+          </Link>
+        </span>
       </form>
     </div>
-   
   );
 }
 
