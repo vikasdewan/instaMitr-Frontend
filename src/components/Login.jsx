@@ -100,7 +100,12 @@ function Login() {
         >
           Login
         </Button>
-        <span className="text-right font-bold text-sm mt-4">Doesn't have an account? <Link to= "/signup" className= "text-blue-600">Signup</Link></span>
+        <span className="text-right font-bold text-sm mt-4">
+          Doesn't have an account?{" "}
+          <Link to="/signup" className="text-blue-600">
+            Signup
+          </Link>
+        </span>
       </form>
     </div>
   );
