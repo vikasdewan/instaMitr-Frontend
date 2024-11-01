@@ -6,6 +6,8 @@ import { useState } from "react";
 import { toast } from "sonner";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { Loader2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [input, setInput] = useState({ email: "", password: "" });
@@ -15,6 +17,7 @@ function Login() {
   };
 
   const [loading, setloading] = useState(false);
+  const navigate = useNavigate();
 
   const signupHandler = async (e) => {
     e.preventDefault();
@@ -33,6 +36,7 @@ function Login() {
       );
 
       if (res.data.success) {
+        navigate("/")
         toast.success(res.data.message);
       }
     } catch (error) {
@@ -48,7 +52,7 @@ function Login() {
   };
 
   return (
-    <div className="flex items-center w-screen h-screen justify-center bg-black text-white">
+    <div className="flex items-center w-screen h-screen justify-center bg-slate-900 text-white">
       <form
         onSubmit={signupHandler}
         className="shadow-white shadow-lg flex flex-col gap-1 p-7 w-96"
@@ -94,12 +98,22 @@ function Login() {
           <span className="text-blue-500">Cookie Policy</span>{" "}
         </p>
 
-        <Button
+        {
+          loading ? (
+            <Button className = "bg-slate-300 text-black mt-5 hover:bg-white">
+              <Loader2 className="mr-2 h-4 w-4  animate-spin"/> Please wait
+            </Button>
+         ) : (
+            <Button
           type="submit"
           className="bg-slate-300 text-black mt-5 hover:bg-white"
         >
           Login
         </Button>
+          )
+        }
+
+ 
         <span className="text-right font-bold text-sm mt-4">
           Doesn't have an account?{" "}
           <Link to="/signup" className="text-blue-600">

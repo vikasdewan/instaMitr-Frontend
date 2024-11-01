@@ -6,6 +6,8 @@ import { useState } from "react";
 import { toast } from "sonner";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { Loader2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function Signup() {
   const [input, setInput] = useState({ username: "", password: "", email: "" });
@@ -15,6 +17,7 @@ function Signup() {
   };
 
   const [loading, setloading] = useState(false);
+  const navigate = useNavigate();
 
   const signupHandler = async (e) => {
     e.preventDefault();
@@ -33,6 +36,7 @@ function Signup() {
       );
 
       if (res.data.success) {
+        navigate("/login");
         toast.success(res.data.message);
       }
     } catch (error) {
@@ -106,12 +110,21 @@ function Signup() {
           <span className="text-blue-500">Cookie Policy</span>{" "}
         </p>
 
-        <Button
+        {
+          loading ? (
+            <Button className = "bg-slate-300 text-black mt-5 hover:bg-white">
+              <Loader2 className="mr-2 h-4 w-4  animate-spin"/> Please wait
+            </Button>
+         ) : (
+            <Button
           type="submit"
           className="bg-slate-300 text-black mt-5 hover:bg-white"
         >
-          SignUp
+          Signup
         </Button>
+          )
+        }
+         
         <span className="text-right font-bold text-sm mt-4">
           Already have an account?{" "}
           <Link to="/login" className="text-blue-600">
