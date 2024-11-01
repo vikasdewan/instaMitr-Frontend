@@ -36,7 +36,7 @@ function Login() {
       );
 
       if (res.data.success) {
-        navigate("/")
+        navigate("/");
         toast.success(res.data.message);
       }
     } catch (error) {
@@ -98,22 +98,19 @@ function Login() {
           <span className="text-blue-500">Cookie Policy</span>{" "}
         </p>
 
-        {
-          loading ? (
-            <Button className = "bg-slate-300 text-black mt-5 hover:bg-white">
-              <Loader2 className="mr-2 h-4 w-4  animate-spin"/> Please wait
-            </Button>
-         ) : (
-            <Button
-          type="submit"
-          className="bg-slate-300 text-black mt-5 hover:bg-white"
-        >
-          Login
-        </Button>
-          )
-        }
+        {loading ? (
+          <Button className="bg-slate-300 text-black mt-5 hover:bg-white">
+            <Loader2 className="mr-2 h-4 w-4  animate-spin" /> Please wait
+          </Button>
+        ) : (
+          <Button
+            type="submit"
+            className="bg-slate-300 text-black mt-5 hover:bg-white"
+          >
+            Login
+          </Button>
+        )}
 
- 
         <span className="text-right font-bold text-sm mt-4">
           Doesn't have an account?{" "}
           <Link to="/signup" className="text-blue-600">
