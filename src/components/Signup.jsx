@@ -110,21 +110,19 @@ function Signup() {
           <span className="text-blue-500">Cookie Policy</span>{" "}
         </p>
 
-        {
-          loading ? (
-            <Button className = "bg-slate-300 text-black mt-5 hover:bg-white">
-              <Loader2 className="mr-2 h-4 w-4  animate-spin"/> Please wait
-            </Button>
-         ) : (
-            <Button
-          type="submit"
-          className="bg-slate-300 text-black mt-5 hover:bg-white"
-        >
-          Signup
-        </Button>
-          )
-        }
-         
+        {loading ? (
+          <Button className="bg-slate-300 text-black mt-5 hover:bg-white">
+            <Loader2 className="mr-2 h-4 w-4  animate-spin" /> Please wait
+          </Button>
+        ) : (
+          <Button
+            type="submit"
+            className="bg-slate-300 text-black mt-5 hover:bg-white"
+          >
+            Signup
+          </Button>
+        )}
+
         <span className="text-right font-bold text-sm mt-4">
           Already have an account?{" "}
           <Link to="/login" className="text-blue-600">
