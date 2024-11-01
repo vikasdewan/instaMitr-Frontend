@@ -5,6 +5,7 @@ import { Button } from "./ui/button.jsx";
 import { useState } from "react";
 import { toast } from "sonner";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 function Login() {
   const [input, setInput] = useState({ email: "", password: "" });
@@ -99,6 +100,7 @@ function Login() {
         >
           Login
         </Button>
+        <span className="text-right font-bold text-sm mt-4">Doesn't have an account? <Link to= "/signup" className= "text-blue-600">Signup</Link></span>
       </form>
     </div>
   );

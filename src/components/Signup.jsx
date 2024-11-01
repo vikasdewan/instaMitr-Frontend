@@ -5,6 +5,7 @@ import { Button } from "./ui/button.jsx";
 import { useState } from "react";
 import { toast } from "sonner";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 function Signup() {
   const [input, setInput] = useState({ username: "", password: "", email: "" });
@@ -48,7 +49,9 @@ function Signup() {
   };
 
   return (
-    <div className="flex items-center w-screen h-screen justify-center bg-black text-white">
+  
+
+    <div className="flex items-center w-screen h-screen justify-center bg-slate-900 text-white">
       <form
         onSubmit={signupHandler}
         className="shadow-white shadow-lg flex flex-col gap-1 p-7 w-96"
@@ -111,8 +114,10 @@ function Signup() {
         >
           SignUp
         </Button>
+        <span className="text-right font-bold text-sm mt-4">Already have an account? <Link to= "/login" className= "text-blue-600">Login</Link></span>
       </form>
     </div>
+   
   );
 }
 
