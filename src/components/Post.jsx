@@ -1,7 +1,7 @@
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
-import { MoreHorizontal } from "lucide-react";
+import { Bookmark, MessageCircle, MoreHorizontal, Send } from "lucide-react";
 import { Button } from "./ui/button";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 
@@ -54,7 +54,14 @@ function Post() {
         alt="post_image"
       />
 
-      <div className=""></div>
+      <div className=" flex gap-5">
+        <FaRegHeart/>
+        <MessageCircle/>
+        <Send/>
+      </div>
+        <div >
+        <Bookmark/> 
+        </div>
     </div>
   );
 }
