@@ -1,37 +1,59 @@
-import React from 'react'
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
-import { Dialog, DialogContent, DialogTrigger } from './ui/dialog'
-import { MoreHorizontal } from 'lucide-react'
-import { Button } from './ui/button'
+import React from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
+import { MoreHorizontal } from "lucide-react";
+import { Button } from "./ui/button";
 
 function Post() {
   return (
-    <div className='my-8 w-full max-w-sm mx-auto'>
-        <div className='flex items-center justify-between'>
-        <div className='flex item-center gap-2 '>
-        <Avatar>
-            <AvatarImage src="" alt = "post_image"/>
+    <div className="my-8 w-full max-w-sm mx-auto">
+      <div className="flex items-center justify-between">
+        <div className="flex item-center gap-2 ">
+          <Avatar>
+            <AvatarImage src="" alt="post_image" />
             <AvatarFallback>IM</AvatarFallback>
-        </Avatar>
-        <h1 className='mt-1'>username</h1>
+          </Avatar>
+          <h1 className="mt-1">username</h1>
         </div>
         <Dialog>
-            <DialogTrigger asChild>
-                <MoreHorizontal className='cursor-pointer'/>
-            </DialogTrigger>
-            <DialogContent  className='flex flex-col items-center text-sm text-center'>
-                <Button variant='ghost' className='cursor-pointer w-fit text-[#ED4956] font-bold rounded-xl' >Unfollow</Button>
-                <Button variant='ghost' className='cursor-pointer w-fit   rounded-xl' >Add to Favourites</Button>
-                <Button variant='ghost' className='cursor-pointer w-fit  rounded-xl' >About this account</Button>
-                <Button variant='ghost' className='cursor-pointer w-fit  rounded-xl font-bold' >Delete</Button>
-            </DialogContent>
+          <DialogTrigger asChild>
+            <MoreHorizontal className="cursor-pointer" />
+          </DialogTrigger>
+          <DialogContent className="flex flex-col items-center text-sm text-center">
+            <Button
+              variant="ghost"
+              className="cursor-pointer w-fit text-[#ED4956] font-bold rounded-xl"
+            >
+              Unfollow
+            </Button>
+            <Button
+              variant="ghost"
+              className="cursor-pointer w-fit   rounded-xl"
+            >
+              Add to Favourites
+            </Button>
+            <Button
+              variant="ghost"
+              className="cursor-pointer w-fit  rounded-xl"
+            >
+              About this account
+            </Button>
+            <Button
+              variant="ghost"
+              className="cursor-pointer w-fit  rounded-xl font-bold"
+            >
+              Delete
+            </Button>
+          </DialogContent>
         </Dialog>
-        </div >
-        <img 
-        className='rounded-sm my-2 w-full aspect-square object-cover'
-        src="https://images.unsplash.com/photo-1730465447702-caa810acd8e7?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="post_image" />
+      </div>
+      <img
+        className="rounded-sm my-2 w-full aspect-square object-cover"
+        src="https://images.unsplash.com/photo-1730465447702-caa810acd8e7?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        alt="post_image"
+      />
     </div>
-  )
+  );
 }
 
-export default Post
+export default Post;
