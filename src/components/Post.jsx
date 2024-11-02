@@ -3,6 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "./ui/button";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 function Post() {
   return (
@@ -53,9 +54,7 @@ function Post() {
         alt="post_image"
       />
 
-      <div className="">
-    
-      </div>
+      <div className=""></div>
     </div>
   );
 }
