@@ -3,7 +3,7 @@ import Post from './Post'
 
 function Posts() {
   return (
-    <div  className='text-black'> 
+    <div  className='text-black w-full'> 
     {
     [1,2,3,4].map((item,index)=> <Post key={index}/>)
     }
