@@ -1,8 +1,17 @@
 import React from 'react'
+import Feed from './Feed.jsx'
+import RightSideBar from './RightSideBar.jsx'
+import { Outlet } from 'react-router-dom'
 
 function Home() {
   return (
-    <div className='text-white'>Home</div>
+    <div className='text-white flex'>
+      <div className='flex-grow'>
+        <Feed/>
+        <Outlet/>
+      </div>
+      <RightSideBar/>
+    </div>
   )
 }
 

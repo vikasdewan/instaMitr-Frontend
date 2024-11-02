@@ -1,8 +1,11 @@
 import React from 'react'
+import Posts from './Posts.jsx'
 
 function Feed() {
   return (
-    <div>Feed</div>
+    <div className='flex-1 my-8 flex flex-col items-center pl-[20%]'> 
+      <Posts/>
+    </div>
   )
 }
 
