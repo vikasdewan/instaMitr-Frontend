@@ -8,6 +8,7 @@ import CommentDialog from "./CommentDialog";
 
 function Post() {
   const [text, setText] = useState("");
+  const [openComment , setOpenComment] = useState(false);
   const changeEventHandler = (e) => {
     const inputText = e.target.value;
     if (inputText.trim()) {
@@ -70,7 +71,8 @@ function Post() {
             size={"22px"}
             className="cursor-pointer hover:text-gray-400"
           />
-          <MessageCircle className="cursor-pointer hover:text-gray-400" />
+          <MessageCircle onClick={()=> setOpenComment(true)} //when we use callback function i.e. ()=> ...  there we can pass argument or params in the function further calling like setOpenCommnet(true)
+            className="cursor-pointer hover:text-gray-400" />
           <Send className="cursor-pointer hover:text-gray-400" />
         </div>
         <Bookmark className="cursor-pointer hover:text-gray-400" />
@@ -79,10 +81,10 @@ function Post() {
       <p>
         <span className="font-medium text-sm ">username</span> &nbsp; caption
       </p>
-      <span className="font-thin text-sm text-gray-400">
+      <span onClick={()=> setOpenComment(true)} className="cursor-pointer font-thin text-sm text-gray-400">
         View all 100 comments
       </span>
-      <CommentDialog />
+      <CommentDialog openComment = {openComment} setOpenComment={setOpenComment} />
       <div className="flex">
         <input
           type="text"
