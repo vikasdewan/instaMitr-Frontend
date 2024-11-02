@@ -6,7 +6,7 @@ import { Outlet } from 'react-router-dom'
 function Home() {
   return (
     <div className='text-white flex'>
-      <div className='flex-grow'>
+      <div className='flex-grow bg-black text-white'>
         <Feed/>
         <Outlet/>
       </div>
