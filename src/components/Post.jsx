@@ -7,16 +7,15 @@ import { FaHeart, FaRegHeart } from "react-icons/fa";
 import CommentDialog from "./CommentDialog";
 
 function Post() {
-  const [text,setText] = useState("");
-  const changeEventHandler = (e)=>{
+  const [text, setText] = useState("");
+  const changeEventHandler = (e) => {
     const inputText = e.target.value;
-    if(inputText.trim()){
+    if (inputText.trim()) {
       setText(inputText);
-    }else{
+    } else {
       setText("");
     }
-
-  }
+  };
   return (
     <div className="my-8 w-full max-w-sm mx-auto text-white">
       <div className="flex items-center justify-between">
@@ -65,35 +64,39 @@ function Post() {
         alt="post_image"
       />
 
-      
-        <div className="flex items-center justify-between my-2">
-          <div className="flex items-center gap-3 ">
-            <FaRegHeart size={'22px'} className="cursor-pointer hover:text-gray-400" />
-            <MessageCircle className="cursor-pointer hover:text-gray-400"/>
-            <Send className="cursor-pointer hover:text-gray-400"/>
-          </div>
-          <Bookmark className="cursor-pointer hover:text-gray-400"/>
+      <div className="flex items-center justify-between my-2">
+        <div className="flex items-center gap-3 ">
+          <FaRegHeart
+            size={"22px"}
+            className="cursor-pointer hover:text-gray-400"
+          />
+          <MessageCircle className="cursor-pointer hover:text-gray-400" />
+          <Send className="cursor-pointer hover:text-gray-400" />
         </div>
-       <span className="font-medium text-sm mb-2 block"> 100k likes</span>
-       <p>
-        <span className="font-medium text-sm ">username</span> &nbsp;
-         caption
-       </p>
-       <span className="font-thin text-sm text-gray-400">View all 100 comments</span>
-       <CommentDialog/>
-       <div className="flex"> 
-        <input 
-        type="text"
-        placeholder="Add a comment..."
-        className="outline-none text-sm w-full bg-black"
-        value={text}
-        onChange={changeEventHandler}
+        <Bookmark className="cursor-pointer hover:text-gray-400" />
+      </div>
+      <span className="font-medium text-sm mb-2 block"> 100k likes</span>
+      <p>
+        <span className="font-medium text-sm ">username</span> &nbsp; caption
+      </p>
+      <span className="font-thin text-sm text-gray-400">
+        View all 100 comments
+      </span>
+      <CommentDialog />
+      <div className="flex">
+        <input
+          type="text"
+          placeholder="Add a comment..."
+          className="outline-none text-sm w-full bg-black"
+          value={text}
+          onChange={changeEventHandler}
         />
-        {
-          text && <span id="Postbutton" className="text-[#0095F6] text-sm font-bold">Post</span>
-        }
-        
-       </div>
+        {text && (
+          <span id="Postbutton" className="text-[#0095F6] text-sm font-bold">
+            Post
+          </span>
+        )}
+      </div>
     </div>
   );
 }
