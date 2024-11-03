@@ -1,6 +1,7 @@
 import React from "react";
 import { Dialog, DialogContent } from "./ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Link } from "react-router-dom";
 
 function CommentDialog({ openComment, setOpenComment }) {
   return (
@@ -19,13 +20,19 @@ function CommentDialog({ openComment, setOpenComment }) {
           </div>
 
           <div className="w-1/2 flex-col justify-between">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-start ">
+             <Link>
               <Avatar>
                 <AvatarImage src="" />
                 <AvatarFallback className="bg-black text-white">
                   IM
                 </AvatarFallback>
               </Avatar>
+             </Link>
+             <div>
+              <Link className="font-semibold text-xs hover:text-gray-400">username</Link> &nbsp;
+              
+             </div>
             </div>
           </div>
         </div>
