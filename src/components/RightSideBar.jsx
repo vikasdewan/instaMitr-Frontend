@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 function RightSideBar() {
-  return (
-    <div className='text-black'>RightSideBar</div>
-  )
+  return <div className="text-black">RightSideBar</div>;
 }
 
-export default RightSideBar
+export default RightSideBar;
