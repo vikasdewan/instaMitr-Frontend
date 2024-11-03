@@ -1,14 +1,14 @@
-import React from 'react'
-import Post from './Post'
+import React from "react";
+import Post from "./Post";
 
 function Posts() {
   return (
-    <div  className='text-black w-full'> 
-    {
-    [1,2,3,4].map((item,index)=> <Post key={index}/>)
-    }
+    <div className="text-black w-full">
+      {[1, 2, 3, 4].map((item, index) => (
+        <Post key={index} />
+      ))}
     </div>
-  )
+  );
 }
 
-export default Posts
+export default Posts;
