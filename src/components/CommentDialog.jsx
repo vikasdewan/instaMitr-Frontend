@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Link } from "react-router-dom";
 import { MoreHorizontal } from "lucide-react";
+import { Button } from "./ui/button";
 
 function CommentDialog({ openComment, setOpenComment }) {
   return (
@@ -39,13 +40,39 @@ function CommentDialog({ openComment, setOpenComment }) {
               </div>
             </div>
 
-            <Dialog >
-              <DialogTrigger asChild>
-              <MoreHorizontal/>
-              </DialogTrigger>
-            </Dialog>
-
+            <Dialog>
+          <DialogTrigger asChild>
+            <MoreHorizontal className="cursor-pointer" />
+          </DialogTrigger>
+          <DialogContent className="bg-black text-white flex flex-col items-center text-sm text-center">
+            <Button
+              variant="ghost"
+              className="cursor-pointer w-fit text-[#ED4956] font-bold rounded-xl hover:bg-gray-500"
+            >
+              Unfollow
+            </Button>
+            <Button
+              variant="ghost"
+              className="cursor-pointer w-fit   rounded-xl hover:bg-gray-500"
+            >
+              Add to Favourites
+            </Button>
+            <Button
+              variant="ghost"
+              className="cursor-pointer w-fit  rounded-xl hover:bg-gray-500"
+            >
+              About this account
+            </Button>
+            <Button
+              variant="ghost"
+              className="cursor-pointer w-fit  rounded-xl font-bold hover:bg-gray-500"
+            >
+              Delete
+            </Button>
+          </DialogContent>
+        </Dialog>
             </div>
+            <hr />
           </div>
         </div>
       </DialogContent>

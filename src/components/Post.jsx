@@ -31,28 +31,29 @@ function Post() {
           <DialogTrigger asChild>
             <MoreHorizontal className="cursor-pointer" />
           </DialogTrigger>
-          <DialogContent className="flex flex-col items-center text-sm text-center">
+          <DialogContent className="bg-black text-white flex flex-col items-center text-sm text-center ">
             <Button
               variant="ghost"
-              className="cursor-pointer w-fit text-[#ED4956] font-bold rounded-xl"
+              className="cursor-pointer w-fit text-[#ED4956] font-bold rounded-xl hover:bg-gray-500"
             >
               Unfollow
             </Button>
+            
             <Button
               variant="ghost"
-              className="cursor-pointer w-fit   rounded-xl"
+              className="cursor-pointer w-fit   rounded-xl hover:bg-gray-500"
             >
               Add to Favourites
             </Button>
             <Button
               variant="ghost"
-              className="cursor-pointer w-fit  rounded-xl"
+              className="cursor-pointer w-fit  rounded-xl hover:bg-gray-500"
             >
               About this account
             </Button>
             <Button
               variant="ghost"
-              className="cursor-pointer w-fit  rounded-xl font-bold"
+              className="cursor-pointer w-fit  rounded-xl font-bold hover:bg-gray-500"
             >
               Delete
             </Button>
