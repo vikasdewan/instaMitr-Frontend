@@ -74,22 +74,24 @@ function CommentDialog({ openComment, setOpenComment }) {
             </div>
             <hr />
 
-           
             <div className="flex flex-col flex-grow justify-between">
               <div className="overflow-y-auto max-h-96 p-4">
-                comments ayenge
-                comments ayenge
+                comments ayenge comments ayenge
               </div>
               <div className="p-4 flex">
                 <input
                   type="text"
                   placeholder="Add a comment...."
-                  className= "placeholder-white  text-white bg-black text-sm w-full outline-none border-gray-300 p-2 rounded"
+                  className="placeholder-white  text-white bg-black text-sm w-full outline-none border-gray-300 p-2 rounded"
                 />
-                <Button variant="outline" className="bg-black text-blue-500 border-none hover:bg-none hover:bg-black hover:text-blue-200 font-bold">Send</Button>
+                <Button
+                  variant="outline"
+                  className="bg-black text-blue-500 border-none hover:bg-none hover:bg-black hover:text-blue-200 font-bold"
+                >
+                  Send
+                </Button>
               </div>
             </div>
-            
           </div>
         </div>
       </DialogContent>
