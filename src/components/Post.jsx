@@ -38,7 +38,7 @@ function Post() {
             >
               Unfollow
             </Button>
-            
+
             <Button
               variant="ghost"
               className="cursor-pointer w-fit   rounded-xl hover:bg-gray-500"
