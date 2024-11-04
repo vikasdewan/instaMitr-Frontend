@@ -8,7 +8,22 @@ import { Button } from "./ui/button";
 function CommentDialog({ openComment, setOpenComment }) {
 
   const [text,setText] = useState("");
-  
+
+  const changeEventHandler = (e)=>{
+
+    const inputText = e.target.value;
+    if(inputText.trim()){
+      setText(inputText);
+    }
+    else{
+      setText("");
+    }
+  }
+
+  const sendMessageHandler = async()=>{
+    alert(text);
+  }
+
   return (
     <Dialog open={openComment}>
       <DialogContent
@@ -84,10 +99,14 @@ function CommentDialog({ openComment, setOpenComment }) {
               <div className="p-4 flex">
                 <input
                   type="text"
+                  value={text}
+                  onChange={changeEventHandler}
                   placeholder="Add a comment...."
                   className="placeholder-white  text-white bg-black text-sm w-full outline-none border-gray-300 p-2 rounded"
                 />
                 <Button
+                  disabled = {!text.trim()}
+                  onClick = {sendMessageHandler}
                   variant="outline"
                   className="bg-black text-blue-500 border-none hover:bg-none hover:bg-black hover:text-blue-200 font-bold"
                 >
