@@ -1,7 +1,8 @@
 import React from "react";
-import { Dialog, DialogContent } from "./ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Link } from "react-router-dom";
+import { MoreHorizontal } from "lucide-react";
 
 function CommentDialog({ openComment, setOpenComment }) {
   return (
@@ -20,7 +21,8 @@ function CommentDialog({ openComment, setOpenComment }) {
           </div>
 
           <div className="w-1/2 flex-col justify-between">
-            <div className="flex items-center justify-start ">
+            <div className="flex items-center justify-between p-4 ">
+            <div className="flex gap-3 items-center ga">
               <Link>
                 <Avatar>
                   <AvatarImage src="" />
@@ -35,6 +37,14 @@ function CommentDialog({ openComment, setOpenComment }) {
                 </Link>{" "}
                 &nbsp;
               </div>
+            </div>
+
+            <Dialog >
+              <DialogTrigger asChild>
+              <MoreHorizontal/>
+              </DialogTrigger>
+            </Dialog>
+
             </div>
           </div>
         </div>
