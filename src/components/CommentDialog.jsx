@@ -6,6 +6,9 @@ import { MoreHorizontal } from "lucide-react";
 import { Button } from "./ui/button";
 
 function CommentDialog({ openComment, setOpenComment }) {
+
+  const [text,setText] = useState("");
+  
   return (
     <Dialog open={openComment}>
       <DialogContent
