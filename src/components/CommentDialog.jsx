@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Link } from "react-router-dom";
@@ -6,23 +6,20 @@ import { MoreHorizontal } from "lucide-react";
 import { Button } from "./ui/button";
 
 function CommentDialog({ openComment, setOpenComment }) {
+  const [text, setText] = useState("");
 
-  const [text,setText] = useState("");
-
-  const changeEventHandler = (e)=>{
-
+  const changeEventHandler = (e) => {
     const inputText = e.target.value;
-    if(inputText.trim()){
+    if (inputText.trim()) {
       setText(inputText);
-    }
-    else{
+    } else {
       setText("");
     }
-  }
+  };
 
-  const sendMessageHandler = async()=>{
+  const sendMessageHandler = async () => {
     alert(text);
-  }
+  };
 
   return (
     <Dialog open={openComment}>
@@ -105,8 +102,8 @@ function CommentDialog({ openComment, setOpenComment }) {
                   className="placeholder-white  text-white bg-black text-sm w-full outline-none border-gray-300 p-2 rounded"
                 />
                 <Button
-                  disabled = {!text.trim()}
-                  onClick = {sendMessageHandler}
+                  disabled={!text.trim()}
+                  onClick={sendMessageHandler}
                   variant="outline"
                   className="bg-black text-blue-500 border-none hover:bg-none hover:bg-black hover:text-blue-200 font-bold"
                 >
