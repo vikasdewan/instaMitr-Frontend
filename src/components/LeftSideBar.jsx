@@ -15,13 +15,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
-
-
 function LeftSideBar() {
   const navigate = useNavigate();
-  const {user} = useSelector(store => store.auth);
-
-  
+  const { user } = useSelector((store) => store.auth);
 
   const logoutHandler = async () => {
     try {
@@ -53,7 +49,7 @@ function LeftSideBar() {
     {
       icon: (
         <Avatar className="w-8 h-8">
-          <AvatarImage src={user?.profileImage}  alt="@shadcn"/>
+          <AvatarImage src={user?.profileImage} alt="@shadcn" />
           <AvatarFallback>IM</AvatarFallback>
         </Avatar>
       ),
