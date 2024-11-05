@@ -39,7 +39,7 @@ function Login() {
       );
 
       if (res.data.success) {
-        dispatch(setAuthUser(res.data.user)) //just calling setAuthUser
+        dispatch(setAuthUser(res.data.user)); //just calling setAuthUser
         navigate("/");
         toast.success(res.data.message);
       }
