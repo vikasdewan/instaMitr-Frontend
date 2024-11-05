@@ -56,10 +56,10 @@ function Login() {
   };
 
   return (
-    <div className="flex items-center w-screen h-screen justify-center bg-slate-900 text-white">
+    <div className="flex items-center w-screen h-screen justify-center bg-black text-white">
       <form
         onSubmit={signupHandler}
-        className="shadow-white shadow-lg flex flex-col gap-1 p-7 w-96"
+        className="shadow-white shadow-lg flex flex-col gap-1 bg-slate-800 p-7 w-96"
       >
         <div className="my-4">
           <h1 className="text-center font-bold text-xl">InstaMitr</h1>
