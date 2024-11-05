@@ -18,7 +18,7 @@ import { setAuthUser } from "@/redux/authSlice";
 
 function LeftSideBar() {
   const navigate = useNavigate();
-  const { user } = useSelector(store => store.auth);
+  const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
 
   const logoutHandler = async () => {
@@ -27,7 +27,7 @@ function LeftSideBar() {
         withCredentials: true,
       });
       if (res.data.status) {
-        dispatch(setAuthUser(null))
+        dispatch(setAuthUser(null));
         navigate("/login");
         toast.success(res.data.message);
       }
