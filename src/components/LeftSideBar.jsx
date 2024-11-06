@@ -16,12 +16,13 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthUser } from "@/redux/authSlice";
 import CreatePost from "./CreatePost";
+import { useState } from "react";
 
 function LeftSideBar() {
   const navigate = useNavigate();
   const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
-  const [open , setOpen] = useState(flase);
+  const [open , setOpen] = useState(false);
 
   const logoutHandler = async () => {
     try {
