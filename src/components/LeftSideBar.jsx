@@ -15,11 +15,13 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthUser } from "@/redux/authSlice";
+import CreatePost from "./CreatePost";
 
 function LeftSideBar() {
   const navigate = useNavigate();
   const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
+  const [open , setOpen] = useState(flase);
 
   const logoutHandler = async () => {
     try {
@@ -36,9 +38,15 @@ function LeftSideBar() {
     }
   };
 
+ 
   const sidebarHandler = (textType) => {
     console.log(`sidebarHandler called with textType: ${textType}`);
-    if (textType === "Logout") logoutHandler();
+    if (textType === "Logout") 
+      {
+      logoutHandler();
+    }else if(textType === "Create"){
+ setOpen(true);
+    }
   };
 
   const sideBarItems = [
@@ -70,6 +78,7 @@ function LeftSideBar() {
         >
           InstaMitr
         </h1>
+        <div>
         {sideBarItems.map((item, index) => {
           return (
             <div
@@ -82,8 +91,12 @@ function LeftSideBar() {
             </div>
           );
         })}
+        </div>
       </div>
+
+      <CreatePost open={open}  setOpen={setOpen} />
     </div>
+
   );
 }
 
