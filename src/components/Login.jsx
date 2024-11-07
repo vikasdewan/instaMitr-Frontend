@@ -22,7 +22,7 @@ function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const signupHandler = async (e) => {
+  const loginHandler = async (e) => {
     e.preventDefault();
     console.log(input);
     try {
@@ -58,7 +58,7 @@ function Login() {
   return (
     <div className="flex items-center w-screen h-screen justify-center bg-black text-white">
       <form
-        onSubmit={signupHandler}
+        onSubmit={loginHandler}
         className="shadow-white shadow-lg flex flex-col gap-1 bg-slate-800 p-7 w-96"
       >
         <div className="my-4">
