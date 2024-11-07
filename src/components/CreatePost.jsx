@@ -5,7 +5,7 @@ import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 
 function CreatePost({ open, setOpen }) {
-  const
+  const imageRef = useRef
   const createPostHandler = async (e) => {
     e.preventDefault();
     try {
