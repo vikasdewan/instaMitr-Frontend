@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Dialog, DialogContent, DialogHeader } from "./ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Textarea } from "./ui/textarea";
@@ -6,6 +6,17 @@ import { Button } from "./ui/button";
 
 function CreatePost({ open, setOpen }) {
   const imageRef = useRef();
+  const [file , setFile] = useState("");
+  const [caption ,setCaption] = useState("");
+  const fileChangeHandler = async (e)=>{
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const url = event.target.result;
+      console.log(url);
+      };
+  }
   const createPostHandler = async (e) => {
     e.preventDefault();
     try {
@@ -39,7 +50,7 @@ function CreatePost({ open, setOpen }) {
             className="focus-visible:ring-transparent border-none bg-black text-xs"
             placeholder="Write a caption..."
           ></Textarea>
-          <input ref={imageRef} type="file" className="hidden" />
+          <input ref={imageRef} type="file" className="hidden" onChange={fileChangeHandler} />
           <Button
             onClick={() => imageRef.current.click()}
             className="font-bold rounded-full  w-fit mx-auto bg-[#0095f6] hover:bg-[#1470ae]"
