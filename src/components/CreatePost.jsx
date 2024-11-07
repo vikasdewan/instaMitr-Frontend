@@ -10,12 +10,12 @@ function CreatePost({ open, setOpen }) {
   const imageRef = useRef();
   const [file, setFile] = useState("");
   const [caption, setCaption] = useState("");
-  const [imagePreview , setImagePreview] = useState("");
+  const [imagePreview, setImagePreview] = useState("");
   const [loading, setloading] = useState(false);
 
   const fileChangeHandler = async (e) => {
     const file = e.target.files[0];
-    if(file){
+    if (file) {
       setFile(file);
       const dataUrl = await readFileAsDataURL(file);
       setImagePreview(dataUrl);
@@ -28,7 +28,7 @@ function CreatePost({ open, setOpen }) {
   };
   const createPostHandler = async (e) => {
     e.preventDefault();
-    console.log(file,caption); 
+    console.log(file, caption);
     try {
     } catch (error) {
       console.log(error);
@@ -57,20 +57,22 @@ function CreatePost({ open, setOpen }) {
             </div>
           </div>
           <Textarea
-          value = {caption}
-          onChange = {(e) => setCaption(e.target.value)}
+            value={caption}
+            onChange={(e) => setCaption(e.target.value)}
             className="focus-visible:ring-transparent border-none bg-black text-xs"
             placeholder="Write a caption..."
           ></Textarea>
 
-          {
-            imagePreview && (
-              <div className="w-full h-64 flex items-center justify-center">
-                <img src={imagePreview} alt="preview_img" className="object-cover h-full w-full rounded-lg" />
-              </div>
-            )
-          }
-          
+          {imagePreview && (
+            <div className="w-full h-64 flex items-center justify-center">
+              <img
+                src={imagePreview}
+                alt="preview_img"
+                className="object-cover h-full w-full rounded-lg"
+              />
+            </div>
+          )}
+
           <input
             ref={imageRef}
             type="file"
@@ -83,18 +85,20 @@ function CreatePost({ open, setOpen }) {
           >
             Select from Computer
           </Button>
-          {
-            imagePreview && (
-             loading ? (
+          {imagePreview &&
+            (loading ? (
               <Button>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin"/> Please wait...
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait...
               </Button>
-             ) : (
-              <Button onClick={createPostHandler} type="submit" className="w-full">Post</Button>
-             )
-  )
-          }
-          
+            ) : (
+              <Button
+                onClick={createPostHandler}
+                type="submit"
+                className="w-full"
+              >
+                Post
+              </Button>
+            ))}
         </DialogContent>
       </Dialog>
     </>
