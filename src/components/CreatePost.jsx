@@ -35,10 +35,17 @@ function CreatePost({ open, setOpen }) {
               <span className="text-gray-600 text-xs">Bio Here...</span>
             </div>
           </div>
-          <Textarea className="focus-visible:ring-transparent border-none bg-black text-xs" placeholder="Write a caption...">
-          </Textarea>
-          <input ref={imageRef} type="file" className="hidden"/>
-          <Button onClick ={()=> imageRef.current.click()} className="font-bold rounded-full  w-fit mx-auto bg-[#0095f6] hover:bg-[#1470ae]">Select from Computer</Button>
+          <Textarea
+            className="focus-visible:ring-transparent border-none bg-black text-xs"
+            placeholder="Write a caption..."
+          ></Textarea>
+          <input ref={imageRef} type="file" className="hidden" />
+          <Button
+            onClick={() => imageRef.current.click()}
+            className="font-bold rounded-full  w-fit mx-auto bg-[#0095f6] hover:bg-[#1470ae]"
+          >
+            Select from Computer
+          </Button>
         </DialogContent>
       </Dialog>
     </>
