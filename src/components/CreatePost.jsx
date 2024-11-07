@@ -37,7 +37,7 @@ function CreatePost({ open, setOpen }) {
           </div>
           <Textarea className="focus-visible:ring-transparent border-none bg-black text-xs" placeholder="Write a caption...">
           </Textarea>
-          <input ref type="file" className="hidden"/>
+          <input ref={imageRef} type="file" className="hidden"/>
           <Button className="font-bold rounded-full  w-fit mx-auto bg-[#0095f6] hover:bg-[#1470ae]">Select from Computer</Button>
         </DialogContent>
       </Dialog>
