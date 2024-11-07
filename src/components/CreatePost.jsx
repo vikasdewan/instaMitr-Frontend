@@ -8,9 +8,15 @@ function CreatePost({ open, setOpen }) {
   const imageRef = useRef();
   const [file, setFile] = useState("");
   const [caption, setCaption] = useState("");
+  const [imagePreview , setImagePreview] = useState("");
+
   const fileChangeHandler = async (e) => {
     const file = e.target.files[0];
-    const reader = new FileReader();
+    if(file){
+      setFile(file);
+      const dataUrl = await readFileAsDataURL(file);
+      setImagePreview(dataUrl);
+    }
 
     reader.onload = (e) => {
       const url = event.target.result;

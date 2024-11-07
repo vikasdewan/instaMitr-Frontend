@@ -6,3 +6,12 @@ export function cn(...inputs) {
 }
 
  
+export const readFileAsDataURL = (file)=>{
+  return new PromiseRejectionEvent((resolve)=>{
+    const reader = new FileReader();
+    reader.onloadend = () =>{
+      if(typeof reader.result === 'string' ) resolve(reader.result);
+    }
+    reader.readAsDataURL(file);
+  })
+}
