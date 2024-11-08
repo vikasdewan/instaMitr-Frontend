@@ -22,30 +22,30 @@ function CreatePost({ open, setOpen }) {
       const dataUrl = await readFileAsDataURL(file);
       setImagePreview(dataUrl);
     }
-
   };
   const createPostHandler = async (e) => {
- 
     const formData = new FormData();
     formData.append("caption", caption);
-    if(imagePreview) formData.append("image",file);
+    if (imagePreview) formData.append("image", file);
     try {
       setLoading(true);
-      const res = await axios.post('http://localhost:8000/api/v1/post/addpost', formData,{
-        header:{
-          'Content-Type' : 'multipart/form-data'
-        },
-        withCredentials : true
-      })
-       
-      if(res.data.success){
-        toast.success(res.data.message)
-      }
+      const res = await axios.post(
+        "http://localhost:8000/api/v1/post/addpost",
+        formData,
+        {
+          header: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }
+      );
 
+      if (res.data.success) {
+        toast.success(res.data.message);
+      }
     } catch (error) {
-     toast.error(error.response.data.message);
-    }
-    finally{
+      toast.error(error.response.data.message);
+    } finally {
       setLoading(false);
     }
   };
@@ -97,19 +97,15 @@ function CreatePost({ open, setOpen }) {
           <Button
             onClick={() => imageRef.current.click()}
             className="font-bold rounded-full  w-fit mx-auto bg-[#0095f6] hover:bg-[#1470ae]"
-            
           >
             Select from Computer
           </Button>
-          {imagePreview && 
-  
-            (
-              loading ? (
+          {imagePreview &&
+            (loading ? (
               <Button>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait...
               </Button>
             ) : (
-
               <Button
                 onClick={createPostHandler}
                 type="submit"
