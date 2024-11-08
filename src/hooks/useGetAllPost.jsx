@@ -4,9 +4,8 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 const useGetAllPost = () => {
-    const dispatch = useDispatch(); //basically kuch chij bhejne ka kaam karta hai
+  const dispatch = useDispatch(); //basically kuch chij bhejne ka kaam karta hai
   useEffect(() => {
-
     const fetchAllPost = async () => {
       try {
         const res = await axios.get("http://localhost:8000/api/v1/post/all", {
@@ -14,8 +13,8 @@ const useGetAllPost = () => {
         });
         if (res.data.success) {
           console.log(res.data.posts);
-          
-            dispatch(setPosts(res.data.posts));
+
+          dispatch(setPosts(res.data.posts));
         }
       } catch (error) {
         console.log(error);
@@ -23,7 +22,7 @@ const useGetAllPost = () => {
     };
 
     fetchAllPost();
-  },[]);
+  }, []);
 };
 
 export default useGetAllPost;
