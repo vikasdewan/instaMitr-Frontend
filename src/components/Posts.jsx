@@ -3,13 +3,12 @@ import Post from "./Post";
 import { useSelector } from "react-redux";
 
 function Posts() {
-  const {posts} = useSelector(store => store.post)
+  const { posts } = useSelector((store) => store.post);
   return (
     <div className="text-black w-full">
-      {
-      posts.map((post) => 
+      {posts.map((post) => (
         <Post key={post._id} post={post} />
-      )}
+      ))}
     </div>
   );
 }
