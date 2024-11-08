@@ -4,8 +4,8 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 const useGetAllPost = () => {
-  useEffect(() => {
     const dispatch = useDispatch(); //basically kuch chij bhejne ka kaam karta hai
+  useEffect(() => {
 
     const fetchAllPost = async () => {
       try {
@@ -13,11 +13,16 @@ const useGetAllPost = () => {
           withCredentials: true,
         });
         if (res.data.success) {
-          dispatch(setPosts(res.data.posts));
+          console.log(res.data);
+            //dispatch(setPosts(res.data.posts));
         }
       } catch (error) {
         console.log(error);
       }
     };
-  });
+
+    fetchAllPost();
+  },[]);
 };
+
+export default useGetAllPost;
