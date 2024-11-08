@@ -5,13 +5,15 @@ import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { readFileAsDataURL } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import axios from "axios";
 
 function CreatePost({ open, setOpen }) {
   const imageRef = useRef();
   const [file, setFile] = useState("");
   const [caption, setCaption] = useState("");
   const [imagePreview, setImagePreview] = useState("");
-  const [loading, setloading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const fileChangeHandler = async (e) => {
     const file = e.target.files[0];
@@ -21,17 +23,30 @@ function CreatePost({ open, setOpen }) {
       setImagePreview(dataUrl);
     }
 
-    reader.onload = (e) => {
-      const url = event.target.result;
-      console.log(url);
-    };
   };
   const createPostHandler = async (e) => {
-    e.preventDefault();
-    console.log(file, caption);
+ 
+    const formData = new FormData();
+    formData.append("caption", caption);
+    if(imagePreview) formData.append("image",file);
     try {
+      setLoading(true);
+      const res = await axios.post('http://localhost:8000/api/v1/post/addpost', formData,{
+        header:{
+          'Content-Type' : 'multipart/form-data'
+        },
+        withCredentials : true
+      })
+       
+      if(res.data.success){
+        toast.success(res.data.message)
+      }
+
     } catch (error) {
-      console.log(error);
+     toast.error(error.response.data.message);
+    }
+    finally{
+      setLoading(false);
     }
   };
   return (
@@ -82,15 +97,19 @@ function CreatePost({ open, setOpen }) {
           <Button
             onClick={() => imageRef.current.click()}
             className="font-bold rounded-full  w-fit mx-auto bg-[#0095f6] hover:bg-[#1470ae]"
+            
           >
             Select from Computer
           </Button>
-          {imagePreview &&
-            (loading ? (
+          {imagePreview && 
+  
+            (
+              loading ? (
               <Button>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait...
               </Button>
             ) : (
+
               <Button
                 onClick={createPostHandler}
                 type="submit"
