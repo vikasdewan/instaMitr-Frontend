@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import CommentDialog from "./CommentDialog";
 
-function Post({post}) {
+function Post({ post }) {
   const [text, setText] = useState("");
   const [openComment, setOpenComment] = useState(false);
   const changeEventHandler = (e) => {
@@ -80,9 +80,12 @@ function Post({post}) {
         </div>
         <Bookmark className="cursor-pointer hover:text-gray-400" />
       </div>
-      <span className="font-medium text-sm mb-2 block">{post.likes.length} likes</span>
+      <span className="font-medium text-sm mb-2 block">
+        {post.likes.length} likes
+      </span>
       <p>
-        <span className="font-medium text-sm ">{post.author.username}</span> &nbsp; {post.caption}
+        <span className="font-medium text-sm ">{post.author.username}</span>{" "}
+        &nbsp; {post.caption}
       </p>
       <span
         onClick={() => setOpenComment(true)}
