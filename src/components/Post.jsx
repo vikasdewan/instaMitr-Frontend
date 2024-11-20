@@ -5,7 +5,7 @@ import { Bookmark, MessageCircle, MoreHorizontal, Send } from "lucide-react";
 import { Button } from "./ui/button";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import CommentDialog from "./CommentDialog";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import axios from "axios";
 import { setPosts } from "@/redux/postSlice";
@@ -30,7 +30,7 @@ function Post({ post }) {
       const res = await axios.delete(`http://localhost:8000/api/v1/post/delete/${post?._id}`,{withCredentials : true})
       if(res.data.success){
         const updatePostData = posts.filter((postItem) => postItem?._id !== post?._id)
-        dispatch(setPosts)
+        dispatch(setPosts(updatePostData))
         toast.success(res.data.message);
          
       }
