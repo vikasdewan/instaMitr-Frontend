@@ -5,10 +5,17 @@ import { Bookmark, MessageCircle, MoreHorizontal, Send } from "lucide-react";
 import { Button } from "./ui/button";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import CommentDialog from "./CommentDialog";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "sonner";
+import axios from "axios";
+import { setPosts } from "@/redux/postSlice";
 
 function Post({ post }) {
   const [text, setText] = useState("");
   const [openComment, setOpenComment] = useState(false);
+  const {user} = useSelector(store => store.auth);
+  const {posts} = useSelector(store => store.post);
+  const dispatch = useDispatch();
   const changeEventHandler = (e) => {
     const inputText = e.target.value;
     if (inputText.trim()) {
@@ -17,6 +24,22 @@ function Post({ post }) {
       setText("");
     }
   };
+
+  const deletePostHandler = async ()=>{
+    try {
+      const res = await axios.delete(`http://localhost:8000/api/v1/post/delete/${post?._id}`,{withCredentials : true})
+      if(res.data.success){
+        const updatePostData = posts.filter((postItem) => postItem?._id !== post?._id)
+        dispatch(setPosts(updatePostData))
+        toast.success(res.data.message);
+         
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
+  }
+
   return (
     <div className="my-8 w-full max-w-sm mx-auto text-white">
       <div className="flex items-center justify-between">
@@ -51,12 +74,18 @@ function Post({ post }) {
             >
               About this account
             </Button>
+            {
+              //show the delete button only to logged In user's post
+            user && user?._id === post?.author._id && (
             <Button
               variant="ghost"
               className="cursor-pointer w-fit  rounded-xl font-bold hover:bg-gray-500"
+              onClick = {deletePostHandler}
             >
               Delete
             </Button>
+              ) 
+            }
           </DialogContent>
         </Dialog>
       </div>
