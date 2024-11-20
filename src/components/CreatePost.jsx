@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Dialog, DialogContent, DialogHeader } from "./ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Textarea } from "./ui/textarea";
@@ -28,6 +28,7 @@ function CreatePost({ open, setOpen }) {
       setImagePreview(dataUrl);
     }
   };
+
   const createPostHandler = async (e) => {
     const formData = new FormData();
     formData.append("caption", caption);
@@ -51,17 +52,25 @@ function CreatePost({ open, setOpen }) {
 
         setOpen(false);
 
-      // Clear inputs for next use
-      setCaption("");
-      setImagePreview("");
-      setFile(null);
+        // Clear inputs for next use
+        setCaption("");
+        setImagePreview("");
+        setFile(null);
       }
     } catch (error) {
-      toast.error(error.response.data.message) ;
+      toast.error(error.response.data.message);
     } finally {
       setLoading(false);
     }
   };
+
+  // Scroll to the top of the page when the dialog opens
+  useEffect(() => {
+    if (open) {
+      window.scrollTo(0, 0); // Scrolls to the top of the page
+    }
+  }, [open]);
+
   return (
     <>
       <Dialog open={open}>
