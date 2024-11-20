@@ -48,6 +48,13 @@ function CreatePost({ open, setOpen }) {
       if (res.data.success) {
         dispatch(setPosts([res.data.post, ...posts]));
         toast.success(res.data.message);
+
+        setOpen(false);
+
+      // Clear inputs for next use
+      setCaption("");
+      setImagePreview("");
+      setFile(null);
       }
     } catch (error) {
       toast.error(error.response.data.message) ;
