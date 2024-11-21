@@ -16,6 +16,9 @@ function Post({ post }) {
   const {user} = useSelector(store => store.auth);
   const {posts} = useSelector(store => store.post);
   const dispatch = useDispatch();
+  const [liked, setLiked] = useState(post.likes.includes(user?._id) || false);
+  const [postLike ,setPostLike] = useState(post.likes.length);
+
   const changeEventHandler = (e) => {
     const inputText = e.target.value;
     if (inputText.trim()) {
@@ -24,6 +27,22 @@ function Post({ post }) {
       setText("");
     }
   };
+
+  const likeOrDislikeHandler = async(postId)=>{
+    try {
+      const action = liked ? "dislike" : "like";  
+      const res = await axios.get(`http://localhost:8000/api/v1/post/${postId}/${action}`)
+      if(res.data.success){
+        const updatedLikes = liked ? postLike -1 : postLike + 1;
+        setPostLike(updatedLikes)
+        setLiked(!liked);
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
 
   const deletePostHandler = async ()=>{
     try {
