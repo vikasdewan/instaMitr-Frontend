@@ -13,11 +13,11 @@ import { setPosts } from "@/redux/postSlice";
 function Post({ post }) {
   const [text, setText] = useState("");
   const [openComment, setOpenComment] = useState(false);
-  const {user} = useSelector(store => store.auth);
-  const {posts} = useSelector(store => store.post);
+  const { user } = useSelector((store) => store.auth);
+  const { posts } = useSelector((store) => store.post);
   const dispatch = useDispatch();
   const [liked, setLiked] = useState(post.likes.includes(user?._id) || false);
-  const [postLike ,setPostLike] = useState(post.likes.length);
+  const [postLike, setPostLike] = useState(post.likes.length);
 
   const changeEventHandler = (e) => {
     const inputText = e.target.value;
@@ -28,36 +28,41 @@ function Post({ post }) {
     }
   };
 
-  const likeOrDislikeHandler = async(postId)=>{
+  const likeOrDislikeHandler = async (postId) => {
     try {
-      const action = liked ? "dislike" : "like";  
-      const res = await axios.get(`http://localhost:8000/api/v1/post/${postId}/${action}`)
-      if(res.data.success){
-        const updatedLikes = liked ? postLike -1 : postLike + 1;
-        setPostLike(updatedLikes)
+      const action = liked ? "dislike" : "like";
+      const res = await axios.get(
+        `http://localhost:8000/api/v1/post/${postId}/${action}`
+      );
+      if (res.data.success) {
+        const updatedLikes = liked ? postLike - 1 : postLike + 1;
+        setPostLike(updatedLikes);
         setLiked(!liked);
         toast.success(res.data.message);
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
-
-  const deletePostHandler = async ()=>{
+  const deletePostHandler = async () => {
     try {
-      const res = await axios.delete(`http://localhost:8000/api/v1/post/delete/${post?._id}`,{withCredentials : true})
-      if(res.data.success){
-        const updatePostData = posts.filter((postItem) => postItem?._id !== post?._id)
-        dispatch(setPosts(updatePostData))
+      const res = await axios.delete(
+        `http://localhost:8000/api/v1/post/delete/${post?._id}`,
+        { withCredentials: true }
+      );
+      if (res.data.success) {
+        const updatePostData = posts.filter(
+          (postItem) => postItem?._id !== post?._id
+        );
+        dispatch(setPosts(updatePostData));
         toast.success(res.data.message);
-         
       }
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
     }
-  }
+  };
 
   return (
     <div className="my-8 w-full max-w-sm mx-auto text-white">
@@ -95,15 +100,15 @@ function Post({ post }) {
             </Button>
             {
               //show the delete button only to logged In user's post
-            user && user?._id === post?.author._id && (
-            <Button
-              variant="ghost"
-              className="cursor-pointer w-fit  rounded-xl font-bold hover:bg-gray-500"
-              onClick = {deletePostHandler}
-            >
-              Delete
-            </Button>
-              ) 
+              user && user?._id === post?.author._id && (
+                <Button
+                  variant="ghost"
+                  className="cursor-pointer w-fit  rounded-xl font-bold hover:bg-gray-500"
+                  onClick={deletePostHandler}
+                >
+                  Delete
+                </Button>
+              )
             }
           </DialogContent>
         </Dialog>
