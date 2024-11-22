@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import axios from "axios";
 import { setPosts, setSelectedPost } from "@/redux/postSlice";
 import "../index.css";
+import { Badge } from "./ui/badge";
 
 function Post({ post }) {
   const [text, setText] = useState("");
@@ -127,7 +128,13 @@ function Post({ post }) {
             <AvatarImage src={post.author?.profileImage} alt="post_image" />
             <AvatarFallback>IM</AvatarFallback>
           </Avatar>
-          <h1 className="mt-1">{post.author?.username}</h1>
+          <div className="flex items-center gap-3">
+          <h1 className="font-bold">{post.author?.username}</h1>
+        
+        { 
+          post?.author?._id === user?._id ? <Badge variant="secondary" className= "  font-bold  bg-gray-300 text-black ">My Vibe</Badge> : null 
+        }  
+          </div>
         </div>
         <Dialog>
           <DialogTrigger asChild>
