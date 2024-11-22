@@ -19,8 +19,8 @@ function Post({ post }) {
   const dispatch = useDispatch();
   const [liked, setLiked] = useState(post.likes.includes(user?._id) || false);
   const [postLike, setPostLike] = useState(post.likes.length);
-  const [comment , setComment] = useState(post.comments)
-  const [animate, setAnimate] = useState(false); 
+  const [comment, setComment] = useState(post.comments);
+  const [animate, setAnimate] = useState(false);
 
   const changeEventHandler = (e) => {
     const inputText = e.target.value;
@@ -30,7 +30,7 @@ function Post({ post }) {
       setText("");
     }
   };
- const likeOrDislikeHandler = async () => {
+  const likeOrDislikeHandler = async () => {
     try {
       const action = liked ? "dislike" : "like";
       const res = await axios.get(
@@ -42,14 +42,23 @@ function Post({ post }) {
         setPostLike(updatedLikes);
         setLiked(!liked);
         setAnimate(true);
-        setTimeout(() => { setAnimate(false); }, 300);
+        setTimeout(() => {
+          setAnimate(false);
+        }, 300);
 
         //apne post ko udpate kar raha hu
-        const updatedPostData = posts.map(p => 
-          p._id === post._id ? {...p, likes: liked ? p.likes.filter(id => id !== user._id) : [...p.likes , user._id]} : p
-        )
+        const updatedPostData = posts.map((p) =>
+          p._id === post._id
+            ? {
+                ...p,
+                likes: liked
+                  ? p.likes.filter((id) => id !== user._id)
+                  : [...p.likes, user._id],
+              }
+            : p
+        );
 
-        dispatch(setPosts(updatedPostData))
+        dispatch(setPosts(updatedPostData));
         toast.success(res.data.message);
       }
     } catch (error) {
@@ -59,29 +68,33 @@ function Post({ post }) {
 
   const commentHandler = async () => {
     try {
-      
-      const res = await axios.post(`http://localhost:8000/api/v1/post/${post?._id}/comment` , {text}, {
-        headers : {
-          'Content-Type' : 'application/json',
+      const res = await axios.post(
+        `http://localhost:8000/api/v1/post/${post?._id}/comment`,
+        { text },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
         }
-        ,withCredentials : true})
+      );
 
-        if(res.data.success){
-          const updatedCommentData =  [...comment,res.data.message];
-          setComment(updatedCommentData)
-          
-          const updatedPostData = posts.map(p =>
-            p._id === post._id ? {...p,comment:updatedCommentData} : p
-          );
+      if (res.data.success) {
+        const updatedCommentData = [...comment, res.data.message];
+        setComment(updatedCommentData);
 
-          dispatch(setPosts(updatedPostData))
-          toast.success(res.data.message);
-          setText("")
-        }
+        const updatedPostData = posts.map((p) =>
+          p._id === post._id ? { ...p, comment: updatedCommentData } : p
+        );
+
+        dispatch(setPosts(updatedPostData));
+        toast.success(res.data.message);
+        setText("");
+      }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   const deletePostHandler = async () => {
     try {
@@ -159,22 +172,24 @@ function Post({ post }) {
 
       <div className="flex items-center justify-between my-2">
         <div className="flex items-center gap-3 ">
-          {
-            liked ?  <FaHeart
-            onClick={likeOrDislikeHandler}
-            size={"22px"}
-            className={`cursor-pointer text-red-600 hover:text-red-700 ${
-              animate ? "pop-animation" : ""
-            }`}
-          /> : <FaRegHeart
-          onClick={likeOrDislikeHandler}
-          size={"22px"}
-          className={`cursor-pointer hover:text-gray-400  ${
-              animate ? "pop-animation" : ""
-            }`}
-        />
-          }
-          
+          {liked ? (
+            <FaHeart
+              onClick={likeOrDislikeHandler}
+              size={"22px"}
+              className={`cursor-pointer text-red-600 hover:text-red-700 ${
+                animate ? "pop-animation" : ""
+              }`}
+            />
+          ) : (
+            <FaRegHeart
+              onClick={likeOrDislikeHandler}
+              size={"22px"}
+              className={`cursor-pointer hover:text-gray-400  ${
+                animate ? "pop-animation" : ""
+              }`}
+            />
+          )}
+
           <MessageCircle
             onClick={() => setOpenComment(true)} //when we use callback function i.e. ()=> ...  there we can pass argument or params in the function further calling like setOpenCommnet(true)
             className="cursor-pointer hover:text-gray-400"
@@ -183,9 +198,7 @@ function Post({ post }) {
         </div>
         <Bookmark className="cursor-pointer hover:text-gray-400" />
       </div>
-      <span className="font-medium text-sm mb-2 block">
-        {postLike} likes
-      </span>
+      <span className="font-medium text-sm mb-2 block">{postLike} likes</span>
       <p>
         <span className="font-medium text-sm ">{post.author.username}</span>{" "}
         &nbsp; {post.caption}
@@ -194,10 +207,7 @@ function Post({ post }) {
         onClick={() => setOpenComment(true)}
         className="cursor-pointer font-thin text-sm text-gray-400"
       >
-        {
-          comment.length == 0 ? "" : `View all ${comment.length} comments` 
-        }
-        
+        {comment.length == 0 ? "" : `View all ${comment.length} comments`}
       </span>
       <CommentDialog
         openComment={openComment}
@@ -212,7 +222,11 @@ function Post({ post }) {
           onChange={changeEventHandler}
         />
         {text && (
-          <span onClick={commentHandler} id="Postbutton" className="text-[#0095F6] text-sm font-bold mt-3 cursor-pointer ">
+          <span
+            onClick={commentHandler}
+            id="Postbutton"
+            className="text-[#0095F6] text-sm font-bold mt-3 cursor-pointer "
+          >
             Post
           </span>
         )}
@@ -222,4 +236,3 @@ function Post({ post }) {
 }
 
 export default Post;
-
