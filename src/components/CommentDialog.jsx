@@ -50,12 +50,13 @@ function CommentDialog({ openComment, setOpenComment }) {
 
         // Update the selectedPost and posts in Redux
         const updatedPostData = posts.map((p) =>
-          p._id === selectedPost._id ? { ...p, comments: updatedCommentData } : p
+          p._id === selectedPost._id
+            ? { ...p, comments: updatedCommentData }
+            : p
         );
 
         dispatch(setPosts(updatedPostData));
 
-       
         toast.success(res.data.message);
         setText("");
       }
@@ -85,7 +86,9 @@ function CommentDialog({ openComment, setOpenComment }) {
                 <Link>
                   <Avatar>
                     <AvatarImage src={selectedPost?.author?.profileImage} />
-                    <AvatarFallback className="bg-black text-white">IM</AvatarFallback>
+                    <AvatarFallback className="bg-black text-white">
+                      IM
+                    </AvatarFallback>
                   </Avatar>
                 </Link>
                 <div>
