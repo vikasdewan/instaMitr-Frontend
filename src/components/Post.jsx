@@ -8,7 +8,7 @@ import CommentDialog from "./CommentDialog";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import axios from "axios";
-import { setPosts } from "@/redux/postSlice";
+import { setPosts, setSelectedPost } from "@/redux/postSlice";
 import "../index.css";
 
 function Post({ post }) {
@@ -17,10 +17,12 @@ function Post({ post }) {
   const { user } = useSelector((store) => store.auth);
   const { posts } = useSelector((store) => store.post);
   const dispatch = useDispatch();
-  const [liked, setLiked] = useState(post.likes.includes(user?._id) || false);
-  const [postLike, setPostLike] = useState(post.likes.length);
-  const [comment, setComment] = useState(post.comments);
+  const [liked, setLiked] = useState(post?.likes?.includes(user?._id) || false);
+  const [postLike, setPostLike] = useState(post?.likes?.length);
+  const [comment, setComment] = useState(post?.comments);
   const [animate, setAnimate] = useState(false);
+
+  
 
   const changeEventHandler = (e) => {
     const inputText = e.target.value;
@@ -80,14 +82,16 @@ function Post({ post }) {
       );
 
       if (res.data.success) {
-        const updatedCommentData = [...comment, res.data.message];
+        const updatedCommentData = [...comment, res.data.comment];
         setComment(updatedCommentData);
 
         const updatedPostData = posts.map((p) =>
-          p._id === post._id ? { ...p, comment: updatedCommentData } : p
+          p._id === post._id ? { ...p, comments: updatedCommentData } : p
         );
 
         dispatch(setPosts(updatedPostData));
+        
+
         toast.success(res.data.message);
         setText("");
       }
@@ -151,7 +155,7 @@ function Post({ post }) {
             </Button>
             {
               //show the delete button only to logged In user's post
-              user && user?._id === post?.author._id && (
+              user && user?._id === post?.author?._id && (
                 <Button
                   variant="ghost"
                   className="cursor-pointer w-fit  rounded-xl font-bold hover:bg-gray-500"
@@ -166,7 +170,7 @@ function Post({ post }) {
       </div>
       <img
         className="rounded-sm my-2 w-full aspect-square object-cover"
-        src={post.image}
+        src={post?.image}
         alt="post_image"
       />
 
@@ -190,9 +194,13 @@ function Post({ post }) {
             />
           )}
 
+
+        
           <MessageCircle
-            onClick={() => setOpenComment(true)} //when we use callback function i.e. ()=> ...  there we can pass argument or params in the function further calling like setOpenCommnet(true)
-            className="cursor-pointer hover:text-gray-400"
+            onClick={() => { 
+              dispatch(setSelectedPost(post))
+              setOpenComment(true)}} //when we use callback function i.e. ()=> ...  there we can pass argument or params in the function further calling like setOpenCommnet(true)
+            className="cursor-pointer hover:text-gray-400  "
           />
           <Send className="cursor-pointer hover:text-gray-400" />
         </div>
@@ -200,14 +208,16 @@ function Post({ post }) {
       </div>
       <span className="font-medium text-sm mb-2 block">{postLike} likes</span>
       <p>
-        <span className="font-medium text-sm ">{post.author.username}</span>{" "}
-        &nbsp; {post.caption}
+        <span className="font-medium text-sm ">{post?.author?.username}</span>{" "}
+        &nbsp; {post?.caption}
       </p>
       <span
-        onClick={() => setOpenComment(true)}
+         onClick={() => { 
+          dispatch(setSelectedPost(post))
+          setOpenComment(true)}}
         className="cursor-pointer font-thin text-sm text-gray-400"
       >
-        {comment.length == 0 ? "" : `View all ${comment.length} comments`}
+        { comment?.length == 0 ? "" : `View all ${comment?.length} comments`}
       </span>
       <CommentDialog
         openComment={openComment}

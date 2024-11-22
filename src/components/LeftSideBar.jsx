@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAuthUser } from "@/redux/authSlice";
 import CreatePost from "./CreatePost";
 import { useState } from "react";
+import { setPosts, setSelectedPost } from "@/redux/postSlice";
 
 function LeftSideBar() {
   const navigate = useNavigate();
@@ -29,13 +30,15 @@ function LeftSideBar() {
       const res = await axios.get("http://localhost:8000/api/v1/user/logout", {
         withCredentials: true,
       });
-      if (res.data.status) {
+      if (res?.data.status) {
         dispatch(setAuthUser(null));
+        dispatch(setSelectedPost(null))
+        dispatch(setPosts([]))
         navigate("/login");
         toast.success(res.data.message);
       }
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message);
     }
   };
 

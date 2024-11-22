@@ -1,55 +1,96 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Link } from "react-router-dom";
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "./ui/button";
+import { useDispatch, useSelector } from "react-redux";
+import Comment from "./Comment";
+import axios from "axios";
+import { setPosts } from "@/redux/postSlice";
+import { toast } from "sonner";
 
 function CommentDialog({ openComment, setOpenComment }) {
   const [text, setText] = useState("");
+  const { selectedPost, posts } = useSelector((store) => store.post);
+  const dispatch = useDispatch();
+  const [comment, setComment] = useState([]);
+
+  // Load comments into local state on component mount
+  useEffect(() => {
+    if (selectedPost?.comments) {
+      setComment(selectedPost.comments);
+    }
+  }, [selectedPost]);
 
   const changeEventHandler = (e) => {
     const inputText = e.target.value;
-    if (inputText.trim()) {
-      setText(inputText);
-    } else {
-      setText("");
-    }
+    setText(inputText.trim() ? inputText : "");
   };
 
   const sendMessageHandler = async () => {
-    alert(text);
+    try {
+      const res = await axios.post(
+        `http://localhost:8000/api/v1/post/${selectedPost?._id}/comment`,
+        { text },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+
+      if (res.data.success) {
+        const newComment = res.data.comment;
+
+        // Update local comment state
+        const updatedCommentData = [...comment, newComment];
+        setComment(updatedCommentData);
+
+        // Update the selectedPost and posts in Redux
+        const updatedPostData = posts.map((p) =>
+          p._id === selectedPost._id ? { ...p, comments: updatedCommentData } : p
+        );
+
+        dispatch(setPosts(updatedPostData));
+
+       
+        toast.success(res.data.message);
+        setText("");
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <Dialog open={openComment}>
       <DialogContent
-        className="bg-black text-white max-w-4xl p-0 flex flex-col"
+        className="bg-black text-white max-w-2xl p-0 flex flex-col"
         onInteractOutside={() => setOpenComment(false)}
       >
         <div className="flex flex-1">
-          <div className="w-1/2">
+          <div className="w-1/2 min-h-96">
             <img
-              src="https://plus.unsplash.com/premium_photo-1697477565728-d54c716b51d4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              src={selectedPost?.image}
               className="w-full h-full rounded-lg object-cover"
               alt="post_image"
             />
           </div>
 
           <div className="w-1/2 flex flex-col justify-between">
-            <div className="flex items-center justify-between p-4 ">
-              <div className="flex gap-3 items-center ">
+            <div className="flex items-center justify-between p-4">
+              <div className="flex gap-3 items-center">
                 <Link>
                   <Avatar>
-                    <AvatarImage src="" />
-                    <AvatarFallback className="bg-black text-white">
-                      IM
-                    </AvatarFallback>
+                    <AvatarImage src={selectedPost?.author?.profileImage} />
+                    <AvatarFallback className="bg-black text-white">IM</AvatarFallback>
                   </Avatar>
                 </Link>
                 <div>
                   <Link className="font-semibold text-xs hover:text-gray-400">
-                    username
+                    {selectedPost?.author?.username}
                   </Link>{" "}
                   &nbsp;
                 </div>
@@ -68,19 +109,19 @@ function CommentDialog({ openComment, setOpenComment }) {
                   </Button>
                   <Button
                     variant="ghost"
-                    className="cursor-pointer w-fit   rounded-xl hover:bg-gray-500"
+                    className="cursor-pointer w-fit rounded-xl hover:bg-gray-500"
                   >
                     Add to Favourites
                   </Button>
                   <Button
                     variant="ghost"
-                    className="cursor-pointer w-fit  rounded-xl hover:bg-gray-500"
+                    className="cursor-pointer w-fit rounded-xl hover:bg-gray-500"
                   >
                     About this account
                   </Button>
                   <Button
                     variant="ghost"
-                    className="cursor-pointer w-fit  rounded-xl font-bold hover:bg-gray-500"
+                    className="cursor-pointer w-fit rounded-xl font-bold hover:bg-gray-500"
                   >
                     Delete
                   </Button>
@@ -91,7 +132,9 @@ function CommentDialog({ openComment, setOpenComment }) {
 
             <div className="flex flex-col flex-grow justify-between">
               <div className="overflow-y-auto max-h-96 p-4">
-                comments ayenge comments ayenge
+                {comment?.map((c) => (
+                  <Comment key={c._id} comment={c} />
+                ))}
               </div>
               <div className="p-4 flex">
                 <input
@@ -99,7 +142,7 @@ function CommentDialog({ openComment, setOpenComment }) {
                   value={text}
                   onChange={changeEventHandler}
                   placeholder="Add a comment...."
-                  className="placeholder-white  text-white bg-black text-sm w-full outline-none border-gray-300 p-2 rounded"
+                  className="placeholder-white text-white bg-black text-sm w-full outline-none border-gray-300 p-2 rounded"
                 />
                 <Button
                   disabled={!text.trim()}
