@@ -4,22 +4,23 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 function RightSideBar() {
-  const {user} = useSelector(store => store.auth);
+  const { user } = useSelector((store) => store.auth);
   return (
-    
     <div className="text-white bg-black w-fit py-10 pr-32 text-sm ">
       <div className="flex item-center gap-2 ">
-        <Link to={`/profile/${user?._id}`}> 
-        <Avatar className="text-black">
-          <AvatarImage src={user?.profileImage} alt="post_image" />
-          <AvatarFallback>IM</AvatarFallback>
-        </Avatar>
+        <Link to={`/profile/${user?._id}`}>
+          <Avatar className="text-black">
+            <AvatarImage src={user?.profileImage} alt="post_image" />
+            <AvatarFallback>IM</AvatarFallback>
+          </Avatar>
         </Link>
-        <Link to={`/profile/${user?._id}`}> 
-        <div>
-          <h1 className="font-bold text-sm">{user?.username}</h1>
-          <span className="text-gray-400 text-sm ">{user?.bio || 'Bio Here....'}</span>
-        </div>
+        <Link to={`/profile/${user?._id}`}>
+          <div>
+            <h1 className="font-bold text-sm">{user?.username}</h1>
+            <span className="text-gray-400 text-sm ">
+              {user?.bio || "Bio Here...."}
+            </span>
+          </div>
         </Link>
       </div>
     </div>
