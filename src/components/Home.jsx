@@ -11,6 +11,7 @@ const Home = () => {
   return (
     <div className="text-white flex">
       <div className="flex-grow bg-black text-white">
+
         <Feed />
         <Outlet />
       </div>
