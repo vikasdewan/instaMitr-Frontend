@@ -78,7 +78,7 @@ function LeftSideBar() {
       <div className="flex flex-col  mt-6">
         <h1
           className=" text-2xl m-3"
-          style={{ fontFamily: "Pacifico, sans-serif" }}
+          style={{ fontFamily: "Pacifico, sans-serif" } }
         >
           InstaMitr
         </h1>
