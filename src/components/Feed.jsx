@@ -7,7 +7,7 @@ function Feed() {
   return (
     <>
     <div className=" ml-64 ">
-       <div className= " flex gap-3 text-black  pl-[17%] pt-3">
+       <div className= " flex gap-3 text-black  pl-[14%] pt-3">
       {story.map((s) => (
         <Story/>
       ))}

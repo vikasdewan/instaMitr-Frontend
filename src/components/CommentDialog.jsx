@@ -133,7 +133,7 @@ function CommentDialog({ openComment, setOpenComment }) {
             </div>
             <hr />
 
-            <div className="flex flex-col flex-grow justify-between">
+            <div className="flex flex-col flex-grow max-h-[90%] justify-between">
               <div className="overflow-y-auto max-h-96 p-4">
                 {comment?.map((c) => (
                   <Comment key={c._id} comment={c} />
