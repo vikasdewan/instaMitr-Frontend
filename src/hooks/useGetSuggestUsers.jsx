@@ -20,7 +20,7 @@ const useGetSuggestUsers = () => {
       }
     };
 
-    fetchAllPost();
+    fetchSuggestedUsers();
   }, []);
 };
 
