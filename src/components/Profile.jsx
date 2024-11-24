@@ -12,8 +12,8 @@ function Profile() {
   useGetUserProfile(userId);
 
   const {userProfile} = useSelector((store) => store.auth);
-  const isLoggedInUserProfile = false;
-  const isFollowing = true;
+  const isLoggedInUserProfile = true;
+  const isFollowing = false;
 
   return (
     <div className='text-white h-screen bg-black flex w-screen justify-center ml-20 pl-10  '>
@@ -39,23 +39,26 @@ function Profile() {
               ) : (
                 isFollowing ? (
                   <>
+                  <Button className="bg-gray-700 text-white font-semibold hover:bg-gray-800 h-8" variant="secondary">Unfollow </Button>
+                  <Button className="hover:bg-gray-800 h-8 bg-gray-700 text-white font-semibold" variant="secondary">Message</Button>
+                  <div className='flex items-end  hover:text-gray-200'>
+                  <User className="text-2xl " />
+                  <Plus className="text-2xl size-3" />
+                  </div>
+                  <MoreHorizontal className="text-2xl hover:text-gray-200" />
+                  </>
+
+                ) :(  
+                  <>
                   <Button className="bg-blue-600 text-white font-semibold hover:bg-blue-700 h-8" variant="secondary">Follow</Button>  
                   <MoreHorizontal className="text-2xl hover:text-gray-200" />
                   </>
-                ) :(  
-                <>
-                <Button className="bg-blue-600 text-white font-semibold hover:bg-blue-700 h-8" variant="secondary">Follow</Button>
-                <Button className="hover:bg-gray-800 h-8 bg-gray-700 text-white font-semibold" variant="secondary">Message</Button>
-                <div className='flex items-end  hover:text-gray-200'>
-                <User className="text-2xl " />
-                <Plus className="text-2xl size-3" />
-                </div>
-                <MoreHorizontal className="text-2xl hover:text-gray-200" />
-                </>
                 )
               )
             }
-            
+            </div>
+            <div>
+              <p></p>
             </div>
           </div>
         </section>
