@@ -1,27 +1,36 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import useGetUserProfile from '@/hooks/useGetUserProfile'
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Button } from './ui/button';
-import { AtSign, Grid, MoreHorizontal, Plus, Settings,UserSquare } from 'lucide-react';
+import { AtSign, Bookmark, Grid, MoreHorizontal, PlaySquare, Plus, Settings,UserSquare} from 'lucide-react';
 import { Badge } from './ui/badge';
 
 function Profile() {
   const params = useParams();
   const userId = params.id;
   useGetUserProfile(userId);
+  const [activeTab , setActiveTab] = useState('posts')
+
 
   const {userProfile} = useSelector((store) => store.auth);
   const isLoggedInUserProfile = true;
   const isFollowing = false;
 
+  const handleTabChange = (tab) =>{
+    setActiveTab(tab);
+  }
+  
+  const displayedPost = activeTab === 'posts' ? userProfile?.posts : userProfile?.bookmarks  
+
+
   return (
-    <div className='text-white h-screen bg-black flex w-screen justify-center ml-20 pl-10  '>
-      <div className='flex flex-col gap-20 p-8'>
-      <div className='grid grid-cols-2'>
-        <section className='flex items-center justify-center mt-3 ml-3'>
-      <Avatar className="h-32 w-32">
+    <div className='text-white  bg-black flex w-[94.8%] justify-center ml-20 pl-10  '>
+      <div className='flex flex-col gap-20 py-8  h-[100%]'>
+      <div className='grid grid-cols-2 gap-3'>
+        <section className='flex items-center justify-center mt-3 ml-80'>
+      <Avatar className="h-40 w-40">
         <AvatarImage src={userProfile?.profileImage} alt="profile_Img"/>
         <AvatarFallback>IM</AvatarFallback>
       </Avatar>
@@ -71,20 +80,45 @@ function Profile() {
           </div>
         </section>
       </div>
-      <div className='border-t border-t-gray-200'>
+      <div className='mr-44 ml-48'>
+        <div className='border-t border-t-gray-200 ml-20'></div>
               <div className='flex items-center justify-center gap-10 text-sm'>
-                <div className='flex  items-center justify-center gap-1'>
+                <div onClick={()=>handleTabChange('posts')} className='flex cursor-pointer items-center justify-center gap-1  '>
               <Grid className="w-5 h-5 font-normal" />
-              <span className='py-3 cursor-pointer font-normal'>
+              <span className={`py-3  text-gray-400  ${activeTab === 'posts' ? 'font-bold text-white' : '' }`} >
                 POSTS
               </span>
                 </div>
-                <div className='flex  items-center justify-center gap-1'>
+                <div  onClick={()=>handleTabChange('reels')} className='flex cursor-pointer items-center justify-center gap-1  '>
+              <PlaySquare className="w-5 h-5 font-normal" />
+              <span className={`py-3 cursor-pointer  text-gray-400  ${activeTab === 'reels' ? 'font-bold text-white' : '' }`}>
+                REELS
+              </span>
+                </div>
+                <div onClick={()=>handleTabChange('saved')} className='flex cursor-pointer  items-center justify-center gap-1  '>
+              <Bookmark className="w-5 h-5 font-normal" />
+              <span className={`py-3 cursor-pointer  text-gray-400   ${activeTab === 'saved' ? 'font-bold text-white' : '' }`} >
+                SAVED
+              </span>
+                </div>
+                <div onClick={()=>handleTabChange('tagged')} className='flex cursor-pointer items-center justify-center gap-1  '>
                 <UserSquare className="w-5 h-5" strokeWidth={1.5} />
-              <span className='py-3 cursor-pointer font-normal'>
+              <span className={`py-3 cursor-pointer  text-gray-400   ${activeTab === 'tagged' ? 'font-bold text-white' : '' }`} >
                 TAGGED
               </span>
                 </div>
+              </div>
+
+              <div className='grid grid-cols-3 gap-1 pl-[8%] bg-black '>
+                {
+                  displayedPost?.map((post)=>{
+                    return(
+                      <div key={post?.id} className='relative group cursor-pointer'> 
+                      <img src={post?.image} alt="post_image" className='rounded-sm my-2 w-full  aspect-square object-cover' />
+                      </div>
+                    )
+                  })
+                }
               </div>
       </div>
       </div>

@@ -52,6 +52,8 @@ function LeftSideBar() {
  setOpen(true);
     } else if(textType === "Profile"){
       navigate(`/profile/${user?._id}`);
+    }else if(textType === "Home"){
+      navigate("/");
     }
   };
 
@@ -76,7 +78,7 @@ function LeftSideBar() {
   ];
 
   return (
-    <div className="bg-black text-white fixed top-0   left-0 px-4 border-r-2 border-r-gray-700 w-[16%] h-screen">
+    <div className="bg-black text-white fixed top-0  left-0 px-4 border-r-2 border-r-gray-700 w-[16%] h-screen">
       <div className="flex flex-col  mt-6">
         <h1
           className=" text-2xl m-3"

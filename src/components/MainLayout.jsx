@@ -4,7 +4,7 @@ import LeftSideBar from "./LeftSideBar";
 
 function MainLayout() {
   return (
-    <div>
+    <div >
       <LeftSideBar />
       <div>
         <Outlet />
