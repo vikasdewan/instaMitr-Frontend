@@ -38,7 +38,7 @@ function Profile() {
     activeTab === "posts" ? userProfile?.posts : userProfile?.bookmarks;
 
   return (
-    <div className="text-white  bg-black flex max-w-[94.8%] justify-center ml-20 pl-10  ">
+    <div className="text-white  bg-black flex min-w-[94.8%] justify-center ml-20 pl-10  ">
       <div className="flex flex-col gap-20 py-8  h-[100%]">
         <div className="grid grid-cols-2 gap-3">
           <section className={`flex items-center justify-center mt-3 ${userProfile?.[activeTab]?.length !=0 ? 'ml-80':''}`}>
@@ -139,8 +139,8 @@ function Profile() {
             </div>
           </section>
         </div>
-        <div className="mr-44 ml-48 ">
-          <div className={`border-t border-t-gray-200 ${userProfile?.[activeTab]?.length !=0 ? 'ml-20':''} `}></div>
+        <div className="mr-44 ml-48">
+          <div className={`border-t  border-t-gray-200 ${userProfile?.[activeTab]?.length !=0 ? 'ml-20':''} `}></div>
           <div className="flex items-center justify-center gap-10 text-sm">
             <div
               onClick={() => handleTabChange("posts")}
