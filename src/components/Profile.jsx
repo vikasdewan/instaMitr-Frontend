@@ -17,6 +17,7 @@ import {
   UserSquare,
 } from "lucide-react";
 import { Badge } from "./ui/badge";
+import { FaComment, FaHeart,   } from "react-icons/fa";
 
 function Profile() {
   const params = useParams();
@@ -36,10 +37,13 @@ function Profile() {
     activeTab === "posts" ? userProfile?.posts : userProfile?.bookmarks;
 
   return (
+    <>
+    
     <div className="text-white  bg-black flex w-[94.8%] justify-center ml-20 pl-10  ">
-      <div className="flex flex-col gap-20 py-8  h-[100%]">
+     
+      <div className="flex flex-col gap-20 py-8 pr-7 h-[100%]">
         <div className="grid grid-cols-2 gap-3">
-          <section className="flex items-center justify-center mt-3 ml-80">
+          <section className={`flex items-center justify-center mt-3 ${userProfile?.[activeTab]?.length !=0 ? 'ml-80':''}`}>
             <Avatar className="h-40 w-40">
               <AvatarImage src={userProfile?.profileImage} alt="profile_Img" />
               <AvatarFallback>IM</AvatarFallback>
@@ -136,7 +140,7 @@ function Profile() {
           </section>
         </div>
         <div className="mr-44 ml-48">
-          <div className="border-t border-t-gray-200 ml-20"></div>
+          <div className={`border-t border-t-gray-200 ${userProfile?.[activeTab]?.length !=0 ? 'ml-20':''} `}></div>
           <div className="flex items-center justify-center gap-10 text-sm">
             <div
               onClick={() => handleTabChange("posts")}
@@ -152,7 +156,20 @@ function Profile() {
               </span>
             </div>
             <div
-              onClick={() => handleTabChange("reels")}
+              onClick={() => handleTabChange("bookmarks")}
+              className="flex cursor-pointer  items-center justify-center gap-1  "
+            >
+              <Bookmark className="w-5 h-5 font-normal" />
+              <span
+                className={`py-3 cursor-pointer  text-gray-400   ${
+                  activeTab === "bookmarks" ? "font-bold text-white" : ""
+                }`}
+              >
+                SAVED
+              </span>
+            </div>
+            <div
+              // onClick={() => handleTabChange("reels")}
               className="flex cursor-pointer items-center justify-center gap-1  "
             >
               <PlaySquare className="w-5 h-5 font-normal" />
@@ -165,20 +182,7 @@ function Profile() {
               </span>
             </div>
             <div
-              onClick={() => handleTabChange("saved")}
-              className="flex cursor-pointer  items-center justify-center gap-1  "
-            >
-              <Bookmark className="w-5 h-5 font-normal" />
-              <span
-                className={`py-3 cursor-pointer  text-gray-400   ${
-                  activeTab === "saved" ? "font-bold text-white" : ""
-                }`}
-              >
-                SAVED
-              </span>
-            </div>
-            <div
-              onClick={() => handleTabChange("tagged")}
+              // onClick={() => handleTabChange("tagged")}
               className="flex cursor-pointer items-center justify-center gap-1  "
             >
               <UserSquare className="w-5 h-5" strokeWidth={1.5} />
@@ -199,18 +203,18 @@ function Profile() {
                   <img
                     src={post?.image}
                     alt="post_image"
-                    className="rounded-sm my-2 w-full  aspect-square object-cover"
+                    className="rounded-sm my-2   aspect-square object-cover"
                   />
-                  <div className="absolute rounded inset-0 flex items-center justify-center bg-black bg-opacity-30  opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="flex items-center text-white space-x-4">
-                  <Button className="flex items-center gap-2 hover:text-gray-300">
-                    <Heart/>
+                  <div className="absolute rounded inset-0 flex items-center justify-center bg-black bg-opacity-40  opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <div className="flex items-center text-white space-x-4 tex-lg font-bold">
+                  <button className="flex items-center gap-2 hover:text-gray-300 ">
+                    <FaHeart />
                     <span>{post?.likes.length}</span>
-                  </Button>
-                  <Button className="flex items-center gap-2 hover:text-gray-300">
-                    <MessageCircle/>
+                  </button>
+                  <button className="flex items-center gap-2 hover:text-gray-300">
+                    <FaComment/>
                     <span>{post?.comments.length}</span>
-                  </Button>
+                  </button>
                   </div>
                   </div>
                 </div>
@@ -220,6 +224,7 @@ function Profile() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 
