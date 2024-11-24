@@ -37,11 +37,8 @@ function Profile() {
     activeTab === "posts" ? userProfile?.posts : userProfile?.bookmarks;
 
   return (
-    <>
-    
     <div className="text-white  bg-black flex w-[94.8%] justify-center ml-20 pl-10  ">
-     
-      <div className="flex flex-col gap-20 py-8 pr-7 h-[100%]">
+      <div className="flex flex-col gap-20 py-8  h-[100%]">
         <div className="grid grid-cols-2 gap-3">
           <section className={`flex items-center justify-center mt-3 ${userProfile?.[activeTab]?.length !=0 ? 'ml-80':''}`}>
             <Avatar className="h-40 w-40">
@@ -139,7 +136,7 @@ function Profile() {
             </div>
           </section>
         </div>
-        <div className="mr-44 ml-48">
+        <div className="mr-44 ml-48 ">
           <div className={`border-t border-t-gray-200 ${userProfile?.[activeTab]?.length !=0 ? 'ml-20':''} `}></div>
           <div className="flex items-center justify-center gap-10 text-sm">
             <div
@@ -195,7 +192,7 @@ function Profile() {
               </span>
             </div>
           </div>
-
+          
           <div className="grid grid-cols-3 gap-1 pl-[8%] bg-black ">
             {displayedPost?.map((post) => {
               return (
@@ -203,7 +200,7 @@ function Profile() {
                   <img
                     src={post?.image}
                     alt="post_image"
-                    className="rounded-sm my-2   aspect-square object-cover"
+                    className="rounded-sm my-2 w-full  aspect-square object-cover"
                   />
                   <div className="absolute rounded inset-0 flex items-center justify-center bg-black bg-opacity-40  opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                   <div className="flex items-center text-white space-x-4 tex-lg font-bold">
@@ -224,7 +221,6 @@ function Profile() {
         </div>
       </div>
     </div>
-    </>
   );
 }
 
