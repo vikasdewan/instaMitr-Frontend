@@ -4,7 +4,8 @@ import useGetUserProfile from '@/hooks/useGetUserProfile'
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Button } from './ui/button';
-import { MoreHorizontal, Plus, Settings, User } from 'lucide-react';
+import { AtSign, Grid, MoreHorizontal, Plus, Settings,UserSquare } from 'lucide-react';
+import { Badge } from './ui/badge';
 
 function Profile() {
   const params = useParams();
@@ -57,11 +58,34 @@ function Profile() {
               )
             }
             </div>
-            <div>
-              <p></p>
+            <div className='flex items-center justify-start gap-9'>
+              <p><span className='font-semibold pr-1 text-lg'>{userProfile?.posts.length}</span>posts</p>
+              <p><span className='font-semibold pr-1 text-lg'>{userProfile?.followers.length}</span>followers</p>
+              <p><span className='font-semibold pr-1 text-lg'>{userProfile?.following.length}</span>following</p>
+            </div>
+            <div className='flex flex-col gap-1'>
+              <span className='font-semibold'>{userProfile?.bio || "bio here..."}</span>
+              <Badge className="w-fit bg-gray-600 text-white hover:bg-gray-700 cursor-pointer" variant='secondary'><AtSign className='size-4'/><span>{userProfile?.username}</span></Badge>
+              <span>MERN Stack💻 | DSA in JAVA🖥️ </span>
             </div>
           </div>
         </section>
+      </div>
+      <div className='border-t border-t-gray-200'>
+              <div className='flex items-center justify-center gap-10 text-sm'>
+                <div className='flex  items-center justify-center gap-1'>
+              <Grid className="w-5 h-5 font-normal" />
+              <span className='py-3 cursor-pointer font-normal'>
+                POSTS
+              </span>
+                </div>
+                <div className='flex  items-center justify-center gap-1'>
+                <UserSquare className="w-5 h-5" strokeWidth={1.5} />
+              <span className='py-3 cursor-pointer font-normal'>
+                TAGGED
+              </span>
+                </div>
+              </div>
       </div>
       </div>
     </div>
