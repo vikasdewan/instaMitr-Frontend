@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import useGetUserProfile from "@/hooks/useGetUserProfile";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Button } from "./ui/button";
 import {
@@ -14,6 +14,7 @@ import {
   PlaySquare,
   Plus,
   Settings,
+  User,
   UserSquare,
 } from "lucide-react";
 import { Badge } from "./ui/badge";
@@ -25,9 +26,9 @@ function Profile() {
   useGetUserProfile(userId);
   const [activeTab, setActiveTab] = useState("posts");
 
-  const { userProfile } = useSelector((store) => store.auth);
-  const isLoggedInUserProfile = true;
-  const isFollowing = false;
+  const { userProfile,user } = useSelector((store) => store.auth);
+  const isLoggedInUserProfile = user?._id === userProfile?._id ;
+  const isFollowing = true;
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -37,7 +38,7 @@ function Profile() {
     activeTab === "posts" ? userProfile?.posts : userProfile?.bookmarks;
 
   return (
-    <div className="text-white  bg-black flex w-[94.8%] justify-center ml-20 pl-10  ">
+    <div className="text-white  bg-black flex max-w-[94.8%] justify-center ml-20 pl-10  ">
       <div className="flex flex-col gap-20 py-8  h-[100%]">
         <div className="grid grid-cols-2 gap-3">
           <section className={`flex items-center justify-center mt-3 ${userProfile?.[activeTab]?.length !=0 ? 'ml-80':''}`}>
@@ -54,12 +55,14 @@ function Profile() {
                 </span>
                 {isLoggedInUserProfile ? (
                   <>
+                  <Link to="/account/edit">
                     <Button
                       className="bg-gray-700 text-white font-semibold hover:bg-gray-800 h-8"
                       variant="secondary"
                     >
                       Edit Profile
                     </Button>
+                  </Link>
                     <Button
                       className="hover:bg-gray-800 h-8 bg-gray-700 text-white font-semibold"
                       variant="secondary"
@@ -74,7 +77,7 @@ function Profile() {
                       className="bg-gray-700 text-white font-semibold hover:bg-gray-800 h-8"
                       variant="secondary"
                     >
-                      Unfollow{" "}
+                      Unfollow 
                     </Button>
                     <Button
                       className="hover:bg-gray-800 h-8 bg-gray-700 text-white font-semibold"
@@ -82,11 +85,11 @@ function Profile() {
                     >
                       Message
                     </Button>
-                    <div className="flex items-end  hover:text-gray-200">
+                    <div className="flex items-end  hover:text-gray-200 cursor-pointer">
                       <User className="text-2xl " />
                       <Plus className="text-2xl size-3" />
                     </div>
-                    <MoreHorizontal className="text-2xl hover:text-gray-200" />
+                    <MoreHorizontal className="text-2xl hover:text-gray-200 cursor-pointer" />
                   </>
                 ) : (
                   <>
@@ -96,7 +99,7 @@ function Profile() {
                     >
                       Follow
                     </Button>
-                    <MoreHorizontal className="text-2xl hover:text-gray-200" />
+                    <MoreHorizontal className="text-2xl hover:text-gray-200 cursor-pointer" />
                   </>
                 )}
               </div>
