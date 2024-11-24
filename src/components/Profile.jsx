@@ -8,6 +8,8 @@ import {
   AtSign,
   Bookmark,
   Grid,
+  Heart,
+  MessageCircle,
   MoreHorizontal,
   PlaySquare,
   Plus,
@@ -199,6 +201,18 @@ function Profile() {
                     alt="post_image"
                     className="rounded-sm my-2 w-full  aspect-square object-cover"
                   />
+                  <div className="absolute rounded inset-0 flex items-center justify-center bg-black bg-opacity-30  opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="flex items-center text-white space-x-4">
+                  <Button className="flex items-center gap-2 hover:text-gray-300">
+                    <Heart/>
+                    <span>{post?.likes.length}</span>
+                  </Button>
+                  <Button className="flex items-center gap-2 hover:text-gray-300">
+                    <MessageCircle/>
+                    <span>{post?.comments.length}</span>
+                  </Button>
+                  </div>
+                  </div>
                 </div>
               );
             })}
