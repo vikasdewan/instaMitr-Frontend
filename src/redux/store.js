@@ -3,6 +3,7 @@ import { authSlice } from "./authSlice.js";
 import { postSlice } from "./postSlice.js";
 import { chatSlice } from "./chatSlice.js";
 import {socketSlice} from "./socketSlice.js";
+import {realTimeNotiSlice} from "./realTimeNotiSlice.js";
 
 import {
   persistReducer,
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   auth: authSlice.reducer,
   post: postSlice.reducer,
   socketio: socketSlice.reducer,
+  realTimeNoti : realTimeNotiSlice.reducer,
   chat: chatSlice.reducer,
 
 });

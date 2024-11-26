@@ -3,9 +3,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import useGetAllMessage from "@/hooks/useGetAllMessage";
+import useGetRealTimeMsg from "@/hooks/useGetRealTimeMsg";
 
 export const Messages = () => {
-    
+  useGetRealTimeMsg();
+  useGetAllMessage();
+    const {user} = useSelector(store=> store.auth);
+    const {messages} = useSelector(store => store.chat)
     const {selectedUser} = useSelector((store) => store.chat);
   return (
     <div className="overflow-y-auto flex-1 p-4 ">
@@ -22,11 +27,11 @@ export const Messages = () => {
       </div>
         <div className="flex flex-col gap-3">
             {
-            [1,2,3,4].map((msg)=>{
+             messages && messages?.map((msg)=>{
                  return (
-                    <div className={`flex`}>
-                        <div>
-                            {msg}
+                    <div key={msg?._id} className={` flex ${msg.senderId === user?._id ? 'justify-end' : 'justify-start'} `}>
+                        <div className={`p-2 rounded-lg max-w-xs break-words ${msg.senderId === user?._id ? 'bg-blue-500' : 'bg-gray-600'}`}>
+                            {msg.message}
                         </div>
                     </div>
                  )

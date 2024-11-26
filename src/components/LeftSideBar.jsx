@@ -18,12 +18,15 @@ import { setAuthUser } from "@/redux/authSlice";
 import CreatePost from "./CreatePost";
 import { useState } from "react";
 import { setPosts, setSelectedPost } from "@/redux/postSlice";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Button } from "./ui/button";
 
 function LeftSideBar() {
   const navigate = useNavigate();
   const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
   const [open , setOpen] = useState(false);
+  const {likeNotiList} = useSelector(store => store.realTimeNoti)
 
   const logoutHandler = async () => {
     try {
@@ -98,6 +101,36 @@ function LeftSideBar() {
             >
               {item.icon}
               <span className="ml-4 ">{item.text}</span>
+              {
+                item.text === 'Notifications' && likeNotiList?.length>0 &&(
+                  <Popover>
+                    <PopoverTrigger asChild>
+                    <div>
+                      <Button size='icon' className= 'bg-red-500 hover:bg-red-500 rounded-full h-5 w-5 absolute bottom-6 left-6'>{likeNotiList?.length}</Button>
+                    </div>
+                    </PopoverTrigger>
+                    <PopoverContent className='bg-black w-full h-48 overflow-auto'>
+                      <div >
+                        {
+                          likeNotiList.length == 0 ? (<p>No new notification</p>) : (
+                            likeNotiList.map((notification)=>{
+                             return(
+                                <div key={notification.userId} className=" bg-black mt-3 text-white flex gap-3 items-center justify-start">
+                                    <Avatar>
+                                      <AvatarImage src={notification?.userDetails?.profileImage}/>
+                                      <AvatarFallback>IM</AvatarFallback>
+                                    </Avatar>
+                                    <p className="text-sm"><span className="font-bold">{notification?.userDetails?.username}</span> Liked your post </p>
+                                </div>  
+                              )
+                            })
+                          )
+                        }
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                )
+              }
             </div>
           );
         })}

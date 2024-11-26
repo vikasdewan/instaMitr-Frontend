@@ -7,6 +7,7 @@ export const chatSlice = createSlice({
         selectedUser :null,
         onlineUsers : [],
         messages : [],
+
       },
     reducers : {
         setSelectedUser : (state , action)=>{
