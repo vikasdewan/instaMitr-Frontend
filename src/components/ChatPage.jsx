@@ -8,8 +8,9 @@ import { Messages } from "./Messages";
 
 export const ChatPage = () => {
   const { user, suggestedUsers } = useSelector((store) => store.auth);
+  const {onlineUsers} = useSelector(store => store.chat)
   const {selectedUser} = useSelector((store)=> store.chat)
-  const isOnline = false;
+
   const dispatch = useDispatch()
 
   return (
@@ -19,6 +20,7 @@ export const ChatPage = () => {
         {/* <hr className="mb-4 border-gray-600 " /> */}
         <div className="overflow-y-auto h-[80vh]">
           {suggestedUsers.map((suggestedUser) => {
+            const isOnline = onlineUsers.includes(suggestedUser?._id);
             return (
               <div onClick={()=> dispatch(setSelectedUser(suggestedUser))} className={`text-gray-200 ml-3 flex gap-3 items-center p-3 hover:bg-gray-900 cursor-pointer ${selectedUser?._id === suggestedUser?._id ? `font-bold` : 'font-medium'}`}>
                 <Avatar className="w-14 h-14">

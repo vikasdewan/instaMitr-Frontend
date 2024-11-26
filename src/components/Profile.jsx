@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import useGetUserProfile from "@/hooks/useGetUserProfile";
 import { Link, useParams } from "react-router-dom";
@@ -33,6 +33,14 @@ function Profile() {
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
+
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(()=>{
+    window.scrollTo(0,0);
+    setTimeout(() => setIsVisible(true), 100); 
+  },[]);
+
 
   const displayedPost =
     activeTab === "posts" ? userProfile?.posts : userProfile?.bookmarks;

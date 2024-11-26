@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 export const Messages = () => {
+    
     const {selectedUser} = useSelector((store) => store.chat);
   return (
     <div className="overflow-y-auto flex-1 p-4 ">
@@ -19,7 +20,7 @@ export const Messages = () => {
            <Link to={`/profile/${selectedUser?._id}`}><Button className="h-8 p-3 bg-gray-800 my-2">View Profile</Button></Link>
         </div>
       </div>
-        <div>
+        <div className="flex flex-col gap-3">
             {
             [1,2,3,4].map((msg)=>{
                  return (
