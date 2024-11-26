@@ -1,17 +1,45 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import {setSelectedUser} from '../redux/chatSlice.js'
+import {setMessages, setSelectedUser} from '../redux/chatSlice.js'
 import { MessageCircleIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import { Messages } from "./Messages";
+import axios from "axios";
 
 export const ChatPage = () => {
+  const [textMessage , setTextMessage] = useState("");
   const { user, suggestedUsers } = useSelector((store) => store.auth);
-  const {onlineUsers} = useSelector(store => store.chat)
-  const {selectedUser} = useSelector((store)=> store.chat)
+  const {onlineUsers,selectedUser , messages} = useSelector(store => store.chat)
 
   const dispatch = useDispatch()
+
+  const sendMessageHandler = async (recieverId)=>{
+    try {
+        
+        const res = await axios.post(`http://localhost:8000/api/v1/message/send/${recieverId}`,{textMessage},{
+            headers:{
+                'Content-Type' : 'application/json',
+            },
+            withCredentials:true
+        })
+
+        if(res.data.success){
+            dispatch(setMessages([...messages,res.data.newMessage]))
+            setTextMessage("")
+        }
+
+    } catch (error) {
+        console.log(error)
+    }
+  }
+
+    //cleanup , means jab message tab se user hatega, aur jab phir aayega toh koi bhi user selected nahi hoga
+    useEffect(()=>{
+        return ()=>{
+            dispatch(setSelectedUser(null))
+        }
+    },[])
 
   return (
     <div className="ml-48  text-white flex">
@@ -57,8 +85,8 @@ export const ChatPage = () => {
                 </div>
                <Messages selectedUser = {selectedUser}/>
                 <div className="flex items-center p-4 border-t border-t-gray-600 ">
-                    <input type="text" className="flex-1 mr-2 bg-black text-white focus-visible:ring-transparent" placeholder="Messages..." />
-                    <Button>Send</Button>
+                    <input value={textMessage} onChange={(e) => setTextMessage(e.target.value)} type="text" className="flex-1 mr-2 bg-black text-white focus-visible:ring-transparent" placeholder="Messages..." />
+                    <Button onClick={()=>sendMessageHandler(selectedUser?._id)}>Send</Button>
                 </div>
             </section>
         ) 
