@@ -24,10 +24,10 @@ export const EditProfile = () => {
   // Handle file input change
   const fileChangeHandler = (e) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setInput({ ...input, profileImage: file });
-    }
+    if (file)  setInput({ ...input, profileImage: file });
   };
+
+
 
   // Handle profile update
   const editProfileHandler = async () => {
