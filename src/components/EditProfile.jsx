@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
 import { setAuthUser } from "@/redux/authSlice";
+import { Input } from "./ui/input";
 
 export const EditProfile = () => {
   const [loading, setLoading] = useState(false);
@@ -16,6 +17,7 @@ export const EditProfile = () => {
   const [input, setInput] = useState({
     profileImage: user?.profileImage,
     bio: user?.bio,
+    username: user?.username, // Added username to state
   });
 
   const navigate = useNavigate();
@@ -24,15 +26,14 @@ export const EditProfile = () => {
   // Handle file input change
   const fileChangeHandler = (e) => {
     const file = e.target.files?.[0];
-    if (file)  setInput({ ...input, profileImage: file });
+    if (file) setInput({ ...input, profileImage: file });
   };
-
-
 
   // Handle profile update
   const editProfileHandler = async () => {
     const formData = new FormData();
     formData.append("bio", input.bio);
+    formData.append("username", input.username); // Append updated username
     if (input.profileImage instanceof File) {
       formData.append("profileImage", input.profileImage); // Only append file if it's updated
     }
@@ -61,6 +62,7 @@ export const EditProfile = () => {
           ...user,
           bio: res.data.user?.bio,
           profileImage: res.data.user?.profileImage,
+          username: res.data.user?.username, // Update username in state
         };
 
         dispatch(setAuthUser(updatedUserData));
@@ -84,8 +86,7 @@ export const EditProfile = () => {
         <div className="flex item-center justify-between bg-gray-900 p-4 rounded-xl">
           <div className="flex items-center justify-center gap-3">
             <Avatar className="text-black w-16 h-16">
-              <AvatarImage src={user?.profileImage} alt="profile_image"  
-  loading="lazy" />
+              <AvatarImage src={user?.profileImage} alt="profile_image" loading="lazy" />
               <AvatarFallback>IM</AvatarFallback>
             </Avatar>
             <div>
@@ -109,6 +110,18 @@ export const EditProfile = () => {
             Change Photo
           </Button>
         </div>
+        <div>
+  <h1 className="font-bold text-xl mb-2">Username</h1>
+  <Input
+    value={input.username}
+    onChange={(e) => setInput({ ...input, username: e.target.value })}
+    placeholder="Enter your username"
+    name="username"
+    className="bg-black w-full text-white focus-visible:ring-0 focus:outline-none border-none"
+    autoComplete="new-username" // Prevent browser autofill for testing
+  />
+</div>
+    
         <div>
           <h1 className="font-bold text-xl mb-2">Bio</h1>
           <Textarea

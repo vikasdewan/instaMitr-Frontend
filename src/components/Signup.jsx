@@ -18,7 +18,7 @@ function Signup() {
 
   const [loading, setloading] = useState(false);
   const navigate = useNavigate();
-
+  
   const signupHandler = async (e) => {
     e.preventDefault();
     console.log(input);
