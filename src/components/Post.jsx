@@ -11,6 +11,7 @@ import axios from "axios";
 import { setPosts, setSelectedPost } from "@/redux/postSlice";
 import "../index.css";
 import { Badge } from "./ui/badge";
+import { Link } from "react-router-dom";
 
 function Post({ post }) {
   const [text, setText] = useState("");
@@ -124,12 +125,14 @@ function Post({ post }) {
     <div className="my-8 w-full max-w-md mx-auto text-white">
       <div className="flex items-center justify-between">
         <div className="flex item-center gap-2 ">
+          <Link to={`/profile/${post?.author?._id}`}>
           <Avatar className="text-black">
             <AvatarImage src={post.author?.profileImage} alt="post_image" />
             <AvatarFallback>IM</AvatarFallback>
           </Avatar>
+          </Link>
           <div className="flex items-center gap-3">
-          <h1 className="font-bold">{post.author?.username}</h1>
+         <Link to={`/profile/${post?.author?._id}`}><h1 className="font-bold">{post.author?.username}</h1></Link> 
         
         { 
           post?.author?._id === user?._id ? <Badge variant="secondary" className= "  font-bold  bg-gray-300 text-black ">My Vibe</Badge> : null 
