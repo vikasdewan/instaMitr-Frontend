@@ -121,6 +121,20 @@ function Post({ post }) {
     }
   };
 
+
+  const bookmarkHandler = async ()=>{
+    try{
+      const res = await axios.get(`http://localhost:8000/api/v1/post/${post?._id}/bookmark`,{withCredentials:true})
+
+      if(res.data.success){
+        setBookmarked(true)
+        toast.success(res.data.message);
+      }
+    }catch(error){
+      console.log(error);
+    }
+  }
+
   return (
     <div className="my-8 w-full max-w-md mx-auto text-white">
       <div className="flex items-center justify-between">
@@ -144,12 +158,16 @@ function Post({ post }) {
             <MoreHorizontal className="cursor-pointer" />
           </DialogTrigger>
           <DialogContent className="bg-black text-white flex flex-col items-center text-sm text-center ">
+
+            {
+              post.author._id !== user._id &&
             <Button
               variant="ghost"
               className="cursor-pointer w-fit text-[#ED4956] font-bold rounded-xl hover:bg-gray-500"
             >
               Unfollow
             </Button>
+            }
 
             <Button
               variant="ghost"
@@ -157,12 +175,15 @@ function Post({ post }) {
             >
               Add to Favourites
             </Button>
+           <Link to={`/profile/${post?.author_id}`}>
             <Button
               variant="ghost"
               className="cursor-pointer w-fit  rounded-xl hover:bg-gray-500"
             >
               About this account
             </Button>
+           </Link>
+           
             {
               //show the delete button only to logged In user's post
               user && user?._id === post?.author?._id && (
@@ -214,7 +235,7 @@ function Post({ post }) {
           />
           <Send className="cursor-pointer hover:text-gray-400" />
         </div>
-        <Bookmark className="cursor-pointer hover:text-gray-400" />
+        <Bookmark onClick={bookmarkHandler} className="cursor-pointer hover:text-gray-400" />
       </div>
       <span className="font-medium text-sm mb-2 block">{postLike} likes</span>
       <p>

@@ -129,7 +129,7 @@ export const EditProfile = () => {
             onChange={(e) => setInput({ ...input, bio: e.target.value })}
             placeholder="Enter your bio"
             name="bio"
-            className="bg-black text-white bg-gray-900 focus-visible:ring-0 focus:outline-none border-none"
+            className="  text-white bg-gray-900 focus-visible:ring-0 focus:outline-none border-none"
           />
         </div>
         <div className="flex justify-end">

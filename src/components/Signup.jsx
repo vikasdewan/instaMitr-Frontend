@@ -1,5 +1,5 @@
 import { Label } from "./ui/label.jsx";
-import React from "react";
+import React, { useEffect } from "react";
 import { Input } from "./ui/input.jsx";
 import { Button } from "./ui/button.jsx";
 import { useState } from "react";
@@ -8,10 +8,11 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function Signup() {
   const [input, setInput] = useState({ username: "", password: "", email: "" });
-
+  const {user} = useSelector(store => store.auth);
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
@@ -51,6 +52,12 @@ function Signup() {
       setloading(false);
     }
   };
+
+  useEffect(()=>{
+    if(user){
+      navigate("/");
+    }
+  },[])
 
   return (
     <div className="flex items-center w-screen h-screen justify-center bg-slate-900 text-white">
