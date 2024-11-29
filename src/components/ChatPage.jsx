@@ -17,6 +17,18 @@ export const ChatPage = () => {
 
   const dispatch = useDispatch();
   const location = useLocation();
+  const [followedUsers, setFollowedUsers] = useState([]);
+
+
+  // Filter out users that are already in the following list
+  useEffect(() => {
+    if (user?._id && suggestedUsers) {
+      const filteredUsers = suggestedUsers.filter((suggUser) =>
+        suggUser?.followers?.includes(user._id)
+      );
+      setFollowedUsers(filteredUsers); // Update followed users
+    }
+  }, [user, suggestedUsers]);
 
   const sendMessageHandler = async (recieverId) => {
     try {
@@ -63,7 +75,8 @@ export const ChatPage = () => {
           );
 
           if (res.data.success) {
-            dispatch(setMessages(res.data.messages)); // Store messages in Redux
+            dispatch(setMessages(res.data.messages));
+             // Store messages in Redux
           }
         } catch (error) {
           console.error("Failed to load messages:", error);
@@ -80,7 +93,7 @@ export const ChatPage = () => {
         <h1 className="font-bold mb-8 px-4 text-2xl">{user?.username}</h1>
         {/* <hr className="mb-4 border-gray-600 " /> */}
         <div className="overflow-y-auto h-[80vh]">
-          {suggestedUsers.map((suggestedUser) => {
+          {followedUsers.map((suggestedUser) => {
             const isOnline = onlineUsers.includes(suggestedUser?._id);
             return (
               <div

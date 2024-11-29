@@ -21,7 +21,7 @@ import { Badge } from "./ui/badge";
 import { FaComment, FaHeart,   } from "react-icons/fa";
 import { toast } from "sonner";
 import axios from "axios";
-import { setAuthUser } from "@/redux/authSlice";
+import { setAuthUser, setSuggestedUsers } from "@/redux/authSlice";
 import { setSelectedUser } from "@/redux/chatSlice";
 
 function Profile() {
@@ -30,8 +30,7 @@ function Profile() {
   useGetUserProfile(userId);
   const [activeTab, setActiveTab] = useState("posts");
 
-  const { userProfile,user } = useSelector((store) => store.auth);
-  const {selectedUser} = useSelector((store) => store.chat);
+  const {suggestedUsers, userProfile,user } = useSelector((store) => store.auth);
   const isLoggedInUserProfile = user?._id === userProfile?._id ;
   const [isFollowing, setIsFollowing] = useState(false);
   const dispatch = useDispatch()
@@ -53,7 +52,7 @@ function Profile() {
    // Handler for follow/unfollow
    const handleFollowToggle = async () => {
     try {
-      console.log("follow/unfollow button clicked")
+      // console.log("follow/unfollow button clicked")
       const response = await axios.post(
         `http://localhost:8000/api/v1/user/followorunfollow/${userProfile?._id}`,
         {}, // No body data required
@@ -68,7 +67,19 @@ function Profile() {
       if (response.data.success) {
         const updatedFollowing = isFollowing
         ? user?.following.filter((id) => id !== userProfile?._id)
-        : [...user.following, userProfile?._id];
+        : ([...user.following, userProfile?._id])
+
+        const updatedSuggestedUsers = suggestedUsers.map((suggUser) =>
+          suggUser?._id === userProfile?._id
+            ? {
+                ...suggUser,
+                followers: suggUser.followers.includes(user._id)
+                  ? suggUser.followers.filter((id) => id !== user._id) // Unfollow
+                  : [...suggUser.followers, user._id], // Follow
+              }
+            : suggUser
+        );
+       dispatch(setSuggestedUsers(updatedSuggestedUsers)) // upto date with the suggested Users
 
       dispatch(setAuthUser({ ...user, following: updatedFollowing }));
         setIsFollowing((prev) => !prev); // Toggle following state
