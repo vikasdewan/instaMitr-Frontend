@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import useGetUserProfile from "@/hooks/useGetUserProfile";
 import { Link, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "./ui/button";
 import {
   AtSign,
@@ -19,6 +19,9 @@ import {
 } from "lucide-react";
 import { Badge } from "./ui/badge";
 import { FaComment, FaHeart,   } from "react-icons/fa";
+import { toast } from "sonner";
+import axios from "axios";
+import { setAuthUser } from "@/redux/authSlice";
 
 function Profile() {
   const params = useParams();
@@ -28,11 +31,17 @@ function Profile() {
 
   const { userProfile,user } = useSelector((store) => store.auth);
   const isLoggedInUserProfile = user?._id === userProfile?._id ;
-  const isFollowing = true;
+  const [isFollowing, setIsFollowing] = useState(false);
+  const dispatch = useDispatch()
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
+
+  useEffect(() => {
+    setIsFollowing(user?.following?.includes(userProfile?._id)); // Check if logged-in user is following the profile
+  }, [userProfile, user]);
+
 
   const [isVisible, setIsVisible] = useState(false);
 
@@ -44,6 +53,37 @@ function Profile() {
 
   const displayedPost =
     activeTab === "posts" ? userProfile?.posts : userProfile?.bookmarks;
+
+   // Handler for follow/unfollow
+   const handleFollowToggle = async () => {
+    try {
+      console.log("follow/unfollow button clicked")
+      const response = await axios.post(
+        `http://localhost:8000/api/v1/user/followorunfollow/${userProfile?._id}`,
+        {}, // No body data required
+        {
+          withCredentials: true, // Send cookies with the request
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // Pass token if needed
+          },
+        }
+      );
+
+      if (response.data.success) {
+        const updatedFollowing = isFollowing
+        ? user?.following.filter((id) => id !== userProfile?._id)
+        : [...user.following, userProfile?._id];
+
+      dispatch(setAuthUser({ ...user, following: updatedFollowing }));
+        setIsFollowing((prev) => !prev); // Toggle following state
+        toast.success(response.data.message); // Success toast
+      }
+    } catch (error) {
+      console.error("Follow/Unfollow failed:", error);
+      toast.error("Something went wrong!"); // Optional: Error toast
+    }
+  };
+
 
   return (
     <div className="text-white  bg-black flex min-w-[94.8%] justify-center ml-20 pl-10  ">
@@ -82,6 +122,7 @@ function Profile() {
                 ) : isFollowing ? (
                   <>
                     <Button
+                      onClick={handleFollowToggle} 
                       className="bg-gray-700 text-white font-semibold hover:bg-gray-800 h-8"
                       variant="secondary"
                     >
@@ -102,6 +143,7 @@ function Profile() {
                 ) : (
                   <>
                     <Button
+                       onClick={handleFollowToggle} 
                       className="bg-blue-600 text-white font-semibold hover:bg-blue-700 h-8"
                       variant="secondary"
                     >
