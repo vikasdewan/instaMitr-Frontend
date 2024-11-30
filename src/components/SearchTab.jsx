@@ -38,7 +38,7 @@ export const SearchTab = () => {
           {filteredUsers.map((user) => (
             <li
               key={user?._id}
-              className="flex  items-center p-2    border-gray-700 cursor-pointer hover:bg-gray-800 rounded-md"
+              className="flex items-center p-2    border-gray-700 cursor-pointer hover:bg-gray-800 rounded-md"
               onClick={() => searchedUserHandler(user)}
             >
               <Avatar className="h-10 w-10 mr-2">
