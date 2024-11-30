@@ -22,7 +22,7 @@ import { FaComment, FaHeart,   } from "react-icons/fa";
 import { toast } from "sonner";
 import axios from "axios";
 import { setAuthUser, setSuggestedUsers, setUserProfile } from "@/redux/authSlice";
-import { setSelectedUser } from "@/redux/chatSlice";
+// import { setSelectedUser } from "@/redux/chatSlice";
 
 function Profile() {
   const params = useParams();
