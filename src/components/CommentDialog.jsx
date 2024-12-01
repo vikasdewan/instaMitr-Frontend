@@ -65,6 +65,12 @@ function CommentDialog({ openComment, setOpenComment }) {
     }
   };
 
+
+  const handleKeyDown = (e)=>{
+    if (e.key === "Enter" && text.trim()) { sendMessageHandler(); }
+  }
+
+        
   return (
     <Dialog open={openComment}>
       <DialogContent
@@ -146,6 +152,7 @@ function CommentDialog({ openComment, setOpenComment }) {
                   onChange={changeEventHandler}
                   placeholder="Add a comment...."
                   className="placeholder-white text-white bg-black text-sm w-full outline-none border-gray-300 p-2 rounded"
+                  onKeyDown={handleKeyDown}
                 />
                 <Button
                   disabled={!text.trim()}

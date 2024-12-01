@@ -3,12 +3,18 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import SuggestedUsers from "./SuggestedUsers";
+import { Button } from "./ui/button";
+import { useNavigate } from "react-router-dom";
 
-function RightSideBar() {
+function SuggestedUsersPage() {
   const { user } = useSelector((store) => store.auth);
+  const navigate = useNavigate();
+
+   
+
   return (
-    <div className="hidden md:block text-white bg-black min-w-fit py-10 pr-40 pl-24 text-sm">
-      <div className="flex item-center gap-2 mb-4">
+    <div className="flex px-2 flex-col items-center justify-center min-h-screen bg-black text-white md:hidden">
+      <div className="flex items-center gap-2 mb-4">
         <Link to={`/profile/${user?._id}`}>
           <Avatar className="text-black">
             <AvatarImage src={user?.profileImage} alt="profile_image" />
@@ -21,8 +27,9 @@ function RightSideBar() {
         </div>
       </div>
       <SuggestedUsers />
+       
     </div>
   );
 }
 
-export default RightSideBar;
+export default SuggestedUsersPage;

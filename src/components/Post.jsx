@@ -24,8 +24,6 @@ function Post({ post }) {
   const [comment, setComment] = useState(post?.comments);
   const [animate, setAnimate] = useState(false);
 
-  
-
   const changeEventHandler = (e) => {
     const inputText = e.target.value;
     if (inputText.trim()) {
@@ -34,6 +32,7 @@ function Post({ post }) {
       setText("");
     }
   };
+
   const likeOrDislikeHandler = async () => {
     try {
       const action = liked ? "dislike" : "like";
@@ -50,7 +49,6 @@ function Post({ post }) {
           setAnimate(false);
         }, 300);
 
-        //apne post ko udpate kar raha hu
         const updatedPostData = posts.map((p) =>
           p._id === post._id
             ? {
@@ -92,8 +90,6 @@ function Post({ post }) {
         );
 
         dispatch(setPosts(updatedPostData));
-        
-
         toast.success(res.data.message);
         setText("");
       }
@@ -121,36 +117,42 @@ function Post({ post }) {
     }
   };
 
+  const bookmarkHandler = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:8000/api/v1/post/${post?._id}/bookmark`,
+        { withCredentials: true }
+      );
 
-  const bookmarkHandler = async ()=>{
-    try{
-      const res = await axios.get(`http://localhost:8000/api/v1/post/${post?._id}/bookmark`,{withCredentials:true})
-
-      if(res.data.success){
-        setBookmarked(true)
+      if (res.data.success) {
+        setBookmarked(true);
         toast.success(res.data.message);
       }
-    }catch(error){
+    } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
-    <div className="my-8 w-full max-w-md mx-auto text-white">
+    <div className="my-8 w-full max-w-md mx-auto text-white px-2 md:px-0">
       <div className="flex items-center justify-between">
         <div className="flex item-center gap-2 ">
           <Link to={`/profile/${post?.author?._id}`}>
-          <Avatar className="text-black">
-            <AvatarImage src={post.author?.profileImage} alt="post_image" />
-            <AvatarFallback>IM</AvatarFallback>
-          </Avatar>
+            <Avatar className="text-black">
+              <AvatarImage src={post?.author?.profileImage} alt="post_image" />
+              <AvatarFallback>IM</AvatarFallback>
+            </Avatar>
           </Link>
           <div className="flex items-center gap-3">
-         <Link to={`/profile/${post?.author?._id}`}><h1 className="font-bold">{post.author?.username}</h1></Link> 
-        
-        { 
-          post?.author?._id === user?._id ? <Badge variant="secondary" className= "  font-bold  bg-gray-300 text-black ">My Vibe</Badge> : null 
-        }  
+            <Link to={`/profile/${post?.author?._id}`}>
+              <h1 className="font-bold">{post?.author?.username}</h1>
+            </Link>
+
+            {post?.author?._id === user?._id ? (
+              <Badge variant="secondary" className="font-bold bg-gray-300 text-black">
+                My Vibe
+              </Badge>
+            ) : null}
           </div>
         </div>
         <Dialog>
@@ -158,44 +160,39 @@ function Post({ post }) {
             <MoreHorizontal className="cursor-pointer" />
           </DialogTrigger>
           <DialogContent className="bg-black text-white flex flex-col items-center text-sm text-center ">
-
-            {
-              post.author._id !== user._id &&
-            <Button
-              variant="ghost"
-              className="cursor-pointer w-fit text-[#ED4956] font-bold rounded-xl hover:bg-gray-500"
-            >
-              Unfollow
-            </Button>
-            }
+            {post.author._id !== user._id && (
+              <Button
+                variant="ghost"
+                className="cursor-pointer w-fit text-[#ED4956] font-bold rounded-xl hover:bg-gray-500"
+              >
+                Unfollow
+              </Button>
+            )}
 
             <Button
               variant="ghost"
-              className="cursor-pointer w-fit   rounded-xl hover:bg-gray-500"
+              className="cursor-pointer w-fit rounded-xl hover:bg-gray-500"
             >
               Add to Favourites
             </Button>
-           <Link to={`/profile/${post?.author_id}`}>
-            <Button
-              variant="ghost"
-              className="cursor-pointer w-fit  rounded-xl hover:bg-gray-500"
-            >
-              About this account
-            </Button>
-           </Link>
-           
-            {
-              //show the delete button only to logged In user's post
-              user && user?._id === post?.author?._id && (
-                <Button
-                  variant="ghost"
-                  className="cursor-pointer w-fit  rounded-xl font-bold hover:bg-gray-500"
-                  onClick={deletePostHandler}
-                >
-                  Delete
-                </Button>
-              )
-            }
+            <Link to={`/profile/${post?.author?._id}`}>
+              <Button
+                variant="ghost"
+                className="cursor-pointer w-fit rounded-xl hover:bg-gray-500"
+              >
+                About this account
+              </Button>
+            </Link>
+
+            {user && user?._id === post?.author?._id && (
+              <Button
+                variant="ghost"
+                className="cursor-pointer w-fit rounded-xl font-bold hover:bg-gray-500"
+                onClick={deletePostHandler}
+              >
+                Delete
+              </Button>
+            )}
           </DialogContent>
         </Dialog>
       </div>
@@ -219,19 +216,17 @@ function Post({ post }) {
             <FaRegHeart
               onClick={likeOrDislikeHandler}
               size={"22px"}
-              className={`cursor-pointer hover:text-gray-400  ${
+              className={`cursor-pointer hover:text-gray-400 ${
                 animate ? "pop-animation" : ""
               }`}
             />
           )}
-
-
-        
           <MessageCircle
-            onClick={() => { 
-              dispatch(setSelectedPost(post))
-              setOpenComment(true)}} //when we use callback function i.e. ()=> ...  there we can pass argument or params in the function further calling like setOpenCommnet(true)
-            className="cursor-pointer hover:text-gray-400  "
+            onClick={() => {
+              dispatch(setSelectedPost(post));
+              setOpenComment(true);
+            }}
+            className="cursor-pointer hover:text-gray-400"
           />
           <Send className="cursor-pointer hover:text-gray-400" />
         </div>
@@ -239,21 +234,18 @@ function Post({ post }) {
       </div>
       <span className="font-medium text-sm mb-2 block">{postLike} likes</span>
       <p>
-        <span className="font-medium text-sm ">{post?.author?.username}</span>{" "}
-        &nbsp; {post?.caption}
+        <span className="font-medium text-sm">{post?.author?.username}</span> &nbsp; {post?.caption}
       </p>
       <span
-         onClick={() => { 
-          dispatch(setSelectedPost(post))
-          setOpenComment(true)}}
+        onClick={() => {
+          dispatch(setSelectedPost(post));
+          setOpenComment(true);
+        }}
         className="cursor-pointer font-thin text-sm text-gray-400"
       >
-        { comment?.length == 0 ? "" : `View all ${comment?.length} comments`}
+        {comment?.length === 0 ? "" : `View all ${comment?.length} comments`}
       </span>
-      <CommentDialog
-        openComment={openComment}
-        setOpenComment={setOpenComment}
-      />
+      <CommentDialog openComment={openComment} setOpenComment={setOpenComment} />
       <div className="flex">
         <input
           type="text"
@@ -266,7 +258,7 @@ function Post({ post }) {
           <span
             onClick={commentHandler}
             id="Postbutton"
-            className="text-[#0095F6] text-sm font-bold mt-3 cursor-pointer "
+            className="text-[#0095F6] text-sm font-bold mt-3 cursor-pointer"
           >
             Post
           </span>

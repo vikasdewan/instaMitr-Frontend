@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { setMessages, setSelectedUser } from "../redux/chatSlice.js";
-import { MessageCircleIcon } from "lucide-react";
+import { MessageCircleIcon, ArrowLeft } from "lucide-react";
 import { Button } from "./ui/button";
 import { Messages } from "./Messages";
 import axios from "axios";
@@ -15,10 +15,11 @@ export const ChatPage = () => {
     (store) => store.chat
   );
 
+  const [showChatList, setShowChatList] = useState(true); // State for controlling chat list visibility on mobile
+
   const dispatch = useDispatch();
   const location = useLocation();
   const [followedUsers, setFollowedUsers] = useState([]);
-
 
   // Filter out users that are already in the following list
   useEffect(() => {
@@ -52,7 +53,7 @@ export const ChatPage = () => {
     }
   };
 
-  //cleanup , means jab message tab se user hatega, aur jab phir aayega toh koi bhi user selected nahi hoga
+  // Cleanup
   useEffect(() => {
     return () => {
       dispatch(setSelectedUser(null));
@@ -70,13 +71,12 @@ export const ChatPage = () => {
       if (selectedUser) {
         try {
           const res = await axios.get(
-            `http://localhost:8000/api/v1/message/${selectedUser._id}`, // Fetch messages
+            `http://localhost:8000/api/v1/message/${selectedUser._id}`,
             { withCredentials: true }
           );
 
           if (res.data.success) {
             dispatch(setMessages(res.data.messages));
-             // Store messages in Redux
           }
         } catch (error) {
           console.error("Failed to load messages:", error);
@@ -88,19 +88,22 @@ export const ChatPage = () => {
   }, [selectedUser]);
 
   return (
-    <div className="ml-48  text-white flex">
-      <section className="w-full  md:w-1/4 my-8">
+    <div className="text-white flex flex-col md:flex-row md:ml-48 h-screen">
+      <section className={`w-full md:w-1/4 my-8 md:my-0 md:mx-8 ${showChatList ? 'block' : 'hidden'} md:block`}>
         <h1 className="font-bold mb-8 px-4 text-2xl">{user?.username}</h1>
-        {/* <hr className="mb-4 border-gray-600 " /> */}
-        <div className="overflow-y-auto h-[80vh]">
+        <div className="overflow-y-auto h-[40vh] md:h-[80vh]">
           {followedUsers.map((suggestedUser) => {
             const isOnline = onlineUsers.includes(suggestedUser?._id);
             return (
               <div
-                onClick={() => dispatch(setSelectedUser(suggestedUser))}
-                className={`text-gray-200 ml-3 flex gap-3 items-center p-3 hover:bg-gray-900 cursor-pointer ${
+                key={suggestedUser._id}
+                onClick={() => {
+                  dispatch(setSelectedUser(suggestedUser));
+                  setShowChatList(false); // Hide chat list on mobile
+                }}
+                className={`text-gray-200 mx-3 flex gap-3 items-center p-3 hover:bg-gray-900 cursor-pointer ${
                   selectedUser?._id === suggestedUser?._id
-                    ? `font-bold`
+                    ? "font-bold"
                     : "font-medium"
                 }`}
               >
@@ -126,19 +129,31 @@ export const ChatPage = () => {
           })}
         </div>
       </section>
-      {selectedUser ? (
-        <section className="flex-1 border-l border-l-gray-600 flex flex-col h-screen">
-          <div className="flex gap-3 items-center px-3 py-2 border-b border-gray-300 sticky top-0   z-10">
+      {selectedUser && (
+        <section className={`flex-1 border-l border-l-gray-600 flex flex-col h-screen ${showChatList ? 'hidden md:flex' : 'flex'}`}>
+          <div className="flex items-center gap-3 px-3 py-2 border-b border-gray-300 sticky top-0 z-10">
+            {/* Back Button for mobile */}
+            {!showChatList && (
+              <button
+                onClick={() => {
+                  setShowChatList(true);
+                  dispatch(setSelectedUser(null)); // Deselect the user
+                }}
+                className="md:hidden p-2 bg-gray-800 rounded-full"
+              >
+                <ArrowLeft className="text-white" />
+              </button>
+            )}
             <Avatar>
               <AvatarImage src={selectedUser?.profileImage} alt="profile" />
               <AvatarFallback>IM</AvatarFallback>
             </Avatar>
-            <div className="flex flexx-col">
+            <div className="flex flex-col">
               <span>{selectedUser?.username}</span>
             </div>
           </div>
           <Messages selectedUser={selectedUser} />
-          <div className="flex items-center p-4 border-t border-t-gray-600 ">
+          <div className="flex items-center p-4 border-t border-t-gray-600">
             <input
               value={textMessage}
               onChange={(e) => setTextMessage(e.target.value)}
@@ -146,7 +161,7 @@ export const ChatPage = () => {
               className="flex-1 mr-2 bg-black text-white focus-visible:ring-transparent"
               placeholder="Messages..."
               onKeyDown={(e) => {
-                if (e.key === 'Enter' && textMessage.trim() !== "") {
+                if (e.key === "Enter" && textMessage.trim() !== "") {
                   e.preventDefault();
                   sendMessageHandler(selectedUser?._id);
                 }
@@ -157,7 +172,8 @@ export const ChatPage = () => {
             </Button>
           </div>
         </section>
-      ) : (
+      )}
+      {!selectedUser && (
         <div className="flex text-gray-500 flex-col items-center justify-center mx-auto">
           <MessageCircleIcon className="w-32 h-32 my-4" />
           <h1 className="text-xl font-bold">Your Messages</h1>
