@@ -74,11 +74,11 @@ function CommentDialog({ openComment, setOpenComment }) {
   return (
     <Dialog open={openComment}>
       <DialogContent
-        className="bg-black text-white max-w-2xl p-0 flex flex-col"
+        className="bg-black  text-white max-w-2xl p-0 flex flex-col"
         onInteractOutside={() => setOpenComment(false)}
       >
-        <div className="flex flex-1">
-          <div className="w-1/2 min-h-96">
+        <div className="flex px-2">
+          <div className="hidden md:block w-1/2 min-h-96">
             <img
               src={selectedPost?.image}
               className="w-full h-full rounded-lg object-cover"
@@ -86,7 +86,7 @@ function CommentDialog({ openComment, setOpenComment }) {
             />
           </div>
 
-          <div className="w-1/2 flex flex-col justify-between">
+          <div className=" w-full md:w-1/2 flex flex-col justify-between">
             <div className="flex items-center justify-between p-4">
               <div className="flex gap-3 items-center">
                 <Link>
