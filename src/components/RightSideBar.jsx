@@ -7,7 +7,7 @@ import SuggestedUsers from "./SuggestedUsers";
 function RightSideBar() {
   const { user } = useSelector((store) => store.auth);
   return (
-    <div className="hidden md:block text-white bg-black min-w-fit py-10 pr-40 pl-24 text-sm">
+    <div className="hidden md:block text-white bg-black min-w-fit py-10 pr-20 pl-24 text-sm">
       <div className="flex item-center gap-2 mb-4">
         <Link to={`/profile/${user?._id}`}>
           <Avatar className="text-black">
