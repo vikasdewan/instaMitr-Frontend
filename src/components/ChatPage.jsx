@@ -89,8 +89,8 @@ export const ChatPage = () => {
 
   return (
     <div className="text-white flex flex-col md:flex-row md:ml-48 h-screen">
-      <section className={`w-full md:w-1/4 my-8 md:my-0 md:mx-8 ${showChatList ? 'block' : 'hidden'} md:block`}>
-        <h1 className="font-bold mb-8 px-4 text-2xl">{user?.username}</h1>
+      <section className={`w-full  border-b md:w-1/4 my-8 md:my-0 md:mx-8 ${showChatList ? 'block' : 'hidden'} md:block`}>
+        <h1 className="font-bold mb-8 py-2 px-4 text-2xl border-b">{user?.username}</h1>
         <div className="overflow-y-auto h-[40vh] md:h-[80vh]">
           {followedUsers.map((suggestedUser) => {
             const isOnline = onlineUsers.includes(suggestedUser?._id);
@@ -153,7 +153,7 @@ export const ChatPage = () => {
             </div>
           </div>
           <Messages selectedUser={selectedUser} />
-          <div className="flex items-center p-4 border-t border-t-gray-600">
+          <div className="flex items-center mb-16 md:mb-0 p-4 border-t border-t-gray-600">
             <input
               value={textMessage}
               onChange={(e) => setTextMessage(e.target.value)}
