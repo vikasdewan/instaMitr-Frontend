@@ -80,7 +80,7 @@ export const EditProfile = () => {
   };
 
   return (
-    <div className="text-white flex max-w-2xl mx-auto my-8">
+    <div className="text-white flex max-w-2xl px-3 mx-auto my-8">
       <section className="flex flex-col gap-6 w-full">
         <h1 className="font-bold text-2xl">Edit Profile</h1>
         <div className="flex item-center justify-between bg-gray-900 p-4 rounded-xl">
