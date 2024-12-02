@@ -19,11 +19,13 @@ function Post({ post }) {
   const { user } = useSelector((store) => store.auth);
   const { posts } = useSelector((store) => store.post);
   const dispatch = useDispatch();
-  const [liked, setLiked] = useState(post?.likes?.includes(user?._id) || false);
+  const [liked, setLiked] = useState(post?.likes?.includes(user?._id));
   const [postLike, setPostLike] = useState(post?.likes?.length);
   const [comment, setComment] = useState(post?.comments);
   const [animate, setAnimate] = useState(false);
-
+  const [bookmarked, setBookmarked] = useState(
+    post?.bookmarks?.includes(user?._id) || false
+  );
 
   const changeEventHandler = (e) => {
     const inputText = e.target.value;
@@ -126,7 +128,12 @@ function Post({ post }) {
       );
 
       if (res.data.success) {
-        setBookmarked(true);
+        setBookmarked((prev)=>!prev);
+        const updatedPostData = posts.map((p) =>
+          p?._id === post?._id ? { ...p, bookmarked: !p
+            .bookmarked } : p
+            );
+            dispatch(setPosts(updatedPostData));
         toast.success(res.data.message);
       }
     } catch (error) {
@@ -150,7 +157,10 @@ function Post({ post }) {
             </Link>
 
             {post?.author?._id === user?._id ? (
-              <Badge variant="secondary" className="font-bold bg-gray-300 text-black">
+              <Badge
+                variant="secondary"
+                className="font-bold bg-gray-300 text-black"
+              >
                 My Vibe
               </Badge>
             ) : null}
@@ -231,11 +241,22 @@ function Post({ post }) {
           />
           <Send className="cursor-pointer hover:text-gray-400" />
         </div>
-        <Bookmark onClick={bookmarkHandler} className="cursor-pointer hover:text-gray-400" />
+        {bookmarked ? (
+          <Bookmark
+            onClick={bookmarkHandler}
+            className="cursor-pointer hover:text-gray-400"
+          />
+        ) : (
+          <Bookmark
+            onClick={bookmarkHandler}
+            className="cursor-pointer hover:text-gray-400"
+          />
+        )}
       </div>
       <span className="font-medium text-sm mb-2 block">{postLike} likes</span>
       <p>
-        <span className="font-medium text-sm">{post?.author?.username}</span> &nbsp; {post?.caption}
+        <span className="font-medium text-sm">{post?.author?.username}</span>{" "}
+        &nbsp; {post?.caption}
       </p>
       <span
         onClick={() => {
@@ -246,7 +267,10 @@ function Post({ post }) {
       >
         {comment?.length === 0 ? "" : `View all ${comment?.length} comments`}
       </span>
-      <CommentDialog openComment={openComment} setOpenComment={setOpenComment} />
+      <CommentDialog
+        openComment={openComment}
+        setOpenComment={setOpenComment}
+      />
       <div className="flex">
         <input
           type="text"
