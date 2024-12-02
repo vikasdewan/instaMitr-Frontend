@@ -136,7 +136,7 @@ function Profile() {
                 </Button>
               </div>
             ) : isFollowing ? (
-              <div className="flex flex-wrap gap-2">
+              <div className="flex justify-center flex-wrap gap-2">
                 <Button onClick={handleFollowToggle} className="bg-gray-700 text-white font-semibold hover:bg-gray-800 h-8" variant="secondary">
                   Unfollow
                 </Button>
