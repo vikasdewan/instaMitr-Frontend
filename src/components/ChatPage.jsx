@@ -25,7 +25,7 @@ export const ChatPage = () => {
   useEffect(() => {
     if (user?._id && suggestedUsers) {
       const filteredUsers = suggestedUsers.filter((suggUser) =>
-        suggUser?.followers?.includes(user._id)
+        suggUser?.followers?.includes(user?._id)
       );
       setFollowedUsers(filteredUsers); // Update followed users
     }
@@ -71,7 +71,7 @@ export const ChatPage = () => {
       if (selectedUser) {
         try {
           const res = await axios.get(
-            `http://localhost:8000/api/v1/message/${selectedUser._id}`,
+            `http://localhost:8000/api/v1/message/${selectedUser?._id}`,
             { withCredentials: true }
           );
 
@@ -96,7 +96,7 @@ export const ChatPage = () => {
             const isOnline = onlineUsers.includes(suggestedUser?._id);
             return (
               <div
-                key={suggestedUser._id}
+                key={suggestedUser?._id}
                 onClick={() => {
                   dispatch(setSelectedUser(suggestedUser));
                   setShowChatList(false); // Hide chat list on mobile

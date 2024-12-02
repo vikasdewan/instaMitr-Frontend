@@ -50,7 +50,7 @@ function CommentDialog({ openComment, setOpenComment }) {
 
         // Update the selectedPost and posts in Redux
         const updatedPostData = posts.map((p) =>
-          p._id === selectedPost._id
+          p?._id === selectedPost?._id
             ? { ...p, comments: updatedCommentData }
             : p
         );
@@ -142,7 +142,7 @@ function CommentDialog({ openComment, setOpenComment }) {
             <div className="flex flex-col flex-grow max-h-[90%] justify-between">
               <div className="overflow-y-auto max-h-96 p-4">
                 {comment?.map((c) => (
-                  <Comment key={c._id} comment={c} />
+                  <Comment key={c?._id} comment={c} />
                 ))}
               </div>
               <div className="p-4 flex">

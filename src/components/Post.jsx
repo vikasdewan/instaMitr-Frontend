@@ -37,7 +37,7 @@ function Post({ post }) {
     try {
       const action = liked ? "dislike" : "like";
       const res = await axios.get(
-        `http://localhost:8000/api/v1/post/${post._id}/${action}`,
+        `http://localhost:8000/api/v1/post/${post?._id}/${action}`,
         { withCredentials: true }
       );
       if (res.data.success) {
@@ -50,12 +50,12 @@ function Post({ post }) {
         }, 300);
 
         const updatedPostData = posts.map((p) =>
-          p._id === post._id
+          p?._id === post?._id
             ? {
                 ...p,
                 likes: liked
-                  ? p.likes.filter((id) => id !== user._id)
-                  : [...p.likes, user._id],
+                  ? p.likes.filter((id) => id !== user?._id)
+                  : [...p.likes, user?._id],
               }
             : p
         );
@@ -86,7 +86,7 @@ function Post({ post }) {
         setComment(updatedCommentData);
 
         const updatedPostData = posts.map((p) =>
-          p._id === post._id ? { ...p, comments: updatedCommentData } : p
+          p?._id === post?._id ? { ...p, comments: updatedCommentData } : p
         );
 
         dispatch(setPosts(updatedPostData));
@@ -160,7 +160,7 @@ function Post({ post }) {
             <MoreHorizontal className="cursor-pointer" />
           </DialogTrigger>
           <DialogContent className="bg-black text-white flex flex-col items-center text-sm text-center ">
-            {post.author._id !== user._id && (
+            {post.author?._id !== user?._id && (
               <Button
                 variant="ghost"
                 className="cursor-pointer w-fit text-[#ED4956] font-bold rounded-xl hover:bg-gray-500"

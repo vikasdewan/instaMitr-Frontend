@@ -38,12 +38,12 @@ function SuggestedUsers() {
       if (response.data.success) {
 
         const updatedUsers = suggestedUsers.map((suggUser) =>
-          suggUser._id === suggUserId
+          suggUser?._id === suggUserId
             ? {
                 ...suggUser,
-                followers: suggUser.followers.includes(user._id)
-                  ? suggUser.followers.filter((id) => id !== user._id) // Unfollow
-                  : [...suggUser.followers, user._id], // Follow
+                followers: suggUser.followers.includes(user?._id)
+                  ? suggUser.followers.filter((id) => id !== user?._id) // Unfollow
+                  : [...suggUser.followers, user?._id], // Follow
               }
             : suggUser
         );
@@ -74,7 +74,7 @@ function SuggestedUsers() {
         </span>
       </div>
       {suggestedUsers.map((suggUser) => {
-           const isFollowing = suggUser.followers.includes(user._id); 
+           const isFollowing = suggUser.followers.includes(user?._id); 
        
   return (
     <div
