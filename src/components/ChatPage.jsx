@@ -18,7 +18,7 @@ export const ChatPage = () => {
   const [showChatList, setShowChatList] = useState(true); // State for controlling chat list visibility on mobile
 
   const dispatch = useDispatch();
-  const location = useLocation();
+  const location = useLocation(); // Use location to get passed state
   const [followedUsers, setFollowedUsers] = useState([]);
 
   // Filter out users that are already in the following list
@@ -58,7 +58,7 @@ export const ChatPage = () => {
     return () => {
       dispatch(setSelectedUser(null));
     };
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (location.state?.selectedUser) {
@@ -85,7 +85,7 @@ export const ChatPage = () => {
     };
 
     fetchMessages();
-  }, [selectedUser]);
+  }, [selectedUser, dispatch]);
 
   return (
     <div className="text-white flex flex-col md:flex-row md:ml-48 h-screen">

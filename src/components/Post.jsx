@@ -24,6 +24,7 @@ function Post({ post }) {
   const [comment, setComment] = useState(post?.comments);
   const [animate, setAnimate] = useState(false);
 
+
   const changeEventHandler = (e) => {
     const inputText = e.target.value;
     if (inputText.trim()) {

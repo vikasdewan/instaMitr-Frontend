@@ -49,7 +49,7 @@ function LeftSideBar() {
       navigate("/chat");
     } else if (textType == "Search") {
       navigate("/search");
-    }
+    } 
   };
 
   const sideBarItems = [

@@ -16,6 +16,7 @@ import { setlikeNotiList  } from "./redux/realTimeNotiSlice";
 import { ProtectedRoutes } from "./components/ProtectedRoutes";
 import { SearchTab } from "./components/SearchTab";
 import SuggestedUsersPage from "./components/SuggestedUsersPage";
+ 
   
 
 const browserRouter = createBrowserRouter([
@@ -47,6 +48,7 @@ const browserRouter = createBrowserRouter([
         path: "/suggestedusers",
         element: <ProtectedRoutes><SuggestedUsersPage/></ProtectedRoutes> ,
       },
+       
     ],
   },
 
