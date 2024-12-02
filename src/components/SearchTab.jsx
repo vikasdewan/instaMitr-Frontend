@@ -26,7 +26,7 @@ export const SearchTab = () => {
       {/* Search Bar */}
       <input
         type="text"
-        className="w-full p-3 text-black rounded-md border border-gray-300 mb-4"
+        className="w-full p-3 font-bold text-black rounded-md border border-gray-300 mb-4"
         placeholder="Search for users..."
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}

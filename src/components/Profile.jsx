@@ -136,7 +136,7 @@ function Profile() {
                 </Button>
               </div>
             ) : isFollowing ? (
-              <div className="flex justify-center flex-wrap gap-2">
+              <div className="flex items-center justify-center flex-wrap gap-2">
                 <Button onClick={handleFollowToggle} className="bg-gray-700 text-white font-semibold hover:bg-gray-800 h-8" variant="secondary">
                   Unfollow
                 </Button>
@@ -150,7 +150,7 @@ function Profile() {
                 <MoreHorizontal className="text-2xl hover:text-gray-200 cursor-pointer" />
               </div>
             ) : (
-              <div className="flex flex-wrap gap-2">
+              <div className="flex items-center justify-center flex-wrap gap-2">
                 <Button onClick={handleFollowToggle} className="bg-blue-600 text-white font-semibold hover:bg-blue-700 h-8" variant="secondary">
                   Follow
                 </Button>
