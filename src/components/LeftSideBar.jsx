@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Heart, Home, LogOut, MessageCircle, PlaySquare, PlusSquare, Search, TrendingUp } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
 import { toast } from "sonner";
@@ -10,6 +10,8 @@ import CreatePost from "./CreatePost";
 import { setPosts, setSelectedPost } from "@/redux/postSlice";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "./ui/button";
+import { setlikeNotiList } from "@/redux/realTimeNotiSlice";
+
 
 function LeftSideBar() {
   const navigate = useNavigate();
@@ -17,6 +19,7 @@ function LeftSideBar() {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const { likeNotiList } = useSelector((store) => store.realTimeNoti);
+  const [showPopover,setShowPopover] = useState(true);
 
   const logoutHandler = async () => {
     try {
@@ -72,6 +75,16 @@ function LeftSideBar() {
     { icon: <LogOut />, text: "Logout" },
   ];
 
+  useEffect(()=>{
+   if(likeNotiList.length>0 && !showPopover  )
+    dispatch(setlikeNotiList([]))
+  },[showPopover,dispatch,likeNotiList])
+
+  const handlePopoverClick = ()=>{
+    setShowPopover(false)
+    dispatch(setlikeNotiList([]))
+  }
+
   return (
     <div className="bg-black text-white fixed top-0 left-0 px-4 border-r-2 border-r-gray-700 h-screen hidden md:flex">
       <div className="flex flex-col mt-6">
@@ -87,9 +100,9 @@ function LeftSideBar() {
             >
               {item.icon}
               <span className="ml-4">{item.text}</span>
-              {item.text === "Notifications" && likeNotiList?.length > 0 && (
-                <Popover>
-                  <PopoverTrigger asChild>
+              {item.text === "Notifications" && likeNotiList?.length > 0 && showPopover && (
+                <Popover    >
+                  <PopoverTrigger asChild  >
                     <div>
                       <Button
                         size="icon"
@@ -98,8 +111,8 @@ function LeftSideBar() {
                         {likeNotiList?.length}
                       </Button>
                     </div>
-                  </PopoverTrigger>
-                  <PopoverContent className="bg-black w-full h-48 overflow-auto">
+                  </PopoverTrigger >
+                  <PopoverContent onInteractOutside={handlePopoverClick} className="bg-black w-full h-48 overflow-auto">
                     <div>
                       {likeNotiList.length == 0 ? (
                         <p>No new notification</p>

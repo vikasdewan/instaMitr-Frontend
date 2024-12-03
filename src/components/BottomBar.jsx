@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect } from "react";
 import { Heart, Home, LogOut, MessageCircle, PlaySquare, PlusSquare, Search, TrendingUp } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
 import { toast } from "sonner";
@@ -11,6 +12,7 @@ import { useState } from "react";
 import { setPosts, setSelectedPost } from "@/redux/postSlice";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "./ui/button";
+import { setlikeNotiList } from "@/redux/realTimeNotiSlice";
 
 export function BottomBar() {
   const navigate = useNavigate();
@@ -18,6 +20,7 @@ export function BottomBar() {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const { likeNotiList } = useSelector((store) => store.realTimeNoti);
+  const [showPopover,setShowPopover] = useState(true);
 
   const logoutHandler = async () => {
     try {
@@ -73,6 +76,16 @@ export function BottomBar() {
     { icon: <LogOut />, text: "Logout" },
   ];
 
+  useEffect(()=>{
+    if(likeNotiList.length>0 && !showPopover  )
+     dispatch(setlikeNotiList([]))
+   },[showPopover,dispatch,likeNotiList])
+ 
+   const handlePopoverClick = ()=>{
+     setShowPopover(false)
+     dispatch(setlikeNotiList([]))
+   }
+
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-black text-white border-t border-gray-700 flex justify-around items-center py-2 md:hidden">
       {sideBarItems.map((item, index) => (
@@ -84,14 +97,14 @@ export function BottomBar() {
           {item.icon}
           <span className="text-xs">{item.text}</span>
           {
-                item.text === 'Notifications' && likeNotiList?.length>0 &&(
+                item.text === 'Notifications' && likeNotiList?.length>0 && showPopover &&(
                   <Popover className="left-0">
                     <PopoverTrigger asChild>
                     <div>
                       <Button size='icon' className= ' bg-red-500 hover:bg-red-500 rounded-full h-5 w-5 absolute top-1 md:bottom-6  md:left-6'>{likeNotiList?.length}</Button>
                     </div>
                     </PopoverTrigger>
-                    <PopoverContent className='bg-black w-full h-48 overflow-auto'>
+                    <PopoverContent onInteractOutside={handlePopoverClick} className='bg-black w-full h-48 overflow-auto'>
                       <div >
                         {
                           likeNotiList.length == 0 ? (<p>No new notification</p>) : (
