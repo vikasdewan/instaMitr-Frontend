@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { Bookmark, MessageCircle, MoreHorizontal, Send } from "lucide-react";
@@ -12,21 +12,23 @@ import { setPosts, setSelectedPost } from "@/redux/postSlice";
 import "../index.css";
 import { Badge } from "./ui/badge";
 import { Link } from "react-router-dom";
+import { setAuthUser, setSuggestedUsers, setUserProfile } from "@/redux/authSlice";
+ 
 
 function Post({ post }) {
   const [text, setText] = useState("");
   const [openComment, setOpenComment] = useState(false);
-  const { user } = useSelector((store) => store.auth);
+  const { user, suggestedUsers } = useSelector((store) => store.auth);
   const { posts } = useSelector((store) => store.post);
   const dispatch = useDispatch();
   const [liked, setLiked] = useState(post?.likes?.includes(user?._id));
   const [postLike, setPostLike] = useState(post?.likes?.length);
   const [comment, setComment] = useState(post?.comments);
   const [animate, setAnimate] = useState(false);
-  const [bookmarked, setBookmarked] = useState(
-    post?.bookmarks?.includes(user?._id) || false
+  const [bookmarked, setBookmarked] = useState( false
   );
   const [showHeart, setShowHeart] = useState(false);
+  const [ isFollowing , setIsFollowing] = useState(user?.following?.includes(post?.author?._id))
 
   const changeEventHandler = (e) => {
     const inputText = e.target.value;
@@ -135,6 +137,7 @@ function Post({ post }) {
   };
 
   const bookmarkHandler = async () => {
+ 
     try {
       const res = await axios.get(
         `http://localhost:8000/api/v1/post/${post?._id}/bookmark`,
@@ -142,7 +145,7 @@ function Post({ post }) {
       );
 
       if (res.data.success) {
-        setBookmarked((prev) => !prev);
+        
         const updatedPostData = posts.map((p) =>
           p?._id === post?._id ? { ...p, bookmarked: !p.bookmarked } : p
         );
@@ -153,6 +156,64 @@ function Post({ post }) {
       console.log(error);
     }
   };
+
+  
+
+  const handleUnfollow = async () => {
+    try {
+      // console.log("follow/unfollow button clicked")
+      const response = await axios.post(
+        `http://localhost:8000/api/v1/user/followorunfollow/${post?.author?._id}`,
+        {}, // No body data required
+        {
+          withCredentials: true, // Send cookies with the request
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // Pass token if needed
+          },
+        }
+      );
+
+      if (response.data.success) {
+       
+        //for updating loggedin user
+        const updatedFollowing = isFollowing
+        ? user?.following?.filter((id) => id !== post?.author?._id)
+        : ([...user.following, post?.author?._id])
+        
+        dispatch(setAuthUser({ ...user, following: updatedFollowing }));
+       
+       //for updating profile user
+        const updatedFollowers = isFollowing
+        ? post?.author?.followers?.filter((id) => id !== user?._id) // Remove follower
+        : [...post?.author?.followers, user?._id]; // Add follower
+        
+        dispatch(setUserProfile({...post?.author, followers:updatedFollowers}))
+
+        //for updating the suggested users list 
+        const updatedSuggestedUsers = suggestedUsers?.map((suggUser) =>
+          suggUser?._id === post?.author?._id
+            ? {
+                ...suggUser,
+                followers: suggUser?.followers?.includes(user?._id)
+                  ? suggUser?.followers?.filter((id) => id !== user?._id) // Unfollow
+                  : [...suggUser?.followers, user?._id], // Follow
+              }
+            : suggUser
+        );
+       dispatch(setSuggestedUsers(updatedSuggestedUsers)) // upto date with the suggested Users
+
+        setIsFollowing((prev) => !prev); // Toggle following state
+        toast.success(response.data.message); // Success toast
+      }
+    } catch (error) {
+      console.error("Follow/Unfollow failed:", error);
+      toast.error("Something went wrong!"); // Optional: Error toast
+    }
+  };
+
+  useEffect(() => {
+     setBookmarked(user?.bookmarks?.includes(post._id)); 
+    }, [user, post._id]);
 
   return (
     <div className="my-8 w-full max-w-md mx-auto text-white px-2 md:px-0">
@@ -184,21 +245,17 @@ function Post({ post }) {
             <MoreHorizontal className="cursor-pointer" />
           </DialogTrigger>
           <DialogContent className="bg-black text-white flex flex-col items-center text-sm text-center ">
-            {post.author?._id !== user?._id && (
+            {post.author?._id !== user?._id && isFollowing ? (
               <Button
                 variant="ghost"
                 className="cursor-pointer w-fit text-[#ED4956] font-bold rounded-xl hover:bg-gray-500"
+                onClick={handleUnfollow}
               >
                 Unfollow
               </Button>
-            )}
+            ) : ""}
 
-            <Button
-              variant="ghost"
-              className="cursor-pointer w-fit rounded-xl hover:bg-gray-500"
-            >
-              Add to Favourites
-            </Button>
+            
             <Link to={`/profile/${post?.author?._id}`}>
               <Button
                 variant="ghost"

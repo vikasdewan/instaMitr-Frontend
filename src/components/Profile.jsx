@@ -161,13 +161,13 @@ function Profile() {
 
           <div className="flex flex-row  items-center justify-center md:justify-start gap-4 md:gap-9">
             <p>
-              <span className="font-semibold pr-1 text-lg">{userProfile?.posts.length}</span> posts
+              <span className="font-semibold pr-1 text-lg">{userProfile?.posts?.length}</span> posts
             </p>
             <p>
-              <span className="font-semibold pr-1 text-lg">{userProfile?.followers.length}</span> followers
+              <span className="font-semibold pr-1 text-lg">{userProfile?.followers?.length}</span> followers
             </p>
             <p>
-              <span className="font-semibold pr-1 text-lg">{userProfile?.following.length}</span> following
+              <span className="font-semibold pr-1 text-lg">{userProfile?.following?.length}</span> following
             </p>
           </div>
 
