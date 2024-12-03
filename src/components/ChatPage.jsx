@@ -34,7 +34,7 @@ export const ChatPage = () => {
   const sendMessageHandler = async (recieverId) => {
     try {
       const res = await axios.post(
-        `http://localhost:8000/api/v1/message/send/${recieverId}`,
+        `https://instamitr-deploy-1.onrender.com/api/v1/message/send/${recieverId}`,
         { textMessage },
         {
           headers: {
@@ -63,6 +63,7 @@ export const ChatPage = () => {
   useEffect(() => {
     if (location.state?.selectedUser) {
       dispatch(setSelectedUser(location.state.selectedUser));
+      setShowChatList(false); // Ensure the chat list is hidden when navigating directly to a chat
     }
   }, [location.state, dispatch]);
 
@@ -71,7 +72,7 @@ export const ChatPage = () => {
       if (selectedUser) {
         try {
           const res = await axios.get(
-            `http://localhost:8000/api/v1/message/${selectedUser?._id}`,
+            `https://instamitr-deploy-1.onrender.com/api/v1/message/${selectedUser?._id}`,
             { withCredentials: true }
           );
 
@@ -89,7 +90,7 @@ export const ChatPage = () => {
 
   return (
     <div className="text-white flex flex-col md:flex-row md:ml-48 h-screen">
-      <section className={`w-full  border-b md:w-1/4 my-8 md:my-0 md:mx-8 ${showChatList ? 'block' : 'hidden'} md:block`}>
+      <section className={`w-full border-b md:w-1/4 my-8 md:my-0 md:mx-8 ${showChatList ? 'block' : 'hidden'} md:block`}>
         <h1 className="font-bold mb-8 py-2 px-4 text-2xl border-b">{user?.username}</h1>
         <div className="overflow-y-auto h-[40vh] md:h-[80vh]">
           {followedUsers.map((suggestedUser) => {

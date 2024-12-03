@@ -10,6 +10,7 @@ import { Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthUser } from "@/redux/authSlice.js";
+import Loader from "./Loader.jsx";
 
 function Login() {
   const [input, setInput] = useState({ email: "", password: "" });
@@ -20,6 +21,7 @@ function Login() {
   };
 
   const [loading, setloading] = useState(false);
+  const [webLoading , setWebLoading] = useState(true);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -61,8 +63,20 @@ function Login() {
     }
   }, [user, navigate]);
 
+  useEffect(() => { 
+    // Simulate a delay for loading content, like fetching data 
+    setTimeout(() => { setWebLoading(false); }, 2000); // Adjust the timeout as needed 
+    }, []);
+
+
   return (
-    <div className="flex items-center w-screen h-screen justify-center bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white">
+
+    <>
+    {
+      webLoading ? 
+      <Loader/> :
+
+      <div className="flex items-center w-screen h-screen justify-center bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white">
       <form
         onSubmit={loginHandler}
         className="shadow-lg flex flex-col gap-1 bg-black p-7 w-96 rounded-md"
@@ -129,6 +143,10 @@ function Login() {
         </span>
       </form>
     </div>
+
+    }
+    </>
+   
   );
 }
 
