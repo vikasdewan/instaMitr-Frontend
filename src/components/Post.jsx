@@ -26,6 +26,7 @@ function Post({ post }) {
   const [bookmarked, setBookmarked] = useState(
     post?.bookmarks?.includes(user?._id) || false
   );
+  const [showHeart, setShowHeart] = useState(false);
 
   const changeEventHandler = (e) => {
     const inputText = e.target.value;
@@ -65,11 +66,24 @@ function Post({ post }) {
 
         dispatch(setPosts(updatedPostData));
         toast.success(res.data.message);
+
+        if (!liked) {
+           setShowHeart(true); setTimeout(() => { 
+            setShowHeart(false); 
+          }, 1000); // Duration of the animation 
+        }
       }
     } catch (error) {
       console.log(error);
     }
   };
+
+  const handleDoubleClick = () => {
+    likeOrDislikeHandler();
+  };
+  
+
+  
 
   const commentHandler = async () => {
     try {
@@ -128,12 +142,11 @@ function Post({ post }) {
       );
 
       if (res.data.success) {
-        setBookmarked((prev)=>!prev);
+        setBookmarked((prev) => !prev);
         const updatedPostData = posts.map((p) =>
-          p?._id === post?._id ? { ...p, bookmarked: !p
-            .bookmarked } : p
-            );
-            dispatch(setPosts(updatedPostData));
+          p?._id === post?._id ? { ...p, bookmarked: !p.bookmarked } : p
+        );
+        dispatch(setPosts(updatedPostData));
         toast.success(res.data.message);
       }
     } catch (error) {
@@ -207,11 +220,18 @@ function Post({ post }) {
           </DialogContent>
         </Dialog>
       </div>
+      <div className="relative "> 
       <img
         className="rounded-sm my-2 w-full aspect-square object-cover"
         src={post?.image}
-        alt="post_image"
+        alt="post_image" 
+        onDoubleClick={handleDoubleClick}
+       
+        // onTouchStart={handleDoubleTap} //double tap like
       />
+      {showHeart && <FaHeart className="heart-animation" />}
+      </div>
+     
 
       <div className="flex items-center justify-between my-2">
         <div className="flex items-center gap-3 ">
