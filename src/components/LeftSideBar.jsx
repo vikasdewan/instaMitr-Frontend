@@ -77,12 +77,12 @@ function LeftSideBar() {
 
   useEffect(()=>{
    if(likeNotiList.length>0 && !showPopover  )
-    dispatch(setlikeNotiList([]))
+    dispatch(setlikeNotiList([likeNotiList]))
   },[showPopover,dispatch,likeNotiList])
 
   const handlePopoverClick = ()=>{
     setShowPopover(false)
-    dispatch(setlikeNotiList([]))
+    dispatch(setlikeNotiList([likeNotiList]))
   }
 
   return (
