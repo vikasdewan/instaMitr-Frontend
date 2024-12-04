@@ -70,7 +70,7 @@ function App() {
 
   useEffect(()=>{
     if(user){
-      const socketio = io('https://insta-mitr-frontend.vercel.app/' , {
+      const socketio = io('https://instamitr.onrender.com' , {
         query:{
           userId:user?._id
         },
