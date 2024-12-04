@@ -43,7 +43,7 @@ function Post({ post }) {
     try {
       const action = liked ? "dislike" : "like";
       const res = await axios.get(
-        `http://localhost:8000/api/v1/post/${post?._id}/${action}`,
+        `https://instamitr.onrender.com/api/v1/post/${post?._id}/${action}`,
         { withCredentials: true }
       );
       if (res.data.success) {
@@ -163,7 +163,7 @@ function Post({ post }) {
     try {
       // console.log("follow/unfollow button clicked")
       const response = await axios.post(
-        `http://localhost:8000/api/v1/user/followorunfollow/${post?.author?._id}`,
+        `https://instamitr.onrender.com/api/v1/user/followorunfollow/${post?.author?._id}`,
         {}, // No body data required
         {
           withCredentials: true, // Send cookies with the request
