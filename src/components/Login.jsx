@@ -30,7 +30,7 @@ function Login() {
     try {
       setloading(true);
       const res = await axios.post(
-        "https://instamitr.onrender.com/api/v1/user/login",
+        "https://instamitr-backend.onrender.com/api/v1/user/login",
         input,
         {
           headers: {
