@@ -10,7 +10,7 @@ const useGetAllMessage = () => {
   useEffect(() => {
     const fetchAllMessage = async () => {
       try {
-        const res = await axios.get(`https://instamitr.onrender.com/api/v1/message/all/${selectedUser?._id}`, {
+        const res = await axios.get(`https://instamitr-backend.onrender.com/api/v1/message/all/${selectedUser?._id}`, {
           withCredentials: true,
         });
         if (res.data.success) {

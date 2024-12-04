@@ -31,7 +31,7 @@ function CommentDialog({ openComment, setOpenComment }) {
   const sendMessageHandler = async () => {
     try {
       const res = await axios.post(
-        `https://instamitr.onrender.com/api/v1/post/${selectedPost?._id}/comment`,
+        `https://instamitr-backend.onrender.com/api/v1/post/${selectedPost?._id}/comment`,
         { text },
         {
           headers: {

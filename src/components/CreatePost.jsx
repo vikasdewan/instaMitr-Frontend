@@ -36,7 +36,7 @@ function CreatePost({ open, setOpen }) {
     try {
       setLoading(true);
       const res = await axios.post(
-        "https://instamitr.onrender.com/api/v1/post/addpost",
+        "https://instamitr-backend.onrender.com/api/v1/post/addpost",
         formData,
         {
           header: {

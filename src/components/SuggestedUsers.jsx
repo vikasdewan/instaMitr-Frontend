@@ -24,7 +24,7 @@ function SuggestedUsers() {
     try {
       console.log("follow button clicked")
       const response = await axios.post(  
-        `https://instamitr.onrender.com/api/v1/user/followorunfollow/${suggUserId}`,
+        `https://instamitr-backend.onrender.com/api/v1/user/followorunfollow/${suggUserId}`,
         {}, // No body data required
         {
           withCredentials: true, // Send cookies with the request

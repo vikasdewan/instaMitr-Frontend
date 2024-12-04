@@ -27,7 +27,7 @@ function Signup() {
     try {
       setLoading(true);
       const res = await axios.post(
-        "https://instamitr.onrender.com/api/v1/user/register",
+        "https://instamitr-backend.onrender.com/api/v1/user/register",
         input,
         {
           headers: {
