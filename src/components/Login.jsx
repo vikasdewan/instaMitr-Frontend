@@ -30,7 +30,7 @@ function Login() {
     try {
       setloading(true);
       const res = await axios.post(
-        "https://insta-mitr-backend.vercel.app/api/v1/user/login",
+        "http://localhost:8000/api/v1/user/login",
         input,
         {
           headers: {

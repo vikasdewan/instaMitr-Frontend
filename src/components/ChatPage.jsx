@@ -34,7 +34,7 @@ export const ChatPage = () => {
   const sendMessageHandler = async (recieverId) => {
     try {
       const res = await axios.post(
-        `https://insta-mitr-backend.vercel.app/api/v1/message/send/${recieverId}`,
+        `http://localhost:8000/api/v1/message/send/${recieverId}`,
         { textMessage },
         {
           headers: {
@@ -72,7 +72,7 @@ export const ChatPage = () => {
       if (selectedUser) {
         try {
           const res = await axios.get(
-            `https://insta-mitr-backend.vercel.app/api/v1/message/${selectedUser?._id}`,
+            `http://localhost:8000/api/v1/message/${selectedUser?._id}`,
             { withCredentials: true }
           );
 

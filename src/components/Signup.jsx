@@ -27,7 +27,7 @@ function Signup() {
     try {
       setLoading(true);
       const res = await axios.post(
-        "https://insta-mitr-backend.vercel.app/api/v1/user/register",
+        "http://localhost:8000/api/v1/user/register",
         input,
         {
           headers: {

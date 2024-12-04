@@ -47,7 +47,7 @@ export const EditProfile = () => {
       }
 
       const res = await axios.post(
-        "https://insta-mitr-backend.vercel.app/api/v1/user/profile/edit",
+        "http://localhost:8000/api/v1/user/profile/edit",
         formData,
         {
           headers: {

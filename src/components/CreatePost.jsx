@@ -36,7 +36,7 @@ function CreatePost({ open, setOpen }) {
     try {
       setLoading(true);
       const res = await axios.post(
-        "https://insta-mitr-backend.vercel.app/api/v1/post/addpost",
+        "http://localhost:8000/api/v1/post/addpost",
         formData,
         {
           header: {

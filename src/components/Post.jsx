@@ -43,7 +43,7 @@ function Post({ post }) {
     try {
       const action = liked ? "dislike" : "like";
       const res = await axios.get(
-        `https://insta-mitr-backend.vercel.app/api/v1/post/${post?._id}/${action}`,
+        `http://localhost:8000/api/v1/post/${post?._id}/${action}`,
         { withCredentials: true }
       );
       if (res.data.success) {
@@ -90,7 +90,7 @@ function Post({ post }) {
   const commentHandler = async () => {
     try {
       const res = await axios.post(
-        `https://insta-mitr-backend.vercel.app/api/v1/post/${post?._id}/comment`,
+        `http://localhost:8000/api/v1/post/${post?._id}/comment`,
         { text },
         {
           headers: {
@@ -120,7 +120,7 @@ function Post({ post }) {
   const deletePostHandler = async () => {
     try {
       const res = await axios.delete(
-        `https://insta-mitr-backend.vercel.app/api/v1/post/delete/${post?._id}`,
+        `http://localhost:8000/api/v1/post/delete/${post?._id}`,
         { withCredentials: true }
       );
       if (res.data.success) {
@@ -140,7 +140,7 @@ function Post({ post }) {
  
     try {
       const res = await axios.get(
-        `https://insta-mitr-backend.vercel.app/api/v1/post/${post?._id}/bookmark`,
+        `http://localhost:8000/api/v1/post/${post?._id}/bookmark`,
         { withCredentials: true }
       );
 
@@ -163,7 +163,7 @@ function Post({ post }) {
     try {
       // console.log("follow/unfollow button clicked")
       const response = await axios.post(
-        `https://insta-mitr-backend.vercel.app/api/v1/user/followorunfollow/${post?.author?._id}`,
+        `http://localhost:8000/api/v1/user/followorunfollow/${post?.author?._id}`,
         {}, // No body data required
         {
           withCredentials: true, // Send cookies with the request
