@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import useGetUserProfile from "@/hooks/useGetUserProfile";
+import useGetUserProfile from "@/hooks/useGetUserProfile.jsx";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "./ui/button";
@@ -54,7 +54,7 @@ function Profile() {
     try {
       // console.log("follow/unfollow button clicked")
       const response = await axios.post(
-        `https://instamitr-backend.onrender.com/api/v1/user/followorunfollow/${userProfile?._id}`,
+        `https://instamitr-deploy-1.onrender.com/api/v1/user/followorunfollow/${userProfile?._id}`,
         {}, // No body data required
         {
           withCredentials: true, // Send cookies with the request
