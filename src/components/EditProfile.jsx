@@ -47,7 +47,7 @@ export const EditProfile = () => {
       }
 
       const res = await axios.post(
-        "https://instamitr-backend.onrender.com/api/v1/user/profile/edit",
+        "http://localhost:8000/api/v1/user/profile/edit",
         formData,
         {
           headers: {

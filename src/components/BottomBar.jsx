@@ -24,7 +24,7 @@ export function BottomBar() {
 
   const logoutHandler = async () => {
     try {
-      const res = await axios.get("https://instamitr-backend.onrender.com/api/v1/user/logout", {
+      const res = await axios.get("http://localhost:8000/api/v1/user/logout", {
         withCredentials: true,
       });
       if (res?.data.status) {
@@ -53,6 +53,9 @@ export function BottomBar() {
       navigate("/chat");
     } else if (textType == "Search") {
       navigate("/search");
+    } else if (textType === "Reels") {
+      // Navigate to the Reels page when the Reels button is clicked
+      navigate("/reels/random");
     }
   };
 
@@ -62,8 +65,9 @@ export function BottomBar() {
     // { icon: <TrendingUp />, text: "Explore" },
     // { icon: <PlaySquare />, text: "Reels" },
     { icon: <MessageCircle />, text: "Messages" },
+    { icon: <PlusSquare />, text: "Create" }, 
+    { icon: <PlaySquare />, text: "Reels" },
     { icon: <Heart />, text: "Notifications" },
-    { icon: <PlusSquare />, text: "Create" },
     {
       icon: (
         <Avatar className="w-8 h-8">
@@ -95,7 +99,7 @@ export function BottomBar() {
           className="flex flex-col items-center cursor-pointer"
         >
           {item.icon}
-          <span className="text-xs">{item.text}</span>
+         {/* <span className="text-xs">{item.text}</span> */}
           {
                 item.text === 'Notifications' && likeNotiList?.length>0 && showPopover &&(
                   <Popover className="left-0">

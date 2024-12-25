@@ -16,6 +16,7 @@ import { setlikeNotiList  } from "./redux/realTimeNotiSlice";
 import { ProtectedRoutes } from "./components/ProtectedRoutes";
 import { SearchTab } from "./components/SearchTab";
 import SuggestedUsersPage from "./components/SuggestedUsersPage";
+import Reels from "./components/Reels";
  
   
 
@@ -60,6 +61,10 @@ const browserRouter = createBrowserRouter([
     path: "/signup",
     element: <Signup />,
   },
+  {
+    path : "/reels/random",
+    element:<Reels/>
+  }
 ]);
 
 function App() {
@@ -70,7 +75,7 @@ function App() {
 
   useEffect(()=>{
     if(user){
-      const socketio = io('https://instamitr-backend.onrender.com' , {
+      const socketio = io('http://localhost:8000' , {
         query:{
           userId:user?._id
         },

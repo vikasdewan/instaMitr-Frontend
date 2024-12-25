@@ -23,7 +23,7 @@ function LeftSideBar() {
 
   const logoutHandler = async () => {
     try {
-      const res = await axios.get("https://instamitr-backend.onrender.com/api/v1/user/logout", {
+      const res = await axios.get("http://localhost:8000/api/v1/user/logout", {
         withCredentials: true,
       });
       if (res?.data.status) {
@@ -52,7 +52,10 @@ function LeftSideBar() {
       navigate("/chat");
     } else if (textType == "Search") {
       navigate("/search");
-    } 
+    } else if (textType === "Reels") {
+      // Navigate to the Reels page when the Reels button is clicked
+      navigate("/reels/random");
+    }
   };
 
   const sideBarItems = [
