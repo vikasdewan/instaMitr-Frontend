@@ -17,6 +17,7 @@ import { ProtectedRoutes } from "./components/ProtectedRoutes";
 import { SearchTab } from "./components/SearchTab";
 import SuggestedUsersPage from "./components/SuggestedUsersPage";
 import Reels from "./components/Reels";
+import Explore from "./components/Explore";
  
   
 
@@ -64,6 +65,10 @@ const browserRouter = createBrowserRouter([
   {
     path : "/reels/random",
     element:<Reels/>
+  },
+  {
+    path:"/explore",
+    element:<Explore/>
   }
 ]);
 

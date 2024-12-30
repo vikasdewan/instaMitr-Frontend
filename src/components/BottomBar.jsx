@@ -56,14 +56,16 @@ export function BottomBar() {
     } else if (textType === "Reels") {
       // Navigate to the Reels page when the Reels button is clicked
       navigate("/reels/random");
-    }
+    }  else if (textType === "Explore") {
+      // Navigate to the Reels page when the Reels button is clicked
+      navigate("/explore");
+    } 
   };
 
   const sideBarItems = [
     { icon: <Home />, text: "Home" },
     { icon: <Search />, text: "Search" },
-    // { icon: <TrendingUp />, text: "Explore" },
-    // { icon: <PlaySquare />, text: "Reels" },
+    { icon: <TrendingUp />, text: "Explore" },
     { icon: <MessageCircle />, text: "Messages" },
     { icon: <PlusSquare />, text: "Create" }, 
     { icon: <PlaySquare />, text: "Reels" },
@@ -71,7 +73,7 @@ export function BottomBar() {
     {
       icon: (
         <Avatar className="w-8 h-8">
-          <AvatarImage src={user?.profileImage} alt="@shadcn" />
+          <AvatarImage src={user?.profileImage} alt="@shadcn"/>
           <AvatarFallback>IM</AvatarFallback>
         </Avatar>
       ),
@@ -96,7 +98,7 @@ export function BottomBar() {
         <div
           onClick={() => sidebarHandler(item.text)}
           key={index}
-          className="flex flex-col items-center cursor-pointer"
+          className="flex flex-col items-center cursor-pointer size-4" 
         >
           {item.icon}
          {/* <span className="text-xs">{item.text}</span> */}

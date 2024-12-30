@@ -55,7 +55,10 @@ function LeftSideBar() {
     } else if (textType === "Reels") {
       // Navigate to the Reels page when the Reels button is clicked
       navigate("/reels/random");
-    }
+    } else if (textType === "Explore") {
+      // Navigate to the Reels page when the Reels button is clicked
+      navigate("/explore");
+    } 
   };
 
   const sideBarItems = [

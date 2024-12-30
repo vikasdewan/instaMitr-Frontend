@@ -90,6 +90,7 @@ const Reels = () => {
             src={reels[currentReelIndex].videoUrl}
             controls={false}
             autoPlay
+            muted
             loop
             onEnded={handleVideoEnd}
             className="w-full h-[90vh] object-cover rounded-lg"

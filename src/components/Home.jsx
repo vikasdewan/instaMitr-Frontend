@@ -19,13 +19,15 @@ const Home = () => {
 
   return (
     <>
+    {loading ?
+     <Loader /> :
      <div className="text-white flex">
       <div className="flex-grow bg-black text-white">
         <Feed />
         <Outlet />
       </div>
       <RightSideBar />
-    </div>   
+    </div>  }
     </>
   );
 }
