@@ -79,13 +79,13 @@ const Explore = () => {
 
       {/* Modal Dialog for Post Details */}
       {openPostDialog && selectedPost && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-black p-6 rounded-lg w-80">
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50 mx-2">
+          <div className="bg-black p-6 rounded-lg w-96 md:h-96">
             <h3 className="text-xl font-semibold mb-4">{selectedPost.title}</h3>
             <img
               src={selectedPost.image}
               alt={selectedPost.title}
-              className="w-full h-64 object-cover rounded-lg mb-4"
+              className="w-full h-64 object-fill rounded-lg mb-4"
             />
             <p className="text-gray-700 mb-4">{selectedPost.description}</p>
             <div className="flex justify-end">
