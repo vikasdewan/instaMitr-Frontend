@@ -98,7 +98,7 @@ export function BottomBar() {
         <div
           onClick={() => sidebarHandler(item.text)}
           key={index}
-          className="flex flex-col items-center cursor-pointer size-4" 
+          className="flex flex-col items-center cursor-pointer size-6" 
         >
           {item.icon}
          {/* <span className="text-xs">{item.text}</span> */}
