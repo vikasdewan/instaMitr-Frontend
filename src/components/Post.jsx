@@ -32,7 +32,7 @@ function Post({ post }) {
   const [animate, setAnimate] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
   const [showHeart, setShowHeart] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true); // track if the video is playing
   const [isFollowing, setIsFollowing] = useState(
     user?.following?.includes(post?.author?._id)
@@ -350,14 +350,15 @@ function Post({ post }) {
           <video
           onClick={handleVideoPostPlayNPause}
           ref={videoRef}
-          className="rounded-sm my-2 w-full aspect-square object-fill"
+          className="rounded-sm my-2 w-full aspect-square object-contain"
           src={post?.video}
           alt="post_video"
           muted={isMuted}
+          loop
         />
         ) : (
           <img
-            className="rounded-sm my-2 w-full aspect-square object-cover"
+            className="rounded-sm my-2 w-full aspect-square object-contain"
             src={post?.image}
             alt="post_image"
             onDoubleClick={handleDoubleClick} // Optional: Double-click to like functionality
@@ -371,9 +372,9 @@ function Post({ post }) {
         className="absolute bottom-4 right-4 p-1 bg-opacity-50 bg-gray-900 rounded-full"
       >
         {isMuted ? (
-          <span role="img" aria-label="mute">🔇</span> // Mute Symbol
+          <span role="img" aria-label="mute"><i className="fas fa-volume-mute"></i></span> // Mute Symbol
         ) : (
-          <span role="img" aria-label="unmute">🔊</span> // Unmute Symbol
+          <span role="img" aria-label="unmute"> <i className="fas fa-volume-up"></i></span> // Unmute Symbol
         )}
       </button>
           ) : ""

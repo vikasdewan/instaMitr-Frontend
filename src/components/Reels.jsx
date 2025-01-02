@@ -91,16 +91,16 @@ const Reels = () => {
             src={reels[currentReelIndex].video}
             controls={false}
             autoPlay
-            muted
+            
             loop
             onEnded={handleVideoEnd}
-            className="w-full h-[90vh] object-cover rounded-lg"
+            className="w-full h-[90vh] object-fill rounded-lg p-1"
             onClick={() => handleToggleSound(currentReelIndex)}
           />
           {showSymbol && (
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="bg-black bg-opacity-50 text-white text-3xl font-bold p-1 rounded-full">
-                {symbol === "mute" ? "🔇" : "🔊"}
+                {symbol === "mute" ? (<i className="fas fa-volume-mute"></i>): (<i className="fas fa-volume-up"></i>)}
               </div>
             </div>
           )}
