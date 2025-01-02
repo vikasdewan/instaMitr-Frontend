@@ -9,12 +9,21 @@ import Comment from "./Comment";
 import axios from "axios";
 import { setPosts } from "@/redux/postSlice";
 import { toast } from "sonner";
+import {
+  setAuthUser,
+  setSuggestedUsers,
+  setUserProfile,
+} from "@/redux/authSlice";
 
 function CommentDialog({ openComment, setOpenComment }) {
   const [text, setText] = useState("");
   const { selectedPost, posts } = useSelector((store) => store.post);
+  const {user} = useSelector((store)=> store.auth)
   const dispatch = useDispatch();
   const [comment, setComment] = useState([]);
+   const [isFollowing, setIsFollowing] = useState(
+      user?.following?.includes(selectedPost?.author?._id)
+    );
 
   // Load comments into local state on component mount
   useEffect(() => {
@@ -70,6 +79,77 @@ function CommentDialog({ openComment, setOpenComment }) {
     if (e.key === "Enter" && text.trim()) { sendMessageHandler(); }
   }
 
+  const handleUnfollow = async () => {
+    try {
+      // console.log("follow/unfollow button clicked")
+      const response = await axios.post(
+        `http://localhost:8000/api/v1/user/followorunfollow/${selectedPost?.author?._id}`,
+        {}, // No body data required
+        {
+          withCredentials: true, // Send cookies with the request
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // Pass token if needed
+          },
+        }
+      );
+
+      if (response.data.success) {
+        //for updating loggedin user
+        const updatedFollowing = isFollowing
+          ? user?.following?.filter((id) => id !== selectedPost?.author?._id)
+          : [...user.following, selectedPost?.author?._id];
+
+        dispatch(setAuthUser({ ...user, following: updatedFollowing }));
+
+        //for updating profile user
+        const updatedFollowers = isFollowing
+          ? selectedPost?.author?.followers?.filter((id) => id !== user?._id) // Remove follower
+          : [...selectedPost?.author?.followers, user?._id]; // Add follower
+
+        dispatch(
+          setUserProfile({ ...selectedPost?.author, followers: updatedFollowers })
+        );
+
+        //for updating the suggested users list
+        const updatedSuggestedUsers = suggestedUsers?.map((suggUser) =>
+          suggUser?._id === selectedPost?.author?._id
+            ? {
+                ...suggUser,
+                followers: suggUser?.followers?.includes(user?._id)
+                  ? suggUser?.followers?.filter((id) => id !== user?._id) // Unfollow
+                  : [...suggUser?.followers, user?._id], // Follow
+              }
+            : suggUser
+        );
+        dispatch(setSuggestedUsers(updatedSuggestedUsers)); // upto date with the suggested Users
+
+        setIsFollowing((prev) => !prev); // Toggle following state
+        toast.success(response.data.message); // Success toast
+      }
+    } catch (error) {
+      console.error("Follow/Unfollow failed:", error);
+      toast.error("Something went wrong!"); // Optional: Error toast
+    }
+  };
+
+  const deletePostHandler = async () => {
+    try {
+      const res = await axios.delete(
+        `http://localhost:8000/api/v1/post/delete/${post?._id}`,
+        { withCredentials: true }
+      );
+      if (res.data.success) {
+        const updatePostData = posts.filter(
+          (postItem) => postItem?._id !== selectedPost?._id
+        );
+        dispatch(setPosts(updatePostData));
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
+  };
         
   return (
     <Dialog open={openComment}>
@@ -79,11 +159,22 @@ function CommentDialog({ openComment, setOpenComment }) {
       >
         <div className="flex px-2">
           <div className="hidden md:block w-1/2 min-h-96">
-            <img
-              src={selectedPost?.image}
-              className="w-full h-full rounded-lg object-cover"
-              alt="post_image"
-            />
+          {selectedPost?.video ? (
+          <video
+          className="rounded-sm my-2 w-full aspect-square object-cover"
+          controls
+          muted
+          src={selectedPost?.video}
+          alt="post_video"
+        />
+        ) : (
+          <img
+            className="rounded-sm my-2 w-full aspect-square object-cover"
+            src={selectedPost?.image}
+            alt="post_image"
+             
+          />
+        )}
           </div>
 
           <div className=" w-full md:w-1/2 flex flex-col justify-between">
@@ -104,38 +195,43 @@ function CommentDialog({ openComment, setOpenComment }) {
                   &nbsp;
                 </div>
               </div>
+  <Dialog>
+          <DialogTrigger asChild>
+            <MoreHorizontal className="cursor-pointer" />
+          </DialogTrigger>
+          <DialogContent className="bg-black text-white flex flex-col items-center text-sm text-center ">
+            {selectedPost.author?._id !== user?._id && isFollowing ? (
+              <Button
+                variant="ghost"
+                className="cursor-pointer w-fit text-[#ED4956] font-bold rounded-xl hover:bg-gray-500"
+                onClick={handleUnfollow}
+              >
+                Unfollow
+              </Button>
+            ) : (
+              ""
+            )}
 
-              <Dialog>
-                <DialogTrigger asChild>
-                  <MoreHorizontal className="cursor-pointer" />
-                </DialogTrigger>
-                <DialogContent className="bg-black text-white flex flex-col items-center text-sm text-center">
-                  <Button
-                    variant="ghost"
-                    className="cursor-pointer w-fit text-[#ED4956] font-bold rounded-xl hover:bg-gray-500"
-                  >
-                    Unfollow
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    className="cursor-pointer w-fit rounded-xl hover:bg-gray-500"
-                  >
-                    Add to Favourites
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    className="cursor-pointer w-fit rounded-xl hover:bg-gray-500"
-                  >
-                    About this account
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    className="cursor-pointer w-fit rounded-xl font-bold hover:bg-gray-500"
-                  >
-                    Delete
-                  </Button>
-                </DialogContent>
-              </Dialog>
+            <Link to={`/profile/${selectedPost?.author?._id}`}>
+              <Button
+                variant="ghost"
+                className="cursor-pointer w-fit rounded-xl hover:bg-gray-500"
+              >
+                About this account
+              </Button>
+            </Link>
+
+            {user && user?._id === selectedPost?.author?._id && (
+              <Button
+                variant="ghost"
+                className="cursor-pointer w-fit rounded-xl font-bold hover:bg-gray-500"
+                onClick={deletePostHandler}
+              >
+                Delete
+              </Button>
+            )}
+          </DialogContent>
+        </Dialog>
             </div>
             <hr />
 

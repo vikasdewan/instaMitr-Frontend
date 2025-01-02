@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { Bookmark, MessageCircle, MoreHorizontal, Send } from "lucide-react";
@@ -12,8 +12,13 @@ import { setPosts, setSelectedPost } from "@/redux/postSlice";
 import "../index.css";
 import { Badge } from "./ui/badge";
 import { Link } from "react-router-dom";
-import { setAuthUser, setSuggestedUsers, setUserProfile } from "@/redux/authSlice";
- 
+import {
+  setAuthUser,
+  setSuggestedUsers,
+  setUserProfile,
+} from "@/redux/authSlice";
+
+
 
 function Post({ post }) {
   const [text, setText] = useState("");
@@ -25,10 +30,14 @@ function Post({ post }) {
   const [postLike, setPostLike] = useState(post?.likes?.length);
   const [comment, setComment] = useState(post?.comments);
   const [animate, setAnimate] = useState(false);
-  const [bookmarked, setBookmarked] = useState( false
-  );
+  const [bookmarked, setBookmarked] = useState(false);
   const [showHeart, setShowHeart] = useState(false);
-  const [ isFollowing , setIsFollowing] = useState(user?.following?.includes(post?.author?._id))
+  const [isMuted, setIsMuted] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(true); // track if the video is playing
+  const [isFollowing, setIsFollowing] = useState(
+    user?.following?.includes(post?.author?._id)
+  );
+  const videoRef = useRef(null);
 
   const changeEventHandler = (e) => {
     const inputText = e.target.value;
@@ -38,6 +47,31 @@ function Post({ post }) {
       setText("");
     }
   };
+
+  const handleVideoPostMute = () => {
+    const videoElement = videoRef.current;
+    if (videoElement) {
+      setIsMuted((prevMuted) => {
+        const newMuteStatus = !prevMuted;
+        videoElement.muted = newMuteStatus;
+        return newMuteStatus;
+      });
+    }
+  };
+
+  const handleVideoPostPlayNPause = () => {
+    const videoElement = videoRef.current;
+    if (videoElement) {
+      if (videoElement.paused) {
+        videoElement.play(); // Play the video
+        setIsPlaying(true);
+      } else {
+        videoElement.pause(); // Pause the video
+        setIsPlaying(false);
+      }
+    }
+  };
+
 
   const likeOrDislikeHandler = async () => {
     try {
@@ -70,9 +104,10 @@ function Post({ post }) {
         toast.success(res.data.message);
 
         if (!liked) {
-           setShowHeart(true); setTimeout(() => { 
-            setShowHeart(false); 
-          }, 1000); // Duration of the animation 
+          setShowHeart(true);
+          setTimeout(() => {
+            setShowHeart(false);
+          }, 1000); // Duration of the animation
         }
       }
     } catch (error) {
@@ -83,9 +118,6 @@ function Post({ post }) {
   const handleDoubleClick = () => {
     likeOrDislikeHandler();
   };
-  
-
-  
 
   const commentHandler = async () => {
     try {
@@ -137,7 +169,6 @@ function Post({ post }) {
   };
 
   const bookmarkHandler = async () => {
- 
     try {
       const res = await axios.get(
         `http://localhost:8000/api/v1/post/${post?._id}/bookmark`,
@@ -145,7 +176,6 @@ function Post({ post }) {
       );
 
       if (res.data.success) {
-        
         const updatedPostData = posts.map((p) =>
           p?._id === post?._id ? { ...p, bookmarked: !p.bookmarked } : p
         );
@@ -156,8 +186,6 @@ function Post({ post }) {
       console.log(error);
     }
   };
-
-  
 
   const handleUnfollow = async () => {
     try {
@@ -174,22 +202,23 @@ function Post({ post }) {
       );
 
       if (response.data.success) {
-       
         //for updating loggedin user
         const updatedFollowing = isFollowing
-        ? user?.following?.filter((id) => id !== post?.author?._id)
-        : ([...user.following, post?.author?._id])
-        
-        dispatch(setAuthUser({ ...user, following: updatedFollowing }));
-       
-       //for updating profile user
-        const updatedFollowers = isFollowing
-        ? post?.author?.followers?.filter((id) => id !== user?._id) // Remove follower
-        : [...post?.author?.followers, user?._id]; // Add follower
-        
-        dispatch(setUserProfile({...post?.author, followers:updatedFollowers}))
+          ? user?.following?.filter((id) => id !== post?.author?._id)
+          : [...user.following, post?.author?._id];
 
-        //for updating the suggested users list 
+        dispatch(setAuthUser({ ...user, following: updatedFollowing }));
+
+        //for updating profile user
+        const updatedFollowers = isFollowing
+          ? post?.author?.followers?.filter((id) => id !== user?._id) // Remove follower
+          : [...post?.author?.followers, user?._id]; // Add follower
+
+        dispatch(
+          setUserProfile({ ...post?.author, followers: updatedFollowers })
+        );
+
+        //for updating the suggested users list
         const updatedSuggestedUsers = suggestedUsers?.map((suggUser) =>
           suggUser?._id === post?.author?._id
             ? {
@@ -200,7 +229,7 @@ function Post({ post }) {
               }
             : suggUser
         );
-       dispatch(setSuggestedUsers(updatedSuggestedUsers)) // upto date with the suggested Users
+        dispatch(setSuggestedUsers(updatedSuggestedUsers)); // upto date with the suggested Users
 
         setIsFollowing((prev) => !prev); // Toggle following state
         toast.success(response.data.message); // Success toast
@@ -212,8 +241,46 @@ function Post({ post }) {
   };
 
   useEffect(() => {
-     setBookmarked(user?.bookmarks?.includes(post._id)); 
-    }, [user, post._id]);
+    setBookmarked(user?.bookmarks?.includes(post._id));
+  }, [user, post._id]);
+
+
+  // IntersectionObserver to play and pause the video when it enters and leaves the screen
+  useEffect(() => {
+    const videoElement = videoRef.current;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Play the video when it enters the viewport, no matter what state it was in
+            if (videoElement && videoElement.paused) {
+              videoElement.play();
+              setIsPlaying(true); // Set the state to playing
+            }
+          } else {
+            // Pause the video when it leaves the viewport
+            if (videoElement) {
+              videoElement.pause();
+              setIsPlaying(false); // Set the state to paused
+            }
+          }
+        });
+      },
+      { threshold: 0.7 }
+    );
+
+    if (videoElement) {
+      observer.observe(videoElement);
+    }
+
+    return () => {
+      if (videoElement) {
+        observer.unobserve(videoElement);
+      }
+    };
+  }, []); // Ensure the observer takes into account the `isPlaying` state
+
 
   return (
     <div className="my-8 w-full max-w-md mx-auto text-white px-2 md:px-0">
@@ -253,9 +320,10 @@ function Post({ post }) {
               >
                 Unfollow
               </Button>
-            ) : ""}
+            ) : (
+              ""
+            )}
 
-            
             <Link to={`/profile/${post?.author?._id}`}>
               <Button
                 variant="ghost"
@@ -277,18 +345,41 @@ function Post({ post }) {
           </DialogContent>
         </Dialog>
       </div>
-      <div className="relative "> 
-      <img
-        className="rounded-sm my-2 w-full aspect-square object-cover"
-        src={post?.image}
-        alt="post_image" 
-        onDoubleClick={handleDoubleClick}
-       
-        // onTouchStart={handleDoubleTap} //double tap like
-      />
-      {showHeart && <FaHeart className="heart-animation" />}
+      <div className="relative ">
+        {post?.video ? (
+          <video
+          onClick={handleVideoPostPlayNPause}
+          ref={videoRef}
+          className="rounded-sm my-2 w-full aspect-square object-fill"
+          src={post?.video}
+          alt="post_video"
+          muted={isMuted}
+        />
+        ) : (
+          <img
+            className="rounded-sm my-2 w-full aspect-square object-cover"
+            src={post?.image}
+            alt="post_image"
+            onDoubleClick={handleDoubleClick} // Optional: Double-click to like functionality
+          />
+        )}
+        {
+          post?.video ? (
+
+        <button
+        onClick={handleVideoPostMute}
+        className="absolute bottom-4 right-4 p-1 bg-opacity-50 bg-gray-900 rounded-full"
+      >
+        {isMuted ? (
+          <span role="img" aria-label="mute">🔇</span> // Mute Symbol
+        ) : (
+          <span role="img" aria-label="unmute">🔊</span> // Unmute Symbol
+        )}
+      </button>
+          ) : ""
+        } 
+        {showHeart && <FaHeart className="heart-animation" />}
       </div>
-     
 
       <div className="flex items-center justify-between my-2">
         <div className="flex items-center gap-3 ">

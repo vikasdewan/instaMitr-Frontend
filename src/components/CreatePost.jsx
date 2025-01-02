@@ -12,7 +12,7 @@ import { setPosts } from "@/redux/postSlice";
 
 function CreatePost({ open, setOpen }) {
   const imageRef = useRef();
-  const [file, setFile] = useState("");
+  const [file, setFile] = useState(null);
   const [caption, setCaption] = useState("");
   const [imagePreview, setImagePreview] = useState("");
   const [loading, setLoading] = useState(false);
@@ -22,6 +22,7 @@ function CreatePost({ open, setOpen }) {
 
   const fileChangeHandler = async (e) => {
     const file = e.target.files[0];
+    
     if (file) {
       setFile(file);
       const dataUrl = await readFileAsDataURL(file);
@@ -30,36 +31,81 @@ function CreatePost({ open, setOpen }) {
   };
 
   const createPostHandler = async (e) => {
+    e.preventDefault(); // Ensure the form submission is prevented
+
     const formData = new FormData();
     formData.append("caption", caption);
-    if (imagePreview) formData.append("image", file);
-    try {
-      setLoading(true);
-      const res = await axios.post(
-        "http://localhost:8000/api/v1/post/addpost",
-        formData,
-        {
-          header: {
-            "Content-Type": "multipart/form-data",
-          },
-          withCredentials: true,
+
+    if (file) {
+      // Check if the file is an image
+      if (file.type.startsWith("image/")) {
+        formData.append("image", file);
+
+        try {
+          setLoading(true);
+          const res = await axios.post(
+            "http://localhost:8000/api/v1/post/addpost/image", // Image API endpoint
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+              withCredentials: true,
+            }
+          );
+
+          if (res.data.success) {
+            dispatch(setPosts([res.data.post, ...posts]));
+            toast.success(res.data.message);
+            setOpen(false);
+            // Clear inputs for next use
+            setCaption("");
+            setImagePreview("");
+            setFile(null);
+          }
+        } catch (error) {
+          toast.error(error.response.data.message);
+        } finally {
+          setLoading(false);
         }
-      );
-
-      if (res.data.success) {
-        dispatch(setPosts([res.data.post, ...posts]));
-        toast.success(res.data.message);
-
-        setOpen(false);
-
-        // Clear inputs for next use
-        setCaption("");
-        setImagePreview("");
-        setFile(null);
       }
-    } catch (error) {
-      toast.error(error.response.data.message);
-    } finally {
+      // Check if the file is a video
+      else if (file.type.startsWith("video/")) {
+        console.log("file Details:", file);
+        formData.append("video", file);
+        try {
+          setLoading(true);
+          const res = await axios.post(
+            "http://localhost:8000/api/v1/post/addpost/video", // Video API endpoint
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+              withCredentials: true,
+            }
+          );
+          console.log(res);
+
+          if (res.data.success) {
+            dispatch(setPosts([res.data.post, ...posts]));
+            toast.success(res.data.message);
+            setOpen(false);
+            // Clear inputs for next use
+            setCaption("");
+            setFile(null);
+          }
+        } catch (error) {
+          toast.error(error.response.data.message);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        toast.error("Only image or video files are allowed.");
+        setLoading(false);
+      }
+    } else {
+      toast.error("Please select a file.");
       setLoading(false);
     }
   };
@@ -100,13 +146,24 @@ function CreatePost({ open, setOpen }) {
             placeholder="Write a caption..."
           ></Textarea>
 
-          {imagePreview && (
+          {imagePreview && file && (
             <div className="w-full h-64 flex items-center justify-center">
-              <img
-                src={imagePreview}
-                alt="preview_img"
-                className="object-cover h-full w-full rounded-lg"
-              />
+              {/* Display image preview */}
+              {file.type.startsWith("image/") && (
+                <img
+                  src={imagePreview}
+                  alt="preview_img"
+                  className="object-cover h-full w-full rounded-lg"
+                />
+              )}
+              {/* Display video preview */}
+              {file.type.startsWith("video/") && (
+                <video
+                  controls
+                  src={imagePreview}
+                  className="object-cover h-full w-full rounded-lg"
+                />
+              )}
             </div>
           )}
 

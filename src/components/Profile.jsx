@@ -242,12 +242,21 @@ function Profile() {
           className="relative group cursor-pointer"
           onClick={() => openPostDialogHandler(post)}
           >
-            <img
-              src={post?.image}
-              alt="post_image"
-              
-              className="rounded-sm my-2 w-full aspect-square object-cover"
-            />
+            
+            {post?.video ? (
+                      <video
+                        src={post?.video}
+                        className="rounded-sm my-2 w-full aspect-square object-cover"
+                        muted
+                        loop
+                      />
+                    ) : (
+                      <img
+                        src={post?.image}
+                        alt="Post"
+                        className="rounded-sm my-2 w-full aspect-square object-cover"
+                      />
+                    )}
             <div className="absolute inset-0 flex items-center justify-center bg-gray-900 bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
               <div className="flex items-center text-white space-x-4 text-lg font-bold">
                 <button className="flex items-center gap-2 hover:text-gray-300">
@@ -271,11 +280,23 @@ function Profile() {
           <div className="fixed inset-0  bg-gray-600 bg-opacity-50 flex justify-center items-center z-50 mx-2">
             <div className="bg-black p-6 rounded-lg md:w-1/2  w-96 mx-2 ">
               <h3 className="text-xl font-semibold mb-4">{selectedPost.caption}</h3>
-              <img
-                src={selectedPost.image}
-                alt={selectedPost.caption}
-                className="cover w-full h-96 object-fill rounded-lg mb-4"
-              />
+              
+               {selectedPost?.video ? (
+                      <video
+                        src={selectedPost?.video}
+                        alt="video_post"
+                        className="cover w-full h-96 object-fill rounded-lg mb-4"
+                        controls
+                        muted
+                        loop
+                      />
+                    ) : (
+                      <img
+                        src={selectedPost?.image}
+                        alt="Image_Post"
+                       className="cover w-full h-96 object-fill rounded-lg mb-4"
+                      />
+                    )}
               {/* <p className="text-gray-700 mb-4">{selectedPost.caption}</p> */}
               <div className="flex justify-end">
                 <button
