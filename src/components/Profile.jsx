@@ -273,6 +273,13 @@ function Profile() {
                         className="rounded-sm my-2 w-full aspect-square object-cover"
                       />
                     )}
+                     <div className="absolute top-2 right-2 bg-black bg-opacity-50 opacity-70 text-white rounded-full p-2 z-10">
+                    {post?.video ? (
+                      <i className="fas fa-video"></i>
+                    ) : (
+                      <i className="fas fa-image"></i>
+                    )}
+                  </div>
             <div className="absolute inset-0 flex items-center justify-center bg-gray-900 bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
               <div className="flex items-center text-white space-x-4 text-lg font-bold">
                 <button className="flex items-center gap-2 hover:text-gray-300">
