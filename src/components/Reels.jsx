@@ -11,6 +11,16 @@ const Reels = () => {
   const videoRef = useRef([]);
   const navigate = useNavigate();
 
+   // Shuffle function to randomize the order of posts
+   const shuffleArray = (array) => {
+    let shuffledArray = [...array];
+    for (let i = shuffledArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]]; // Swap elements
+    }
+    return shuffledArray;
+  };
+
   useEffect(() => {
     const fetchReels = async () => {
       try {
@@ -23,7 +33,8 @@ const Reels = () => {
         const filteredReels = res.data.posts.filter(
           (post) => post.video && post.video.trim() !== ""
         );
-        setReels(filteredReels);
+        const shuffledReels = shuffleArray(filteredReels);
+        setReels(shuffledReels);
       } catch (error) {
         console.error("Error fetching reels:", error);
       }

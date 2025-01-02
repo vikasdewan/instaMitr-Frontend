@@ -313,7 +313,7 @@ function Profile() {
                   <div className="relative">
                     <video
                       src={selectedPost?.video}
-                      className="w-full h-[550px] md:h-[550px] pt-4 md:py-10 object-contain rounded-lg mb-4"
+                      className="w-full h-[500px] md:h-[550px] pt-4 md:py-10 object-contain rounded-lg mb-4"
                       muted={isMuted}
                       ref={videoRef}
                       onClick={handleVideoPostPlayNPause}
