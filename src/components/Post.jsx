@@ -355,6 +355,7 @@ function Post({ post }) {
           alt="post_video"
           muted={isMuted}
           loop
+          autoPlay
         />
         ) : (
           <img

@@ -12,6 +12,18 @@ const Explore = () => {
   const [loading, setLoading] = useState(true);
   const videoRef = useRef(null);
 
+
+  // Shuffle function to randomize the order of posts
+  const shuffleArray = (array) => {
+    let shuffledArray = [...array];
+    for (let i = shuffledArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]]; // Swap elements
+    }
+    return shuffledArray;
+  };
+
+
   // Fetch posts when the component mounts
   useEffect(() => {
     const fetchPosts = async () => {
@@ -19,7 +31,8 @@ const Explore = () => {
         const response = await axios.get("http://localhost:8000/api/v1/post/all", {
           withCredentials: true,
         });
-        setPosts(response.data.posts); // Assuming your API returns a list of posts
+        const shuffledPosts = shuffleArray(response.data.posts); // Shuffle the posts
+        setPosts(shuffledPosts); // Set shuffled posts
       } catch (error) {
         console.error("Error fetching posts:", error);
       }

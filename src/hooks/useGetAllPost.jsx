@@ -5,14 +5,27 @@ import { useDispatch } from "react-redux";
 
 const useGetAllPost = () => {
   const dispatch = useDispatch(); //basically kuch chij bhejne ka kaam karta hai
+  
+  const shuffleArray = (array) => {
+    let shuffledArray = [...array];
+    for (let i = shuffledArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]]; // Swap elements
+    }
+    return shuffledArray;
+  };
+
+
   useEffect(() => {
     const fetchAllPost = async () => {
       try {
         const res = await axios.get("http://localhost:8000/api/v1/post/all", {
           withCredentials: true,
         });
+        
         if (res.data.success) {
-          dispatch(setPosts(res.data.posts));
+          const shuffledPosts = shuffleArray(res.data.posts); // Shuffle the posts
+          dispatch(setPosts(shuffledPosts));
         }
       } catch (error) {
         console.log(error);
