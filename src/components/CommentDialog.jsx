@@ -200,7 +200,7 @@ function CommentDialog({ openComment, setOpenComment }) {
             <MoreHorizontal className="cursor-pointer" />
           </DialogTrigger>
           <DialogContent className="bg-black text-white flex flex-col items-center text-sm text-center ">
-            {selectedPost.author?._id !== user?._id && isFollowing ? (
+            {selectedPost?.author?._id !== user?._id && isFollowing ? (
               <Button
                 variant="ghost"
                 className="cursor-pointer w-fit text-[#ED4956] font-bold rounded-xl hover:bg-gray-500"
