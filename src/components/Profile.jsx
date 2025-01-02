@@ -141,7 +141,7 @@ function Profile() {
   return (
 
     
-    <div className="text-white bg-black flex flex-col mx-auto w-full md:min-w-[94.8%] justify-center md:ml-20 md:pl-10">
+    <div className="text-white bg-black flex flex-col mx-auto w-full md:min-w-[94.8%] justify-center md:ml-10 md:pl-10">
 
       
   <div className="flex flex-col gap-10 py-8 h-[100%]">
@@ -301,19 +301,19 @@ function Profile() {
 
   {openPostDialog && selectedPost && (
             <div
-              className="fixed inset-0   bg-opacity-75 flex justify-center items-center z-50 h-full"
+              className="fixed inset-0   bg-opacity-75 flex justify-center items-center z-50  "
               onClick={closeDialog} // Close dialog on clicking outside
             >
               <div
-                className="bg-gray-900 p-6 rounded-lg md:w-1/4 w-96 relative shadow-xl"
+                className="bg-gray-900 p-2 rounded-lg md:w-1/4 w-96 relative shadow-xl"
                 onClick={(e) => e.stopPropagation()} // Prevent closing when interacting inside dialog
               >
-                <h3 className="text-xl font-semibold   mb-4">{selectedPost?.caption}</h3>
+       
                 {selectedPost?.video ? (
                   <div className="relative">
                     <video
                       src={selectedPost?.video}
-                      className="w-full h-full md:h-screen md:py-10 object-contain rounded-lg mb-4"
+                      className="w-full h-[550px] md:h-[550px] pt-4 md:py-10 object-contain rounded-lg mb-4"
                       muted={isMuted}
                       ref={videoRef}
                       onClick={handleVideoPostPlayNPause}
