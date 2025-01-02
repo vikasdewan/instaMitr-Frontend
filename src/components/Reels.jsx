@@ -82,7 +82,7 @@ const Reels = () => {
     <div
       {...swipeHandlers}
       onWheel={handleMouseScroll}
-      className="flex flex-col items-center h-screen overflow-hidden relative bg-gradient-to-r from-black via-black  to-black"
+      className="flex flex-col items-center h-screen overflow-hidden relative bg-gradient-to-r from-blue-900 via-black  to-blue-900"
     >
       {reels.length > 0 && (
         <div className="relative md:w-1/4 w-full h-full flex items-center justify-center">

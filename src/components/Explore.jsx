@@ -85,7 +85,7 @@ const Explore = () => {
       {loading ? (
         <Loader />
       ) : (
-        <div className="bg-gradient-to-r from-red-900 via-yellow-900 to-blue-900 min-h-screen p-4">
+        <div className="bg-gradient-to-r from-blue-900 via-black to-blue-900 min-h-screen p-4">
           {/* Search Bar */}
           <div className="md:hidden flex justify-center mb-6">
             <input
@@ -145,11 +145,11 @@ const Explore = () => {
                 className="bg-gray-900 p-6 rounded-lg md:w-1/4 w-96 relative shadow-xl"
                 onClick={(e) => e.stopPropagation()} // Prevent closing when interacting inside dialog
               >
-                <h3 className="text-xl font-semibold text-white mb-4">{selectedPost.title}</h3>
-                {selectedPost.video ? (
+                <h3 className="text-xl font-semibold text-white mb-4">{selectedPost?.title}</h3>
+                {selectedPost?.video ? (
                   <div className="relative">
                     <video
-                      src={selectedPost.video}
+                      src={selectedPost?.video}
                       className="w-full h-full md:h-screen md:py-10 object-contain rounded-lg mb-4"
                       muted={isMuted}
                       ref={videoRef}
@@ -170,12 +170,12 @@ const Explore = () => {
                   </div>
                 ) : (
                   <img
-                    src={selectedPost.image}
-                    alt={selectedPost.title}
+                    src={selectedPost?.image}
+                    alt={selectedPost?.title}
                     className="w-full h-96 object-cover rounded-lg mb-4"
                   />
                 )}
-                <p className="text-gray-400 mb-4">{selectedPost.description}</p>
+                <p className="text-gray-400 mb-4">{selectedPost?.description}</p>
               </div>
             </div>
           )}

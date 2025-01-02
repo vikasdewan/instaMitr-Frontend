@@ -300,48 +300,48 @@ function Profile() {
   
 
   {openPostDialog && selectedPost && (
-  <div
-    className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50 mx-2"
-    onClick={() => setOpenPostDialog(false)} // Close dialog when clicking outside
-  >
-    <div
-      className="bg-black p-6 rounded-lg md:w-1/2 w-96 mx-2"
-      onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
-    >
-      <h3 className="text-xl font-semibold mb-4">{selectedPost.caption}</h3>
-      {selectedPost?.video ? (
-        <div className="relative">
-          <video
-            src={selectedPost?.video}
-            alt="video_post"
-            className="cover w-full h-96 object-contain rounded-lg mb-4"
-            ref={videoRef}
-            onClick={handleVideoPostPlayNPause}
-            loop
-            autoPlay
-            muted={isMuted}
-          />
-          <button
-            className="absolute bottom-2 right-2 bg-black bg-opacity-50 text-white rounded-full p-2"
-            onClick={() => setIsMuted(!isMuted)}
-          >
-            {isMuted ? (
-              <i className="fas fa-volume-mute"></i>
-            ) : (
-              <i className="fas fa-volume-up"></i>
-            )}
-          </button>
-        </div>
-      ) : (
-        <img
-          src={selectedPost?.image}
-          alt="Image_Post"
-          className="cover w-full h-96 object-fill rounded-lg mb-4"
-        />
-      )}
-    </div>
-  </div>
-)}
+            <div
+              className="fixed inset-0   bg-opacity-75 flex justify-center items-center z-50 h-full"
+              onClick={closeDialog} // Close dialog on clicking outside
+            >
+              <div
+                className="bg-gray-900 p-6 rounded-lg md:w-1/4 w-96 relative shadow-xl"
+                onClick={(e) => e.stopPropagation()} // Prevent closing when interacting inside dialog
+              >
+                <h3 className="text-xl font-semibold   mb-4">{selectedPost?.caption}</h3>
+                {selectedPost?.video ? (
+                  <div className="relative">
+                    <video
+                      src={selectedPost?.video}
+                      className="w-full h-full md:h-screen md:py-10 object-contain rounded-lg mb-4"
+                      muted={isMuted}
+                      ref={videoRef}
+                      onClick={handleVideoPostPlayNPause}
+                      autoPlay
+                      loop
+                    />
+                    <button
+                      className="absolute bottom-2 right-2 bg-gray-700 text-white rounded-full p-2"
+                      onClick={() => setIsMuted(!isMuted)}
+                    >
+                      {isMuted ? (
+                        <i className="fas fa-volume-mute"></i>
+                      ) : (
+                        <i className="fas fa-volume-up"></i>
+                      )}
+                    </button>
+                  </div>
+                ) : (
+                  <img
+                    src={selectedPost?.image}
+                    alt={selectedPost?.caption}
+                    className="w-full h-96 object-cover rounded-lg mb-4"
+                  />
+                )}
+                <p className="text-gray-400 mb-4">{selectedPost?.caption}</p>
+              </div>
+            </div>
+          )}
 
 </div>
 
