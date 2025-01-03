@@ -64,12 +64,12 @@ export function BottomBar() {
 
   const sideBarItems = [
     { icon: <Home />, text: "Home" },
-    { icon: <Search />, text: "Search" },
-    { icon: <TrendingUp />, text: "Explore" },
-    { icon: <MessageCircle />, text: "Messages" },
+    // { icon: <Search />, text: "Search" },
+    { icon: <Search />, text: "Explore" },
     { icon: <PlusSquare />, text: "Create" }, 
     { icon: <PlaySquare />, text: "Reels" },
-    { icon: <Heart />, text: "Notifications" },
+    { icon: <MessageCircle />, text: "Messages" },
+    // { icon: <Heart />, text: "Notifications" },
     {
       icon: (
         <Avatar className="w-8 h-8">
@@ -98,7 +98,7 @@ export function BottomBar() {
         <div
           onClick={() => sidebarHandler(item.text)}
           key={index}
-          className="flex flex-col items-center cursor-pointer size-5" 
+          className="flex flex-col items-center cursor-pointer size-6 font-bold text-white" 
         >
           {item.icon}
          {/* <span className="text-xs">{item.text}</span> */}

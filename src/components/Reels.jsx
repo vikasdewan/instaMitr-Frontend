@@ -10,13 +10,13 @@ const Reels = () => {
   const [symbol, setSymbol] = useState(""); // "mute" or "unmute"
   const videoRef = useRef([]);
   const navigate = useNavigate();
+  let longPressTimeout;
 
-   // Shuffle function to randomize the order of posts
-   const shuffleArray = (array) => {
+  const shuffleArray = (array) => {
     let shuffledArray = [...array];
     for (let i = shuffledArray.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]]; // Swap elements
+      [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
     }
     return shuffledArray;
   };
@@ -89,6 +89,23 @@ const Reels = () => {
     navigate("/");
   };
 
+  const handleLongPressStart = (index) => {
+    longPressTimeout = setTimeout(() => {
+      const video = videoRef.current[index];
+      if (video) {
+        video.pause();
+      }
+    }, 500); // Long press starts after 500ms
+  };
+
+  const handleLongPressEnd = (index) => {
+    clearTimeout(longPressTimeout);
+    const video = videoRef.current[index];
+    if (video && video.paused) {
+      video.play();
+    }
+  };
+
   return (
     <div
       {...swipeHandlers}
@@ -105,6 +122,8 @@ const Reels = () => {
             loop
             onEnded={handleVideoEnd}
             className="w-full h-[90vh] object-fill rounded-lg p-1"
+            onPointerDown={() => handleLongPressStart(currentReelIndex)}
+            onPointerUp={() => handleLongPressEnd(currentReelIndex)}
             onClick={() => handleToggleSound(currentReelIndex)}
           />
           {showSymbol && (

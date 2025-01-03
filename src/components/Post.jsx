@@ -283,8 +283,8 @@ function Post({ post }) {
 
 
   return (
-    <div className="my-8 w-full max-w-md mx-auto text-white px-2 md:px-0">
-      <div className="flex items-center justify-between">
+    <div className="my-8  w-full max-w-md mx-auto text-white px-2 md:px-0">
+      <div className="flex  items-center justify-between">
         <div className="flex item-center gap-2 ">
           <Link to={`/profile/${post?.author?._id}`}>
             <Avatar className="text-black">
@@ -350,7 +350,7 @@ function Post({ post }) {
           <video
           onClick={handleVideoPostPlayNPause}
           ref={videoRef}
-          className="rounded-sm my-2 w-full aspect-square object-contain"
+          className="rounded-sm my-2 w-full h-[500px] aspect-square object-contain"
           src={post?.video}
           alt="post_video"
           muted={isMuted}
