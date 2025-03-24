@@ -19,6 +19,8 @@ import SuggestedUsersPage from "./components/SuggestedUsersPage";
 import Reels from "./components/Reels";
 import Explore from "./components/Explore";
  
+ 
+
   
 
 const browserRouter = createBrowserRouter([
@@ -64,12 +66,13 @@ const browserRouter = createBrowserRouter([
   },
   {
     path : "/reels/random",
-    element:<Reels/>
+    element: <ProtectedRoutes><Reels/></ProtectedRoutes>
   },
   {
     path:"/explore",
-    element:<Explore/>
-  }
+    element:<ProtectedRoutes><Explore/></ProtectedRoutes>
+  },
+  
 ]);
 
 function App() {

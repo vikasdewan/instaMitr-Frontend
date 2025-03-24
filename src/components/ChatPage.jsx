@@ -93,41 +93,47 @@ export const ChatPage = () => {
       <section className={`w-full border-b md:w-1/4 my-8 md:my-0 md:mx-8 ${showChatList ? 'block' : 'hidden'} md:block`}>
         <h1 className="font-bold mb-8 py-2 px-4 text-2xl border-b">{user?.username}</h1>
         <div className="overflow-y-auto h-[40vh] md:h-[80vh]">
-          {followedUsers.map((suggestedUser) => {
-            const isOnline = onlineUsers.includes(suggestedUser?._id);
-            return (
-              <div
-                key={suggestedUser?._id}
-                onClick={() => {
-                  dispatch(setSelectedUser(suggestedUser));
-                  setShowChatList(false); // Hide chat list on mobile
-                }}
-                className={`text-gray-200 mx-3 flex gap-3 items-center p-3 hover:bg-gray-900 cursor-pointer ${
-                  selectedUser?._id === suggestedUser?._id
-                    ? "font-bold"
-                    : "font-medium"
-                }`}
-              >
-                <Avatar className="w-14 h-14">
-                  <AvatarImage
-                    src={suggestedUser?.profileImage}
-                    alt="profile_image"
-                  />
-                  <AvatarFallback>IM</AvatarFallback>
-                </Avatar>
-                <div className="flex flex-col">
-                  <span>{suggestedUser?.username}</span>
-                  <span
-                    className={`text-xs font-bold ${
-                      isOnline ? "text-green-500" : "text-red-600"
-                    }`}
-                  >
-                    {isOnline ? "online" : "offline"}
-                  </span>
-                </div>
-              </div>
-            );
-          })}
+          {followedUsers
+  // Sort users to prioritize online ones
+  .sort((a, b) => {
+    const isAOnline = onlineUsers.includes(a?._id);
+    const isBOnline = onlineUsers.includes(b?._id);
+    return isBOnline - isAOnline; // Online users (true=1) come before offline ones (false=0)
+  })
+  .map((suggestedUser) => {
+    const isOnline = onlineUsers.includes(suggestedUser?._id);
+    return (
+      <div
+        key={suggestedUser?._id}
+        onClick={() => {
+          dispatch(setSelectedUser(suggestedUser));
+          setShowChatList(false); // Hide chat list on mobile
+        }}
+        className={`text-gray-200 mx-3 flex gap-3 items-center p-3 hover:bg-gray-900 cursor-pointer ${
+          selectedUser?._id === suggestedUser?._id ? "font-bold" : "font-medium"
+        }`}
+      >
+        <Avatar className="w-14 h-14">
+          <AvatarImage
+            src={suggestedUser?.profileImage}
+            alt="profile_image"
+          />
+          <AvatarFallback>IM</AvatarFallback>
+        </Avatar>
+        <div className="flex flex-col">
+          <span>{suggestedUser?.username}</span>
+          <span
+            className={`text-xs font-bold ${
+              isOnline ? "text-green-500" : "text-red-600"
+            }`}
+          >
+            {isOnline ? "online" : "offline"}
+          </span>
+        </div>
+      </div>
+    );
+  })}
+
         </div>
       </section>
       {selectedUser && (

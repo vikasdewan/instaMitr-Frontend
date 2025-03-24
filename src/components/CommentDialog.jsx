@@ -162,8 +162,8 @@ function CommentDialog({ openComment, setOpenComment }) {
           {selectedPost?.video ? (
           <video
           className="rounded-sm my-2 w-full aspect-square object-cover"
-          controls
-          muted
+          autoPlay
+          loop
           src={selectedPost?.video}
           alt="post_video"
         />
