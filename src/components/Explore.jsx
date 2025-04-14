@@ -29,10 +29,8 @@ const Explore = () => {
         const response = await axios.get("http://localhost:8000/api/v1/post/all", {
           withCredentials: true,
         });
-        const filterVideoPosts = response.data.posts.filter(
-          (post) => post.video && post.video.trim() !== ""
-        );
-        const shuffledPosts = shuffleArray(filterVideoPosts); // Shuffle the posts
+        const Allposts = response.data.posts;
+        const shuffledPosts = shuffleArray(Allposts); // Shuffle the posts
         setPosts(shuffledPosts); // Set shuffled posts
       } catch (error) {
         console.error("Error fetching posts:", error);
@@ -88,7 +86,7 @@ const Explore = () => {
       {loading ? (
         <Loader />
       ) : (
-        <div className={`bg-gradient-to-r from-blue-900 via-black to-blue-900 min-h-screen p-1 md:px-20 md:py-2 `}>
+        <div className={`bg-black min-h-screen p-1 md:pl-96 md:pr-40 md:py-2 `}>
           {/* Search Bar */}
           <div className="md:hidden flex justify-center mb-6">
             <input
@@ -100,7 +98,7 @@ const Explore = () => {
           </div>
 
           {/* Posts Grid */}
-          <div className={`grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-1 ${
+          <div className={`grid grid-cols-2 mt-5 md:grid-cols-3 lg:grid-cols-3 gap-1 md:gap-1 ${
           openPostDialog ? "filter blur-sm" : "" // Add blur effect when modal is open
         }`}>
             {posts.length > 0 ? (
@@ -185,13 +183,7 @@ const Explore = () => {
             </div>
           )}
 
-          <button
-            onClick={goToHome}
-            className="fixed bottom-5 right-5 bg-red-500 hover:bg-red-600 text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg transition duration-300"
-            title="Go to Home"
-          >
-            🏠
-          </button>
+           
         </div>
       )}
     </>
