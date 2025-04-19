@@ -8,7 +8,7 @@ import CommentDialog from "./CommentDialog";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import axios from "axios";
-import { setPosts, setSelectedPost } from "@/redux/postSlice";
+import { setPosts, setSelectedPost } from "@/redux/postSlice.js";
 import "../index.css";
 import { Badge } from "./ui/badge";
 import { Link } from "react-router-dom";
@@ -17,8 +17,6 @@ import {
   setSuggestedUsers,
   setUserProfile,
 } from "@/redux/authSlice";
-
-
 
 function Post({ post }) {
   const [text, setText] = useState("");
@@ -33,7 +31,7 @@ function Post({ post }) {
   const [bookmarked, setBookmarked] = useState(false);
   const [showHeart, setShowHeart] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(true); // track if the video is playing
+  const [isPlaying, setIsPlaying] = useState(true); // Track if the video is playing
   const [isFollowing, setIsFollowing] = useState(
     user?.following?.includes(post?.author?._id)
   );
@@ -63,15 +61,14 @@ function Post({ post }) {
     const videoElement = videoRef.current;
     if (videoElement) {
       if (videoElement.paused) {
-        videoElement.play(); // Play the video
+        videoElement.play();
         setIsPlaying(true);
       } else {
-        videoElement.pause(); // Pause the video
+        videoElement.pause();
         setIsPlaying(false);
       }
     }
   };
-
 
   const likeOrDislikeHandler = async () => {
     try {
@@ -107,7 +104,7 @@ function Post({ post }) {
           setShowHeart(true);
           setTimeout(() => {
             setShowHeart(false);
-          }, 1000); // Duration of the animation
+          }, 1000);
         }
       }
     } catch (error) {
@@ -131,7 +128,7 @@ function Post({ post }) {
           withCredentials: true,
         }
       );
-
+      
       if (res.data.success) {
         const updatedCommentData = [...comment, res.data.comment];
         setComment(updatedCommentData);
@@ -189,61 +186,56 @@ function Post({ post }) {
 
   const handleUnfollow = async () => {
     try {
-      // console.log("follow/unfollow button clicked")
       const response = await axios.post(
         `http://localhost:8000/api/v1/user/followorunfollow/${post?.author?._id}`,
-        {}, // No body data required
+        {},
         {
-          withCredentials: true, // Send cookies with the request
+          withCredentials: true,
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // Pass token if needed
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
 
       if (response.data.success) {
-        //for updating loggedin user
         const updatedFollowing = isFollowing
           ? user?.following?.filter((id) => id !== post?.author?._id)
           : [...user.following, post?.author?._id];
 
         dispatch(setAuthUser({ ...user, following: updatedFollowing }));
 
-        //for updating profile user
         const updatedFollowers = isFollowing
-          ? post?.author?.followers?.filter((id) => id !== user?._id) // Remove follower
-          : [...post?.author?.followers, user?._id]; // Add follower
+          ? post?.author?.followers?.filter((id) => id !== user?._id)
+          : [...post?.author?.followers, user?._id];
 
         dispatch(
           setUserProfile({ ...post?.author, followers: updatedFollowers })
         );
 
-        //for updating the suggested users list
         const updatedSuggestedUsers = suggestedUsers?.map((suggUser) =>
           suggUser?._id === post?.author?._id
             ? {
                 ...suggUser,
                 followers: suggUser?.followers?.includes(user?._id)
-                  ? suggUser?.followers?.filter((id) => id !== user?._id) // Unfollow
-                  : [...suggUser?.followers, user?._id], // Follow
+                  ? suggUser?.followers?.filter((id) => id !== user?._id)
+                  : [...suggUser?.followers, user?._id],
               }
             : suggUser
         );
-        dispatch(setSuggestedUsers(updatedSuggestedUsers)); // upto date with the suggested Users
+        dispatch(setSuggestedUsers(updatedSuggestedUsers));
 
-        setIsFollowing((prev) => !prev); // Toggle following state
-        toast.success(response.data.message); // Success toast
+        setIsFollowing((prev) => !prev);
+        toast.success(response.data.message);
       }
     } catch (error) {
       console.error("Follow/Unfollow failed:", error);
-      toast.error("Something went wrong!"); // Optional: Error toast
+      toast.error("Something went wrong!");
     }
   };
 
   useEffect(() => {
     setBookmarked(user?.bookmarks?.includes(post._id));
   }, [user, post._id]);
-
 
   // IntersectionObserver to play and pause the video when it enters and leaves the screen
   useEffect(() => {
@@ -253,16 +245,14 @@ function Post({ post }) {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // Play the video when it enters the viewport, no matter what state it was in
             if (videoElement && videoElement.paused) {
               videoElement.play();
-              setIsPlaying(true); // Set the state to playing
+              setIsPlaying(true);
             }
           } else {
-            // Pause the video when it leaves the viewport
             if (videoElement) {
               videoElement.pause();
-              setIsPlaying(false); // Set the state to paused
+              setIsPlaying(false);
             }
           }
         });
@@ -279,12 +269,27 @@ function Post({ post }) {
         observer.unobserve(videoElement);
       }
     };
-  }, []); // Ensure the observer takes into account the `isPlaying` state
+  }, []);
 
+  // Pause video when CommentDialog opens, resume when it closes
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    if (videoElement) {
+      if (openComment) {
+        // Pause the video when the comment dialog opens
+        videoElement.pause();
+        setIsPlaying(false);
+      } else if (isPlaying) {
+        // Resume the video when the dialog closes, only if it was playing before
+        videoElement.play();
+        setIsPlaying(true);
+      }
+    }
+  }, [openComment]); // Trigger when openComment changes
 
   return (
-    <div className="my-8  w-full max-w-md mx-auto text-white px-2 md:px-0">
-      <div className="flex  items-center justify-between">
+    <div className="my-8 w-full max-w-md mx-auto text-white px-2 md:px-0">
+      <div className="flex items-center justify-between">
         <div className="flex item-center gap-2 ">
           <Link to={`/profile/${post?.author?._id}`}>
             <Avatar className="text-black">
@@ -348,38 +353,41 @@ function Post({ post }) {
       <div className="relative ">
         {post?.video ? (
           <video
-          onClick={handleVideoPostPlayNPause}
-          ref={videoRef}
-          className="rounded-sm my-2 w-full h-[500px] aspect-square object-contain"
-          src={post?.video}
-          alt="post_video"
-          muted={isMuted}
-          loop
-          autoPlay
-        />
+            onClick={handleVideoPostPlayNPause}
+            ref={videoRef}
+            className="rounded-sm my-2 w-full h-[560px] aspect-square object-contain"
+            src={post?.video}
+            alt="post_video"
+            muted={isMuted}
+            loop
+            autoPlay
+          />
         ) : (
           <img
             className="rounded-sm my-2 w-full aspect-square object-contain"
             src={post?.image}
             alt="post_image"
-            onDoubleClick={handleDoubleClick} // Optional: Double-click to like functionality
+            onDoubleClick={handleDoubleClick}
           />
         )}
-        {
-          post?.video ? (
-
-        <button
-        onClick={handleVideoPostMute}
-        className="absolute bottom-4 right-4 p-1 bg-opacity-50 bg-gray-900 rounded-full"
-      >
-        {isMuted ? (
-          <span role="img" aria-label="mute"><i className="fas fa-volume-mute"></i></span> // Mute Symbol
+        {post?.video ? (
+          <button
+            onClick={handleVideoPostMute}
+            className="absolute bottom-4 right-4 p-1 bg-opacity-50 bg-gray-900 rounded-full"
+          >
+            {isMuted ? (
+              <span role="img" aria-label="mute">
+                <i className="fas fa-volume-mute"></i>
+              </span>
+            ) : (
+              <span role="img" aria-label="unmute">
+                <i className="fas fa-volume-up"></i>
+              </span>
+            )}
+          </button>
         ) : (
-          <span role="img" aria-label="unmute"> <i className="fas fa-volume-up"></i></span> // Unmute Symbol
+          ""
         )}
-      </button>
-          ) : ""
-        } 
         {showHeart && <FaHeart className="heart-animation" />}
       </div>
 
@@ -426,7 +434,7 @@ function Post({ post }) {
       <span className="font-medium text-sm mb-2 block">{postLike} likes</span>
       <p>
         <span className="font-medium text-sm">{post?.author?.username}</span>{" "}
-        &nbsp; {post?.caption}
+          {post?.caption}
       </p>
       <span
         onClick={() => {

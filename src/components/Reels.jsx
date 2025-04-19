@@ -1,34 +1,50 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import axios from "axios";
 import { useSwipeable } from "react-swipeable";
 import { Link, useNavigate } from "react-router-dom";
-import { AiOutlineHeart, AiFillHeart, AiOutlineComment, AiOutlineShareAlt } from "react-icons/ai";
+import {
+  AiOutlineHeart,
+  AiFillHeart,
+  AiOutlineComment,
+  AiOutlineShareAlt,
+} from "react-icons/ai";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "@/redux/postSlice";
+import ReelComments from "./ReelComments";
 
 const Reels = () => {
   const dispatch = useDispatch();
-  const [reels, setReels] = useState([]);
   const [currentReelIndex, setCurrentReelIndex] = useState(0);
   const { user } = useSelector((store) => store.auth);
   const { posts } = useSelector((store) => store.post);
   const [showSymbol, setShowSymbol] = useState(false);
+  const [showComments, setShowComments] = useState(false);
+  const [currentReelForComments, setCurrentReelForComments] = useState(null);
   const [symbol, setSymbol] = useState(""); // "mute" or "unmute"
-  const [likedState, setLikedState] = useState([]); // To track the liked state of each reel
+  const [likedState, setLikedState] = useState([]);
   const videoRef = useRef([]);
   const navigate = useNavigate();
   let longPressTimeout;
+
+  // Derive reels from posts
+  const reels = useMemo(() => {
+    return posts.filter((post) => post.video && post.video.trim() !== "");
+  }, [posts]);
 
   const shuffleArray = (array) => {
     let shuffledArray = [...array];
     for (let i = shuffledArray.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+      [shuffledArray[i], shuffledArray[j]] = [
+        shuffledArray[j],
+        shuffledArray[i],
+      ];
     }
     return shuffledArray;
   };
 
+  // Initial fetch and shuffle
   useEffect(() => {
     const fetchReels = async () => {
       try {
@@ -38,14 +54,16 @@ const Reels = () => {
           },
           withCredentials: true,
         });
-        const filteredReels = res.data.posts.filter(
+
+        const videoPosts = res.data.posts.filter(
           (post) => post.video && post.video.trim() !== ""
         );
-        const shuffledReels = shuffleArray(filteredReels);
-        setReels(shuffledReels);
 
-        // Initialize liked state for each reel (true or false)
-        const initialLikedState = shuffledReels.map((reel) =>
+        const shuffled = shuffleArray(videoPosts);
+        dispatch(setPosts(shuffled));
+
+        // Initialize liked state
+        const initialLikedState = shuffled.map((reel) =>
           reel.likes.includes(user?._id)
         );
         setLikedState(initialLikedState);
@@ -55,7 +73,7 @@ const Reels = () => {
     };
 
     fetchReels();
-  }, [user]);
+  }, [user, dispatch]);
 
   const handleVideoEnd = () => {
     setCurrentReelIndex((prevIndex) => (prevIndex + 1) % reels.length);
@@ -98,9 +116,7 @@ const Reels = () => {
     }
   };
 
-  const goToHome = () => {
-    navigate("/");
-  };
+   
 
   const handleLongPressStart = (index) => {
     longPressTimeout = setTimeout(() => {
@@ -119,43 +135,42 @@ const Reels = () => {
     }
   };
 
-  // Handle like/dislike action
+  const handleCommentClick = (reel) => {
+    setCurrentReelForComments(reel);
+    setShowComments(true);
+  };
+
+  useEffect(() => {
+    if (showComments && reels.length > 0) {
+      setCurrentReelForComments(reels[currentReelIndex]);
+    }
+  }, [currentReelIndex, showComments, reels]);
+
   const likeOrDislikeHandler = async () => {
-    console.log("like button clicked")
     try {
       const currentReel = reels[currentReelIndex];
-      const isLiked = likedState[currentReelIndex]; // Check current like state
+      const isLiked = likedState[currentReelIndex];
 
       const action = isLiked ? "dislike" : "like";
 
-      // API request to toggle like/dislike
       const res = await axios.get(
         `http://localhost:8000/api/v1/post/${currentReel._id}/${action}`,
         { withCredentials: true }
       );
 
       if (res.data.success) {
-        // Update the like state for the current reel
         const updatedLikedState = [...likedState];
         updatedLikedState[currentReelIndex] = !isLiked;
         setLikedState(updatedLikedState);
 
-        // Update likes in the posts array (for Redux)
         const updatedLikes = isLiked
           ? currentReel.likes.filter((id) => id !== user?._id)
           : [...currentReel.likes, user?._id];
 
-        // Update the reel and the posts in the Redux store
-        const updatedReels = reels.map((reel, index) =>
-          index === currentReelIndex ? { ...reel, likes: updatedLikes } : reel
-        );
-        setReels(updatedReels);
-
         const updatedPostData = posts.map((p) =>
-          p?._id === currentReel._id
-            ? { ...p, likes: updatedLikes }
-            : p
+          p?._id === currentReel._id ? { ...p, likes: updatedLikes } : p
         );
+
         dispatch(setPosts(updatedPostData));
       }
     } catch (error) {
@@ -163,15 +178,21 @@ const Reels = () => {
     }
   };
 
+   
+  
   return (
     <div
-      {...swipeHandlers}
-      onWheel={handleMouseScroll}
-      className="flex flex-col items-center h-screen overflow-hidden relative bg-gradient-to-r from-blue-900 via-black to-blue-900"
-    >
+    {...swipeHandlers}
+    onWheel={(e) => {
+      if (!showComments) {
+        handleMouseScroll(e);
+      }
+    }}
+    className="flex flex-col items-center h-screen bg-black"
+  >
+  
       {reels.length > 0 && (
-        <div className="relative md:w-1/4 w-full h-full flex items-center justify-center">
-          {/* Video Component */}
+        <div className="relative md:w-[25%] w-full h-full flex items-center justify-center">
           <video
             ref={(el) => (videoRef.current[currentReelIndex] = el)}
             src={reels[currentReelIndex].video}
@@ -179,7 +200,7 @@ const Reels = () => {
             autoPlay
             loop
             onEnded={handleVideoEnd}
-            className="w-full h-[90vh] object-fill rounded-lg"
+            className="w-full md:h-[90vh] h-[100vh] object-fill rounded-lg"
             onPointerDown={() => handleLongPressStart(currentReelIndex)}
             onPointerUp={() => handleLongPressEnd(currentReelIndex)}
             onClick={() => handleToggleSound(currentReelIndex)}
@@ -197,7 +218,6 @@ const Reels = () => {
             </div>
           )}
 
-          {/* Username and Caption */}
           <div className="absolute bottom-24 left-3 text-white z-50">
             <Link to={`/profile/${reels[currentReelIndex]?.author?._id}`}>
               <div className="flex items-center">
@@ -218,7 +238,6 @@ const Reels = () => {
             </p>
           </div>
 
-          {/* Interaction Buttons */}
           <div className="absolute bottom-16 right-5 z-50 flex flex-col items-center space-y-3 text-white">
             <button onClick={likeOrDislikeHandler}>
               {likedState[currentReelIndex] ? (
@@ -230,7 +249,7 @@ const Reels = () => {
                 {reels[currentReelIndex].likes.length}
               </span>
             </button>
-            <button>
+            <button onClick={() => handleCommentClick(reels[currentReelIndex])}>
               <AiOutlineComment size={30} className="hover:text-blue-500" />
               <span className="text-xs mt-1">
                 {reels[currentReelIndex]?.comments.length}
@@ -243,14 +262,16 @@ const Reels = () => {
         </div>
       )}
 
-      {/* Go to Home */}
-      <button
-        onClick={goToHome}
-        className="fixed bottom-5 right-5 bg-red-500 hover:bg-red-600 text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg transition duration-300"
-        title="Go to Home"
-      >
-        🏠
-      </button>
+      {showComments && currentReelForComments && (
+        <ReelComments
+          reel={currentReelForComments}
+          onClose={() => {
+            setShowComments(false);
+            setCurrentReelForComments(null);
+          }}
+          user={user}
+        />
+      )}
     </div>
   );
 };
