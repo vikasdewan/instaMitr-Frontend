@@ -90,9 +90,9 @@ function SuggestedUsers() {
           </Avatar>
         </Link>
         <Link to={`/profile/${suggUser?._id}`}>
-          <div>
+          <div className="w-64">
             <h1 className="font-bold text-sm">{suggUser?.username}</h1>
-            <span className="text-gray-400 text-sm">
+            <span className="text-gray-400 text-sm break-words w-full">
               {suggUser?.bio || "Bio Here...."}
             </span>
           </div>
