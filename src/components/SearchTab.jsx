@@ -21,7 +21,7 @@ export const SearchTab = () => {
   };
 
   return (
-    <div className="flex flex-col items-start px-auto justify-center mx-auto bg-black py-10 text-white w-[70%]">
+    <div className="flex flex-col items-center   px-auto justify-center mx-auto bg-black py-10 text-white w-[70%]">
       <span className="font-bold text-2xl p-3">Search</span>
       {/* Search Bar */}
       <input
