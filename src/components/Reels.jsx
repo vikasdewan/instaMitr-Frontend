@@ -116,8 +116,6 @@ const Reels = () => {
     }
   };
 
-   
-
   const handleLongPressStart = (index) => {
     longPressTimeout = setTimeout(() => {
       const video = videoRef.current[index];
@@ -178,19 +176,16 @@ const Reels = () => {
     }
   };
 
-   
-  
   return (
     <div
-    {...swipeHandlers}
-    onWheel={(e) => {
-      if (!showComments) {
-        handleMouseScroll(e);
-      }
-    }}
-    className="flex flex-col items-center h-screen bg-black"
-  >
-  
+      {...swipeHandlers}
+      onWheel={(e) => {
+        if (!showComments) {
+          handleMouseScroll(e);
+        }
+      }}
+      className="flex flex-col items-center h-screen bg-black"
+    >
       {reels.length > 0 && (
         <div className="relative md:w-[25%] w-full h-full flex items-center justify-center">
           <video
