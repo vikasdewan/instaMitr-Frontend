@@ -156,7 +156,6 @@ function Profile() {
       setShowDialog(true);
     }
   };
-  
 
   return (
     <div className="text-white bg-black flex flex-col mx-auto w-full md:min-w-[94.8%] justify-center md:ml-10 md:pl-10">
@@ -374,7 +373,6 @@ function Profile() {
           </div>
         </div>
       </div>
-
       {openPostDialog && selectedPost && (
         <div
           className="fixed inset-0   bg-opacity-75 flex justify-center items-center z-50  "
@@ -417,8 +415,7 @@ function Profile() {
           </div>
         </div>
       )}
-
-      //follower and following list   
+      //follower and following list
       {showDialog && (
         <FollowersFollowingDialog
           type={dialogType}
