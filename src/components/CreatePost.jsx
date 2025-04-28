@@ -22,7 +22,7 @@ function CreatePost({ open, setOpen }) {
 
   const fileChangeHandler = async (e) => {
     const file = e.target.files[0];
-    
+
     if (file) {
       setFile(file);
       const dataUrl = await readFileAsDataURL(file);
