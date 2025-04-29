@@ -85,7 +85,9 @@ const ReelComments = ({ reel, onClose, user }) => {
       >
         {/* Header */}
         <div className="flex justify-between items-center p-4 border-b border-gray-800">
-          <h2 className="text-white text-xl font-bold">Comments ({comments.length})</h2>
+          <h2 className="text-white text-xl font-bold">
+            Comments ({comments.length})
+          </h2>
           <button onClick={onClose} className="text-gray-400 hover:text-white">
             <X size={24} />
           </button>
@@ -104,7 +106,9 @@ const ReelComments = ({ reel, onClose, user }) => {
                 </Avatar>
                 <div className="flex-1">
                   <div className="bg-gray-800 rounded-lg p-3">
-                    <p className="font-semibold text-white">{comment.author?.username}</p>
+                    <p className="font-semibold text-white">
+                      {comment.author?.username}
+                    </p>
                     <p className="text-white">{comment.text}</p>
                   </div>
                   <p className="text-gray-400 text-xs mt-1">
