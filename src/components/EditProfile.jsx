@@ -86,7 +86,11 @@ export const EditProfile = () => {
         <div className="flex item-center justify-between bg-gray-900 p-4 rounded-xl">
           <div className="flex items-center justify-center gap-3">
             <Avatar className="text-black w-16 h-16">
-              <AvatarImage src={user?.profileImage} alt="profile_image" loading="lazy" />
+              <AvatarImage
+                src={user?.profileImage}
+                alt="profile_image"
+                loading="lazy"
+              />
               <AvatarFallback>IM</AvatarFallback>
             </Avatar>
             <div>
@@ -111,17 +115,17 @@ export const EditProfile = () => {
           </Button>
         </div>
         <div>
-  <h1 className="font-bold text-xl mb-2">Username</h1>
-  <Input
-    value={input.username}
-    onChange={(e) => setInput({ ...input, username: e.target.value })}
-    placeholder="Enter your username"
-    name="username"
-    className="bg-black w-full text-white focus-visible:ring-0 focus:outline-none border-none"
-    autoComplete="new-username" // Prevent browser autofill for testing
-  />
-</div>
-    
+          <h1 className="font-bold text-xl mb-2">Username</h1>
+          <Input
+            value={input.username}
+            onChange={(e) => setInput({ ...input, username: e.target.value })}
+            placeholder="Enter your username"
+            name="username"
+            className="bg-black w-full text-white focus-visible:ring-0 focus:outline-none border-none"
+            autoComplete="new-username" // Prevent browser autofill for testing
+          />
+        </div>
+
         <div>
           <h1 className="font-bold text-xl mb-2">Bio</h1>
           <Textarea

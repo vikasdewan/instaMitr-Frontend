@@ -17,7 +17,10 @@ const Explore = () => {
     let shuffledArray = [...array];
     for (let i = shuffledArray.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]]; // Swap elements
+      [shuffledArray[i], shuffledArray[j]] = [
+        shuffledArray[j],
+        shuffledArray[i],
+      ]; // Swap elements
     }
     return shuffledArray;
   };
@@ -26,9 +29,12 @@ const Explore = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/v1/post/all", {
-          withCredentials: true,
-        });
+        const response = await axios.get(
+          "http://localhost:8000/api/v1/post/all",
+          {
+            withCredentials: true,
+          }
+        );
         const Allposts = response.data.posts;
         const shuffledPosts = shuffleArray(Allposts); // Shuffle the posts
         setPosts(shuffledPosts); // Set shuffled posts
@@ -98,9 +104,11 @@ const Explore = () => {
           </div>
 
           {/* Posts Grid */}
-          <div className={`grid grid-cols-2 mt-5 md:grid-cols-3 lg:grid-cols-3 gap-1 md:gap-1 ${
-          openPostDialog ? "filter blur-sm" : "" // Add blur effect when modal is open
-        }`}>
+          <div
+            className={`grid grid-cols-2 mt-5 md:grid-cols-3 lg:grid-cols-3 gap-1 md:gap-1 ${
+              openPostDialog ? "filter blur-sm" : "" // Add blur effect when modal is open
+            }`}
+          >
             {posts.length > 0 ? (
               posts.map((post) => (
                 <div
@@ -148,7 +156,9 @@ const Explore = () => {
                 className="bg-gray-900 p-6 rounded-lg md:w-1/4 w-96 relative shadow-xl"
                 onClick={(e) => e.stopPropagation()} // Prevent closing when interacting inside dialog
               >
-                <h3 className="text-xl font-semibold text-white mb-4">{selectedPost?.title}</h3>
+                <h3 className="text-xl font-semibold text-white mb-4">
+                  {selectedPost?.title}
+                </h3>
                 {selectedPost?.video ? (
                   <div className="relative">
                     <video
@@ -178,12 +188,12 @@ const Explore = () => {
                     className="w-full h-96 object-cover rounded-lg mb-4"
                   />
                 )}
-                <p className="text-gray-400 mb-4">{selectedPost?.description}</p>
+                <p className="text-gray-400 mb-4">
+                  {selectedPost?.description}
+                </p>
               </div>
             </div>
           )}
-
-           
         </div>
       )}
     </>
