@@ -18,12 +18,12 @@ import {
 function CommentDialog({ openComment, setOpenComment }) {
   const [text, setText] = useState("");
   const { selectedPost, posts } = useSelector((store) => store.post);
-  const {user} = useSelector((store)=> store.auth)
+  const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
   const [comment, setComment] = useState([]);
-   const [isFollowing, setIsFollowing] = useState(
-      user?.following?.includes(selectedPost?.author?._id)
-    );
+  const [isFollowing, setIsFollowing] = useState(
+    user?.following?.includes(selectedPost?.author?._id)
+  );
 
   // Load comments into local state on component mount
   useEffect(() => {
@@ -74,10 +74,11 @@ function CommentDialog({ openComment, setOpenComment }) {
     }
   };
 
-
-  const handleKeyDown = (e)=>{
-    if (e.key === "Enter" && text.trim()) { sendMessageHandler(); }
-  }
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && text.trim()) {
+      sendMessageHandler();
+    }
+  };
 
   const handleUnfollow = async () => {
     try {
@@ -107,7 +108,10 @@ function CommentDialog({ openComment, setOpenComment }) {
           : [...selectedPost?.author?.followers, user?._id]; // Add follower
 
         dispatch(
-          setUserProfile({ ...selectedPost?.author, followers: updatedFollowers })
+          setUserProfile({
+            ...selectedPost?.author,
+            followers: updatedFollowers,
+          })
         );
 
         //for updating the suggested users list
@@ -150,7 +154,7 @@ function CommentDialog({ openComment, setOpenComment }) {
       toast.error(error.response.data.message);
     }
   };
-        
+
   return (
     <Dialog open={openComment}>
       <DialogContent
@@ -159,22 +163,21 @@ function CommentDialog({ openComment, setOpenComment }) {
       >
         <div className="flex px-2">
           <div className="hidden md:block w-1/2 min-h-96">
-          {selectedPost?.video ? (
-          <video
-          className="rounded-sm my-2 w-full aspect-square object-cover"
-          autoPlay
-          loop
-          src={selectedPost?.video}
-          alt="post_video"
-        />
-        ) : (
-          <img
-            className="rounded-sm my-2 w-full aspect-square object-cover"
-            src={selectedPost?.image}
-            alt="post_image"
-             
-          />
-        )}
+            {selectedPost?.video ? (
+              <video
+                className="rounded-sm my-2 w-full aspect-square object-cover"
+                autoPlay
+                loop
+                src={selectedPost?.video}
+                alt="post_video"
+              />
+            ) : (
+              <img
+                className="rounded-sm my-2 w-full aspect-square object-cover"
+                src={selectedPost?.image}
+                alt="post_image"
+              />
+            )}
           </div>
 
           <div className=" w-full md:w-1/2 flex flex-col justify-between">
@@ -195,43 +198,43 @@ function CommentDialog({ openComment, setOpenComment }) {
                   &nbsp;
                 </div>
               </div>
-  <Dialog>
-          <DialogTrigger asChild>
-            <MoreHorizontal className="cursor-pointer" />
-          </DialogTrigger>
-          <DialogContent className="bg-black text-white flex flex-col items-center text-sm text-center ">
-            {selectedPost?.author?._id !== user?._id && isFollowing ? (
-              <Button
-                variant="ghost"
-                className="cursor-pointer w-fit text-[#ED4956] font-bold rounded-xl hover:bg-gray-500"
-                onClick={handleUnfollow}
-              >
-                Unfollow
-              </Button>
-            ) : (
-              ""
-            )}
+              <Dialog>
+                <DialogTrigger asChild>
+                  <MoreHorizontal className="cursor-pointer" />
+                </DialogTrigger>
+                <DialogContent className="bg-black text-white flex flex-col items-center text-sm text-center ">
+                  {selectedPost?.author?._id !== user?._id && isFollowing ? (
+                    <Button
+                      variant="ghost"
+                      className="cursor-pointer w-fit text-[#ED4956] font-bold rounded-xl hover:bg-gray-500"
+                      onClick={handleUnfollow}
+                    >
+                      Unfollow
+                    </Button>
+                  ) : (
+                    ""
+                  )}
 
-            <Link to={`/profile/${selectedPost?.author?._id}`}>
-              <Button
-                variant="ghost"
-                className="cursor-pointer w-fit rounded-xl hover:bg-gray-500"
-              >
-                About this account
-              </Button>
-            </Link>
+                  <Link to={`/profile/${selectedPost?.author?._id}`}>
+                    <Button
+                      variant="ghost"
+                      className="cursor-pointer w-fit rounded-xl hover:bg-gray-500"
+                    >
+                      About this account
+                    </Button>
+                  </Link>
 
-            {user && user?._id === selectedPost?.author?._id && (
-              <Button
-                variant="ghost"
-                className="cursor-pointer w-fit rounded-xl font-bold hover:bg-gray-500"
-                onClick={deletePostHandler}
-              >
-                Delete
-              </Button>
-            )}
-          </DialogContent>
-        </Dialog>
+                  {user && user?._id === selectedPost?.author?._id && (
+                    <Button
+                      variant="ghost"
+                      className="cursor-pointer w-fit rounded-xl font-bold hover:bg-gray-500"
+                      onClick={deletePostHandler}
+                    >
+                      Delete
+                    </Button>
+                  )}
+                </DialogContent>
+              </Dialog>
             </div>
             <hr />
 
