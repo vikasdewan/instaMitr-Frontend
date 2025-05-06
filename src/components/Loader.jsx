@@ -1,6 +1,5 @@
 // Loader.jsx
-import React from 'react';
- 
+import React from "react";
 
 const Loader = () => {
   return (
