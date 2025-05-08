@@ -17,7 +17,9 @@ function RightSideBar() {
         </Link>
         <div>
           <h1 className="font-bold text-sm">{user?.username}</h1>
-          <span className="text-gray-400 text-sm">{user?.bio || "Bio Here...."}</span>
+          <span className="text-gray-400 text-sm">
+            {user?.bio || "Bio Here...."}
+          </span>
         </div>
       </div>
       <SuggestedUsers />
