@@ -61,84 +61,68 @@ function Signup() {
   }, [user, navigate]);
 
   return (
-    <div className="flex items-center w-screen h-screen justify-center bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white">
-      <form
-        onSubmit={signupHandler}
-        className="shadow-lg flex flex-col gap-1 bg-black p-7 w-96 rounded-md"
-      >
-        <div className="my-4">
-          <h1 className="text-center font-bold text-2xl text-pink-500">InstaMitr</h1>
-          <p className="pl-2 text-sm text-center font-medium mt-2 text-gray-300">
-            Sign up to see photos and videos from your friends.
-          </p>
-        </div>
-        <div>
-          <Label className="font-medium pl-1 text-gray-300">Username</Label>
-          <Input
-            type="text"
-            placeholder="Username"
-            name="username"
-            value={input.username}
-            onChange={changeEventHandler}
-            className="text-black font-bold focus-visible:ring-transparent my-2 bg-gray-200"
-          />
-        </div>
-        <div>
-          <Label className="font-medium pl-1 text-gray-300">Email</Label>
-          <Input
-            type="email"
-            placeholder="Email"
-            name="email"
-            value={input.email}
-            onChange={changeEventHandler}
-            className="text-black font-bold focus-visible:ring-transparent my-2 bg-gray-200"
-          />
-        </div>
-        <div>
-          <Label className="font-medium pl-1 text-gray-300">Password</Label>
-          <Input
-            type="password"
-            placeholder="Password"
-            name="password"
-            value={input.password}
-            onChange={changeEventHandler}
-            className="text-black font-bold focus-visible:ring-transparent my-2 bg-gray-200"
-          />
-        </div>
-
-        <p className="text-xs text-center text-gray-500">
-          People who use our service may have uploaded your contact information
-          to Instagram. <span className="text-blue-500">Learn More</span>
-        </p>
-
-        <p className="text-xs text-center text-gray-500">
-          By signing up, you agree to our{" "}
-          <span className="text-blue-500">Terms</span>,{" "}
-          <span className="text-blue-500">Privacy Policy</span> and{" "}
-          <span className="text-blue-500">Cookie Policy</span>.
-        </p>
-
-        {loading ? (
-          <Button className="bg-blue-500 text-white mt-5 hover:bg-blue-600">
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
-          </Button>
-        ) : (
-          <Button
-            type="submit"
-            className="bg-blue-500 text-white mt-5 hover:bg-blue-600"
-          >
-            Sign up
-          </Button>
-        )}
-
-        <span className="text-right font-bold text-sm mt-4">
-          Already have an account?{" "}
-          <Link to="/login" className="text-pink-500">
-            Login
-          </Link>
-        </span>
-      </form>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-800 via-purple-900 to-indigo-800 p-4">
+  <div className="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl overflow-hidden w-full max-w-5xl grid grid-cols-1 md:grid-cols-2">
+    
+    {/* 🌟 Left Side: Vector or Illustrative Image */}
+    <div className="hidden md:flex items-center justify-center bg-white/5 p-6">
+      <img
+        src="https://cdni.iconscout.com/illustration/premium/thumb/cloud-computing-service-4658252-3880447.png"
+        alt="Signup Illustration"
+        className="w-4/5 h-auto object-contain animate-float"
+      />
     </div>
+
+    {/* 📝 Right Side: Signup Form */}
+    <div className="p-8 md:p-12 flex flex-col justify-center">
+       <h1 className="text-4xl font-extrabold text-center text-pink-400 mb-4">InstaMitr</h1>
+      <h1 className="text-2xl font-extrabold text-center  text-pink-300 mb-6">Create your free account</h1>
+      <form onSubmit={signupHandler} className="space-y-5">
+
+        <Input
+          type="text"
+          name="username"
+          placeholder="xyz"
+          value={input.username}
+          onChange={changeEventHandler}
+          className="w-full px-4 py-3 bg-white/90 placeholder-gray-600 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-pink-400"
+        />
+
+        <Input
+          type="email"
+          name="email"
+          placeholder="you@gmail.com"
+          value={input.email}
+          onChange={changeEventHandler}
+          className="w-full px-4 py-3 bg-white/90 placeholder-gray-600 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-pink-400"
+        />
+
+        <Input
+          type="password"
+          name="password"
+          placeholder="••••••••"
+          value={input.password}
+          onChange={changeEventHandler}
+          className="w-full px-4 py-3 bg-white/90 placeholder-gray-600 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-pink-400"
+        />
+
+        <Button
+          type="submit"
+          className="w-full bg-pink-500 hover:bg-pink-600 py-3 font-bold transition"
+          disabled={loading}
+        >
+          {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : "Sign Up"}
+        </Button>
+      </form>
+
+      <p className="text-gray-300 text-center font-bold text-sm mt-6">
+        Already have an account?{' '}
+        <Link to="/login" className="text-pink-400 hover:underline">Login</Link>
+      </p>
+    </div>
+  </div>
+</div>
+
   );
 }
 
