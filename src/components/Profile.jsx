@@ -380,7 +380,7 @@ function Profile() {
     onClick={closeDialog} // Close dialog on clicking outside
   >
     <div
-      className="bg-gray-900 rounded-lg shadow-xl w-fit max-w-4xl flex flex-col md:flex-row m-4 md:m-8 overflow-hidden"
+      className="bg-black rounded-lg shadow-xl w-fit max-w-4xl flex flex-col md:flex-row m-4 md:m-8 overflow-hidden"
       onClick={(e) => e.stopPropagation()} // Prevent closing when interacting inside dialog
     >
       {/* Post Section */}
@@ -423,7 +423,7 @@ function Profile() {
       </div>
 
       {/* Comment Section (hidden on mobile) */}
-      <div className="hidden md:flex md:w-[400px] bg-gray-800 border-l border-gray-700 flex-col max-h-[600px] p-4 overflow-y-auto">
+      <div className="hidden md:flex md:w-[400px] bg-black border-l border-gray-700 flex-col max-h-[600px] p-4 overflow-y-auto">
         <CommentSection postId={selectedPost?._id} />
       </div>
     </div>

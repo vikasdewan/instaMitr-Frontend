@@ -4,13 +4,26 @@ import axios from "axios";
 import { setComments, addComment, clearComments } from "../redux/commentSlice";
 import { toast } from "sonner";
 import EmojiPicker from "emoji-picker-react";
-import { FaSmile } from "react-icons/fa";
+import { Smile } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+ 
 
 const CommentSection = ({ postId }) => {
   const dispatch = useDispatch();
   const comments = useSelector((state) => state.comment.comments);
+  const {user} = useSelector((store) => store.auth);
+  const { posts } = useSelector((store) => store.post);
   const [input, setInput] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const navigate = useNavigate();
+   const selectedPost = posts.find((post)=> post._id === postId);
+
+
+   const GoToCommentUserProfile = (commentAuthorId) => {
+  if (commentAuthorId !== user?._id) {
+    window.location.href = `/profile/${commentAuthorId}`;
+  }  
+};
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -58,75 +71,96 @@ const CommentSection = ({ postId }) => {
   };
 
   return (
-    <div className="flex flex-col h-full">
-      <h4 className="text-white text-lg font-bold mb-4">Comments</h4>
+    <div className="flex flex-col h-full bg-[#0f0f0f] p-4 rounded-xl shadow-inner border border-[#1c1c1c]">
 
-      {/* Comment List */}
-      <div className="flex-1 overflow-y-auto pr-1 space-y-4 custom-scroll min-h-0">
-        {comments.length === 0 ? (
-  <p className="text-gray-400 text-sm">No comments yet.</p>
-) : (
-  comments.map((comment) => (
-    <div
-      key={comment._id}
-      className="flex items-start gap-3 bg-gray-800 bg-opacity-60 p-3 rounded-lg border border-gray-700 shadow-sm"
-    >
-      <img
-        src={
-          comment.author?.profileImage || "https://via.placeholder.com/40"
-        }
-        alt="avatar"
-        className="w-9 h-9 rounded-full object-cover"
-      />
-      <div className="flex flex-col">
-        <span className="text-white font-semibold text-sm">
-          {comment.author?.username}
-        </span>
-        <span className="text-gray-300 text-sm break-words">
-          {comment.text}
-        </span>
-      </div>
-    </div>
-  ))
-)}
+  {/* 🧑 Post Owner Header */}
+  <div
+    className="flex items-center gap-3 cursor-pointer mb-4 hover:bg-[#1c1c1c] p-2 rounded-lg transition duration-200"
+    onClick={() => navigate(`/profile/${selectedPost?.author?._id}`)}
+  >
+    <img
+      src={selectedPost?.author?.profileImage || "https://via.placeholder.com/40"}
+      alt="User Avatar"
+      className="w-10 h-10 rounded-full object-cover border border-gray-600"
+    />
+    <h4 className="text-white text-base md:text-lg font-semibold tracking-wide">
+      {selectedPost?.author?.username || "User"}
+    </h4>
+  </div>
 
-      </div>
+  <hr className="border-gray-700 mb-4" />
 
-      {/* Input Box */}
-      <div className="mt-4 border-t border-gray-700 pt-3 flex flex-col gap-2">
-        <div className="flex gap-2">
-          <input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handlePostComment()}
-            placeholder="Add a comment..."
-            className="flex-1 px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+  {/* 💬 Comments Section */}
+  <div className="flex-1 overflow-y-auto custom-scroll pr-1 space-y-3 min-h-0">
+    {comments.length === 0 ? (
+      <p className="text-gray-500 text-sm text-center">No comments yet. Be the first to comment!</p>
+    ) : (
+      comments.map((comment) => (
+        <div
+          key={comment._id}
+          className="flex items-start gap-3 bg-[#1c1c1c] p-3 rounded-lg border border-[#2a2a2a] hover:shadow-md transition-all"
+        >
+          <img
+           onClick={() => 
+            GoToCommentUserProfile(comment?.author?._id)}
+            src={comment.author?.profileImage || "https://via.placeholder.com/40"}
+            alt="avatar"
+            className="w-9 h-9 cursor-pointer rounded-full object-cover border border-gray-700"
           />
-          <button
-            onClick={() => setShowEmojiPicker((prev) => !prev)}
-            className="text-white bg-gray-700 px-3 rounded-lg hover:bg-gray-600"
-          >
-            <FaSmile size={20} />
-          </button>
-          <button
-            onClick={handlePostComment}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
-          >
-            Post
-          </button>
-        </div>
-
-        {showEmojiPicker && (
-          <div className="absolute bottom-[19%] right-40 z-50">
-            <EmojiPicker
-              onEmojiClick={handleEmojiClick}
-              theme="dark"
-              width={300}
-            />
+          <div className="flex flex-col">
+            <span 
+             onClick={() => GoToCommentUserProfile(comment?.author?._id)}
+            className="text-white cursor-pointer font-medium text-sm mb-1">
+              {comment.author?.username}
+            </span>
+            <span className="text-gray-300 text-sm break-words">
+              {comment.text}
+            </span>
           </div>
-        )}
-      </div>
+        </div>
+      ))
+    )}
+  </div>
+
+  {/* ✍️ Input Box */}
+  <div className="mt-5 pt-3 border-t border-gray-800 flex flex-col gap-3">
+    <div className="flex gap-2 items-center">
+      <input
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && handlePostComment()}
+        placeholder="Add a comment..."
+        className="flex-1 px-4 py-2 rounded-lg bg-[#1f1f1f] text-white border border-[#333] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600"
+      />
+      <button
+        onClick={() => setShowEmojiPicker((prev) => !prev)}
+        className="text-white bg-[#2a2a2a] p-2 rounded-lg hover:bg-[#3a3a3a] transition"
+      >
+        <Smile size={20} />
+      </button>
+      <button
+        onClick={handlePostComment}
+        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold transition"
+      >
+        Post
+      </button>
     </div>
+
+    {showEmojiPicker && (
+      <div className="relative">
+        <div className="absolute bottom-[4.5rem] right-2 z-50">
+          <EmojiPicker
+            onEmojiClick={handleEmojiClick}
+            theme="dark"
+            width={300}
+          />
+        </div>
+      </div>
+    )}
+  </div>
+</div>
+
+
   );
 };
 
