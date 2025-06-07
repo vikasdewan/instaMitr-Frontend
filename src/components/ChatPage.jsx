@@ -2,32 +2,32 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { setMessages, setSelectedUser } from "../redux/chatSlice.js";
-import { MessageCircleIcon, ArrowLeft } from "lucide-react";
+import { MessageCircleIcon, ArrowLeft, Smile } from "lucide-react";
 import { Button } from "./ui/button";
 import { Messages } from "./Messages";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
+import EmojiPicker from "emoji-picker-react";
 
 export const ChatPage = () => {
   const [textMessage, setTextMessage] = useState("");
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const { user, suggestedUsers } = useSelector((store) => store.auth);
   const { onlineUsers, selectedUser, messages } = useSelector(
     (store) => store.chat
   );
 
-  const [showChatList, setShowChatList] = useState(true); // State for controlling chat list visibility on mobile
-
+  const [showChatList, setShowChatList] = useState(true);
   const dispatch = useDispatch();
-  const location = useLocation(); // Use location to get passed state
+  const location = useLocation();
   const [followedUsers, setFollowedUsers] = useState([]);
 
-  // Filter out users that are already in the following list
   useEffect(() => {
     if (user?._id && suggestedUsers) {
       const filteredUsers = suggestedUsers.filter((suggUser) =>
         suggUser?.followers?.includes(user?._id)
       );
-      setFollowedUsers(filteredUsers); // Update followed users
+      setFollowedUsers(filteredUsers);
     }
   }, [user, suggestedUsers]);
 
@@ -47,13 +47,13 @@ export const ChatPage = () => {
       if (res.data.success) {
         dispatch(setMessages([...messages, res.data.newMessage]));
         setTextMessage("");
+        setShowEmojiPicker(false); // Optional: close picker after sending
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  // Cleanup
   useEffect(() => {
     return () => {
       dispatch(setSelectedUser(null));
@@ -63,7 +63,7 @@ export const ChatPage = () => {
   useEffect(() => {
     if (location.state?.selectedUser) {
       dispatch(setSelectedUser(location.state.selectedUser));
-      setShowChatList(false); // Ensure the chat list is hidden when navigating directly to a chat
+      setShowChatList(false);
     }
   }, [location.state, dispatch]);
 
@@ -100,11 +100,10 @@ export const ChatPage = () => {
         </h1>
         <div className="overflow-y-auto h-[40vh] md:h-[80vh]">
           {followedUsers
-            // Sort users to prioritize online ones
             .sort((a, b) => {
               const isAOnline = onlineUsers.includes(a?._id);
               const isBOnline = onlineUsers.includes(b?._id);
-              return isBOnline - isAOnline; // Online users (true=1) come before offline ones (false=0)
+              return isBOnline - isAOnline;
             })
             .map((suggestedUser) => {
               const isOnline = onlineUsers.includes(suggestedUser?._id);
@@ -113,7 +112,7 @@ export const ChatPage = () => {
                   key={suggestedUser?._id}
                   onClick={() => {
                     dispatch(setSelectedUser(suggestedUser));
-                    setShowChatList(false); // Hide chat list on mobile
+                    setShowChatList(false);
                   }}
                   className={`text-gray-200 mx-3 flex gap-3 items-center p-3 hover:bg-gray-900 cursor-pointer ${
                     selectedUser?._id === suggestedUser?._id
@@ -143,6 +142,7 @@ export const ChatPage = () => {
             })}
         </div>
       </section>
+
       {selectedUser && (
         <section
           className={`flex-1 border-l border-l-gray-600 flex flex-col h-screen ${
@@ -150,12 +150,11 @@ export const ChatPage = () => {
           }`}
         >
           <div className="flex items-center gap-3 px-3 py-2 border-b border-gray-300 sticky top-0 z-10">
-            {/* Back Button for mobile */}
             {!showChatList && (
               <button
                 onClick={() => {
                   setShowChatList(true);
-                  dispatch(setSelectedUser(null)); // Deselect the user
+                  dispatch(setSelectedUser(null));
                 }}
                 className="md:hidden p-2 bg-gray-800 rounded-full"
               >
@@ -170,8 +169,33 @@ export const ChatPage = () => {
               <span>{selectedUser?.username}</span>
             </div>
           </div>
+
           <Messages selectedUser={selectedUser} />
-          <div className="flex items-center mb-16 md:mb-0 p-4 border-t border-t-gray-600">
+
+          <div className="flex items-center mb-16 md:mb-0 p-4 border-t border-t-gray-600 relative">
+            {/* emoji button */}
+            <button
+              onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+              className="text-white mr-2"
+              type="button"
+            >
+              <Smile className="w-5 h-5" />
+            </button>
+          
+            {showEmojiPicker && (
+              <div className="absolute bottom-16 z-50">
+                <EmojiPicker
+                  onEmojiClick={(emojiData) => {
+                    setTextMessage((prev) => prev + emojiData.emoji);
+                    setShowEmojiPicker(false);
+                  }}
+                  theme="dark"
+                  height={350}
+                  width={300}
+                />
+              </div>
+            )}
+
             <input
               value={textMessage}
               onChange={(e) => setTextMessage(e.target.value)}
@@ -191,6 +215,7 @@ export const ChatPage = () => {
           </div>
         </section>
       )}
+
       {!selectedUser && (
         <div className="flex text-gray-500 flex-col items-center justify-center mx-auto">
           <MessageCircleIcon className="w-32 h-32 my-4" />

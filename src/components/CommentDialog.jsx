@@ -14,6 +14,8 @@ import {
   setSuggestedUsers,
   setUserProfile,
 } from "@/redux/authSlice";
+import { Smile } from "lucide-react";
+import EmojiPicker from "emoji-picker-react";
 
 function CommentDialog({ openComment, setOpenComment }) {
   const [text, setText] = useState("");
@@ -24,6 +26,13 @@ function CommentDialog({ openComment, setOpenComment }) {
   const [isFollowing, setIsFollowing] = useState(
     user?.following?.includes(selectedPost?.author?._id)
   );
+
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
+const handleEmojiClick = (emojiData) => {
+  setText((prev) => prev + emojiData.emoji);
+  setShowEmojiPicker(false);
+};
 
   // Load comments into local state on component mount
   useEffect(() => {
@@ -161,11 +170,11 @@ function CommentDialog({ openComment, setOpenComment }) {
         className="bg-black  text-white max-w-2xl p-0 flex flex-col"
         onInteractOutside={() => setOpenComment(false)}
       >
-        <div className="flex px-2">
+        <div className="flex px-2 justify-center">
           <div className="hidden md:block w-1/2 min-h-96">
             {selectedPost?.video ? (
               <video
-                className="rounded-sm my-2 w-full aspect-square object-cover"
+                className="rounded-sm h-full  p-2 w-full aspect-square object-cover"
                 autoPlay
                 loop
                 src={selectedPost?.video}
@@ -173,7 +182,7 @@ function CommentDialog({ openComment, setOpenComment }) {
               />
             ) : (
               <img
-                className="rounded-sm my-2 w-full aspect-square object-cover"
+                className="rounded-sm h-full pb-5 my-2 w-full aspect-square object-cover"
                 src={selectedPost?.image}
                 alt="post_image"
               />
@@ -244,24 +253,38 @@ function CommentDialog({ openComment, setOpenComment }) {
                   <Comment key={c?._id} comment={c} />
                 ))}
               </div>
-              <div className="p-4 flex">
-                <input
-                  type="text"
-                  value={text}
-                  onChange={changeEventHandler}
-                  placeholder="Add a comment...."
-                  className="placeholder-white text-white bg-black text-sm w-full outline-none border-gray-300 p-2 rounded"
-                  onKeyDown={handleKeyDown}
-                />
-                <Button
-                  disabled={!text.trim()}
-                  onClick={sendMessageHandler}
-                  variant="outline"
-                  className="bg-black text-blue-500 border-none hover:bg-none hover:bg-black hover:text-blue-200 font-bold"
-                >
-                  Send
-                </Button>
-              </div>
+              <div className="p-4 flex items-center relative">
+  <button
+    onClick={() => setShowEmojiPicker((prev) => !prev)}
+    className="text-gray-200 border-black mr-2"
+  >
+    <Smile size={22} />
+  </button>
+
+  <input
+    type="text"
+    value={text}
+    onChange={changeEventHandler}
+    placeholder="Add a comment...."
+    className="placeholder-white text-white bg-black text-sm w-full outline-none border-gray-300 p-2 rounded"
+    onKeyDown={handleKeyDown}
+  />
+
+  <Button
+    disabled={!text.trim()}
+    onClick={sendMessageHandler}
+    variant="outline"
+    className="bg-black text-blue-500 border-none hover:bg-none hover:bg-black hover:text-blue-200 font-bold ml-2"
+  >
+    Send
+  </Button>
+
+  {showEmojiPicker && (
+    <div className="absolute bottom-[60px] left-2 z-50">
+      <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark" />
+    </div>
+  )}
+</div>
             </div>
           </div>
         </div>

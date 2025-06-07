@@ -17,6 +17,8 @@ import {
   setSuggestedUsers,
   setUserProfile,
 } from "@/redux/authSlice";
+import EmojiPicker from "emoji-picker-react";
+import { Smile } from "lucide-react";
 
 function Post({ post }) {
   const [text, setText] = useState("");
@@ -32,19 +34,22 @@ function Post({ post }) {
   const [showHeart, setShowHeart] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true); // Track if the video is playing
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [isFollowing, setIsFollowing] = useState(
     user?.following?.includes(post?.author?._id)
   );
+
+  const handleEmojiClick = (emojiData) => {
+    setText((prev) => prev + emojiData.emoji);
+    setShowEmojiPicker(false);
+  };
+
   const videoRef = useRef(null);
 
   const changeEventHandler = (e) => {
-    const inputText = e.target.value;
-    if (inputText.trim()) {
-      setText(inputText);
-    } else {
-      setText("");
-    }
-  };
+  setText(e.target.value);
+  setShowEmojiPicker(false); // optional
+};
 
   const handleVideoPostMute = () => {
     const videoElement = videoRef.current;
@@ -449,24 +454,41 @@ function Post({ post }) {
         openComment={openComment}
         setOpenComment={setOpenComment}
       />
-      <div className="flex">
-        <input
-          type="text"
-          placeholder="Add a comment..."
-          className="outline-none text-sm w-full bg-black mt-3"
-          value={text}
-          onChange={changeEventHandler}
-        />
-        {text && (
-          <span
-            onClick={commentHandler}
-            id="Postbutton"
-            className="text-[#0095F6] text-sm font-bold mt-3 cursor-pointer"
-          >
-            Post
-          </span>
-        )}
-      </div>
+     <div className="flex relative">
+  <input
+    type="text"
+    placeholder="Add a comment..."
+    className="outline-none text-sm w-full bg-black mt-3 pr-16"
+    value={text}
+    onChange={changeEventHandler}
+  />
+
+  <div className="absolute right-2 top-[14px] flex items-center gap-2">
+    <button
+      onClick={() => setShowEmojiPicker((prev) => !prev)}
+      className="text-gray-200"
+    >
+      <Smile size={18} />
+    </button>
+
+    {text && (
+      <span
+        onClick={commentHandler}
+        id="Postbutton"
+        className="text-[#0095F6] text-sm font-bold cursor-pointer"
+      >
+        Post
+      </span>
+    )}
+  </div>
+
+  {showEmojiPicker && (
+    <div className="absolute bottom-[40px] right-0 z-50">
+      <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark" />
+    </div>
+  )}
+</div>
+
     </div>
   );
 }

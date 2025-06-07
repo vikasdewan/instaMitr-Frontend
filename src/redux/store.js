@@ -4,6 +4,7 @@ import { postSlice } from "./postSlice.js";
 import { chatSlice } from "./chatSlice.js";
 import {socketSlice} from "./socketSlice.js";
 import {realTimeNotiSlice} from "./realTimeNotiSlice.js";
+import commentReducer from "./commentSlice";
 
 import {
   persistReducer,
@@ -28,6 +29,7 @@ const rootReducer = combineReducers({
   socketio: socketSlice.reducer,
   realTimeNoti : realTimeNotiSlice.reducer,
   chat: chatSlice.reducer,
+  comment: commentReducer,
 
 });
 

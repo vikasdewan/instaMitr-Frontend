@@ -27,6 +27,7 @@ import {
   setUserProfile,
 } from "@/redux/authSlice";
 import FollowersFollowingDialog from "./FollowersFollowingDialog";
+import CommentSection from "./CommentSection";
 // import { setSelectedUser } from "@/redux/chatSlice";
 
 function Profile() {
@@ -373,48 +374,64 @@ function Profile() {
           </div>
         </div>
       </div>
-      {openPostDialog && selectedPost && (
-        <div
-          className="fixed inset-0   bg-opacity-75 flex justify-center items-center z-50  "
-          onClick={closeDialog} // Close dialog on clicking outside
-        >
-          <div
-            className="bg-gray-900 p-2 rounded-lg md:w-1/4 w-96 relative shadow-xl"
-            onClick={(e) => e.stopPropagation()} // Prevent closing when interacting inside dialog
-          >
-            {selectedPost?.video ? (
-              <div className="relative">
-                <video
-                  src={selectedPost?.video}
-                  className="w-full h-[500px] md:h-[550px] pt-4 md:py-10 object-contain rounded-lg mb-4"
-                  muted={isMuted}
-                  ref={videoRef}
-                  onClick={handleVideoPostPlayNPause}
-                  autoPlay
-                  loop
-                />
-                <button
-                  className="absolute bottom-2 right-2 bg-gray-700 text-white rounded-full p-2"
-                  onClick={() => setIsMuted(!isMuted)}
-                >
-                  {isMuted ? (
-                    <i className="fas fa-volume-mute"></i>
-                  ) : (
-                    <i className="fas fa-volume-up"></i>
-                  )}
-                </button>
-              </div>
-            ) : (
-              <img
-                src={selectedPost?.image}
-                alt={selectedPost?.caption}
-                className="w-full h-96 object-cover rounded-lg mb-4"
-              />
-            )}
-            <p className="text-gray-400 mb-4">{selectedPost?.caption}</p>
+               {openPostDialog && selectedPost && (
+  <div
+    className="fixed inset-0 bg-transparent bg-opacity-75 flex justify-center items-center z-50"
+    onClick={closeDialog} // Close dialog on clicking outside
+  >
+    <div
+      className="bg-gray-900 rounded-lg shadow-xl w-fit max-w-4xl flex flex-col md:flex-row m-4 md:m-8 overflow-hidden"
+      onClick={(e) => e.stopPropagation()} // Prevent closing when interacting inside dialog
+    >
+      {/* Post Section */}
+      <div className="flex-1 p-4 md:p-6">
+        <h3 className="text-xl font-semibold text-white mb-4">
+          {selectedPost?.title}
+        </h3>
+
+        {selectedPost?.video ? (
+          <div className="relative">
+            <video
+              src={selectedPost?.video}
+              className="w-full h-[450px] md:h-[500px] object-contain rounded-lg mb-4"
+              muted={isMuted}
+              ref={videoRef}
+              onClick={handleVideoPostPlayNPause}
+              autoPlay
+              loop
+            />
+            <button
+              className="absolute bottom-3 right-3 bg-gray-700 text-white rounded-full p-2"
+              onClick={() => setIsMuted(!isMuted)}
+            >
+              {isMuted ? (
+                <i className="fas fa-volume-mute"></i>
+              ) : (
+                <i className="fas fa-volume-up"></i>
+              )}
+            </button>
           </div>
-        </div>
-      )}
+        ) : (
+          <img
+            src={selectedPost?.image}
+            alt={selectedPost?.title}
+            className="w-full h-[250px] md:h-[500px] object-contain rounded-lg mb-4"
+          />
+        )}
+
+        <p className="text-gray-400 mb-2">{selectedPost?.description}</p>
+      </div>
+
+      {/* Comment Section (hidden on mobile) */}
+      <div className="hidden md:flex md:w-[400px] bg-gray-800 border-l border-gray-700 flex-col max-h-[600px] p-4 overflow-y-auto">
+        <CommentSection postId={selectedPost?._id} />
+      </div>
+    </div>
+  </div>
+)}
+
+
+
       //follower and following list
       {showDialog && (
         <FollowersFollowingDialog

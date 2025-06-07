@@ -4,78 +4,67 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { setAuthUser, setSuggestedUsers } from "@/redux/authSlice";
 import { toast } from "sonner";
 import axios from "axios";
+import { useState } from "react";
 
 function SuggestedUsers() {
   const { suggestedUsers, user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
 
-  // Filter out users that are already in the following list
-  // const filteredUsers = suggestedUsers.filter(
-  //   (suggUser) => !suggUser?.followers?.includes(user._id)
-  // );
+  const [showAll, setShowAll] = useState(false); // toggle for "See More"
 
-  // console.log(filteredUsers);
+  const visibleUsers = showAll ? suggestedUsers : suggestedUsers.slice(0, 5);
 
   const handleFollow = async (suggUserId) => {
     try {
-      console.log("follow button clicked");
       const response = await axios.post(
         `http://localhost:8000/api/v1/user/followorunfollow/${suggUserId}`,
-        {}, // No body data required
+        {},
         {
-          withCredentials: true, // Send cookies with the request
+          withCredentials: true,
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // Pass token if needed
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
 
-      console.log(response);
       if (response.data.success) {
         const updatedUsers = suggestedUsers.map((suggUser) =>
           suggUser?._id === suggUserId
             ? {
                 ...suggUser,
                 followers: suggUser.followers.includes(user?._id)
-                  ? suggUser.followers.filter((id) => id !== user?._id) // Unfollow
-                  : [...suggUser.followers, user?._id], // Follow
+                  ? suggUser.followers.filter((id) => id !== user?._id)
+                  : [...suggUser.followers, user?._id],
               }
             : suggUser
         );
 
         dispatch(setSuggestedUsers(updatedUsers));
-
         const updatedFollowing = [...user.following, suggUserId];
-
         dispatch(setAuthUser({ ...user, following: updatedFollowing }));
-        // Toggle following state
-        toast.success(response.data.message); // Success toast
+
+        toast.success(response.data.message);
       }
     } catch (error) {
       console.error("Follow/Unfollow failed:", error);
-      toast.error("Something went wrong!"); // Optional: Error toast
+      toast.error("Something went wrong!");
     }
   };
 
   return (
     <div className="mt-5">
-      <div className="flex justify-between ">
-        <h1 className="font-semibold text-gray-400 text-sm">
-          Suggested for you
-        </h1>
-        <span className="font-semibold text-xs mt-0.5 cursor-pointer text-gray-300 ">
-          See All
-        </span>
+      <div className="flex justify-between items-center">
+        <h1 className="font-semibold text-gray-400 text-sm">Suggested for you</h1>
       </div>
-      {suggestedUsers.map((suggUser) => {
+
+      {visibleUsers.map((suggUser) => {
         const isFollowing = suggUser.followers.includes(user?._id);
 
         return (
           <div
-            key={suggUser.id}
-            className="flex items-center justify-between mt-2  pt-3  "
+            key={suggUser._id}
+            className="flex items-center justify-between mt-2 pt-3 animate-fade-in"
           >
-            {/* Left Section: Avatar and Bio */}
             <div className="flex items-center gap-3">
               <Link to={`/profile/${suggUser?._id}`}>
                 <Avatar className="text-black">
@@ -93,7 +82,6 @@ function SuggestedUsers() {
               </Link>
             </div>
 
-            {/* Right Section: Follow Button */}
             <button
               className={`${
                 isFollowing
@@ -108,8 +96,20 @@ function SuggestedUsers() {
           </div>
         );
       })}
+
+      {suggestedUsers.length > 5 && (
+        <div className="mt-2 text-center">
+          <button
+            className="text-sm text-blue-400 font-medium hover:underline transition duration-300 ease-in-out"
+            onClick={() => setShowAll(!showAll)}
+          >
+            {showAll ? "See Less" : "See More"}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
 
 export default SuggestedUsers;
+  
