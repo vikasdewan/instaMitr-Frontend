@@ -9,6 +9,8 @@ import { setPosts } from "@/redux/postSlice";
 import { toast } from "sonner";
 import EmojiPicker from "emoji-picker-react";
 import { Smile } from "lucide-react";
+import { Link } from "react-router-dom";
+import { APP_BASE_URL } from "@/config.js";
 
 const ReelComments = ({ reel, onClose, user }) => {
   const [comments, setComments] = useState(reel?.comments || []);
@@ -106,15 +108,19 @@ const ReelComments = ({ reel, onClose, user }) => {
           ) : (
             comments.map((comment) => (
               <div key={comment._id} className="flex items-start space-x-3">
+                <Link to={`/profile/${comment?.author?._id}`} >
                 <Avatar className="h-8 w-8">
                   <AvatarImage src={comment.author?.profileImage} />
                   <AvatarFallback>U</AvatarFallback>
                 </Avatar>
+                </Link>
                 <div className="flex-1">
                   <div className="bg-gray-800 rounded-lg p-3">
+                    <Link  to={`/profile/${comment?.author?._id}`} >
                     <p className="font-semibold text-white">
                       {comment.author?.username}
                     </p>
+                    </Link>
                     <p className="text-white">{comment.text}</p>
                   </div>
                   <p className="text-gray-400 text-xs mt-1">
@@ -141,7 +147,7 @@ const ReelComments = ({ reel, onClose, user }) => {
               <Button
                 variant="ghost"
                 onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                className="text-white"
+                className="text-white  hover:bg-gray-500"
               >
                 <Smile size={20} />
               </Button>
@@ -157,8 +163,12 @@ const ReelComments = ({ reel, onClose, user }) => {
             {showEmojiPicker && (
               <div className="absolute bottom-14 left-0 z-50">
                 <EmojiPicker
+                  searchDisabled
+                      skinTonesDisabled
+                      previewConfig={{ showPreview: false }}
                   onEmojiClick={handleEmojiClick}
                   theme="dark"
+                  height={350}
                   width={300}
                 />
               </div>

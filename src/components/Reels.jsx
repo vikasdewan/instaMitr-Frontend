@@ -12,6 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "@/redux/postSlice";
 import ReelComments from "./ReelComments";
+import { APP_BASE_URL } from "@/config.js";
 
 const Reels = () => {
   const dispatch = useDispatch();
@@ -48,7 +49,7 @@ const Reels = () => {
   useEffect(() => {
     const fetchReels = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/api/v1/post/all", {
+        const res = await axios.get(`http://localhost:8000/api/v1/post/all`, {
           headers: {
             "Content-Type": "application/json",
           },

@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthUser } from "@/redux/authSlice.js";
 import Loader from "./Loader.jsx";
+import { APP_BASE_URL } from "@/config.js";
 
 function Login() {
   const [input, setInput] = useState({ email: "", password: "" });
@@ -26,17 +27,14 @@ function Login() {
   const dispatch = useDispatch();
    
 
-  useEffect(() => {
-    const timer = setTimeout(() => setShowDemoBox(false), 15000); // 30 seconds
-    return () => clearTimeout(timer);
-  }, []);
+ 
 
   const loginHandler = async (e) => {
     e.preventDefault();
     try {
       setloading(true);
       const res = await axios.post(
-        "http://localhost:8000/api/v1/user/login",
+        `http://localhost:8000/api/v1/user/login`,
         input,
         {
           headers: {

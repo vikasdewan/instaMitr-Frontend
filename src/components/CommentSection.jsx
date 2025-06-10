@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import EmojiPicker from "emoji-picker-react";
 import { Smile } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { APP_BASE_URL } from "@/config.js";
  
 
 const CommentSection = ({ postId }) => {
@@ -150,8 +151,12 @@ const CommentSection = ({ postId }) => {
       <div className="relative">
         <div className="absolute bottom-[4.5rem] right-2 z-50">
           <EmojiPicker
+          searchDisabled
+                      skinTonesDisabled
+                      previewConfig={{ showPreview: false }}
             onEmojiClick={handleEmojiClick}
             theme="dark"
+            height={350}
             width={300}
           />
         </div>

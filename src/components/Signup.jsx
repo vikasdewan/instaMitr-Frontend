@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { APP_BASE_URL } from "@/config.js";
 
 function Signup() {
   const [input, setInput] = useState({ username: "", password: "", email: "" });
@@ -27,7 +28,7 @@ function Signup() {
     try {
       setLoading(true);
       const res = await axios.post(
-        "http://localhost:8000/api/v1/user/register",
+        `http://localhost:8000/api/v1/user/register`,
         input,
         {
           headers: {

@@ -16,6 +16,7 @@ import {
 } from "@/redux/authSlice";
 import { Smile } from "lucide-react";
 import EmojiPicker from "emoji-picker-react";
+import { APP_BASE_URL } from "@/config.js";
 
 function CommentDialog({ openComment, setOpenComment }) {
   const [text, setText] = useState("");
@@ -284,7 +285,13 @@ function CommentDialog({ openComment, setOpenComment }) {
 
                 {showEmojiPicker && (
                   <div className="absolute bottom-[60px] left-2 z-50">
-                    <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark" />
+                    <EmojiPicker
+                    height={350}
+                      width={300}
+                    searchDisabled
+                      skinTonesDisabled
+                      previewConfig={{ showPreview: false }}
+                    onEmojiClick={handleEmojiClick} theme="dark" />
                   </div>
                 )}
               </div>

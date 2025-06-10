@@ -9,6 +9,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { setAuthUser } from "@/redux/authSlice";
 import { Input } from "./ui/input";
+import { APP_BASE_URL } from "@/config.js";
 
 export const EditProfile = () => {
   const [loading, setLoading] = useState(false);
@@ -47,7 +48,7 @@ export const EditProfile = () => {
       }
 
       const res = await axios.post(
-        "http://localhost:8000/api/v1/user/profile/edit",
+        `http://localhost:8000/api/v1/user/profile/edit`,
         formData,
         {
           headers: {

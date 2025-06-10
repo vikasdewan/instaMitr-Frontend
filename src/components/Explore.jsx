@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Loader from "./Loader.jsx";
 import CommentSection from "./CommentSection.jsx";
+import { APP_BASE_URL } from "@/config.js";
 
 
 const Explore = () => {
@@ -32,7 +33,7 @@ const Explore = () => {
     const fetchPosts = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/v1/post/all",
+          `http://localhost:8000/api/v1/post/all`,
           {
             withCredentials: true,
           }

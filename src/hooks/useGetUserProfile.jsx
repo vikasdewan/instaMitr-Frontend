@@ -3,6 +3,7 @@ import { setUserProfile } from "@/redux/authSlice";
 import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { APP_BASE_URL } from "@/config.js";
 
 const useGetUserProfile = (userId) => {
   const dispatch = useDispatch(); //basically kuch chij bhejne ka kaam karta hai

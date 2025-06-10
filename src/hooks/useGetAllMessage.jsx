@@ -3,6 +3,7 @@ import { setPosts } from "@/redux/postSlice";
 import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { APP_BASE_URL } from "@/config.js";
 
 const useGetAllMessage = () => {
   const {selectedUser} = useSelector(store => store.chat)

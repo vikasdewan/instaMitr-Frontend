@@ -8,6 +8,7 @@ import { Messages } from "./Messages";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import EmojiPicker from "emoji-picker-react";
+import { APP_BASE_URL } from "@/config.js";
 
 export const ChatPage = () => {
   const [textMessage, setTextMessage] = useState("");
@@ -185,6 +186,10 @@ export const ChatPage = () => {
             {showEmojiPicker && (
               <div className="absolute bottom-16 z-50">
                 <EmojiPicker
+                 
+                  searchDisabled
+                      skinTonesDisabled
+                      previewConfig={{ showPreview: false }}
                   onEmojiClick={(emojiData) => {
                     setTextMessage((prev) => prev + emojiData.emoji);
                     setShowEmojiPicker(false);

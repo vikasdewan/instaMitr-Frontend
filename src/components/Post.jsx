@@ -19,6 +19,7 @@ import {
 } from "@/redux/authSlice";
 import EmojiPicker from "emoji-picker-react";
 import { Smile } from "lucide-react";
+import { APP_BASE_URL } from "@/config.js";
 
 function Post({ post }) {
   const [text, setText] = useState("");
@@ -487,7 +488,13 @@ function Post({ post }) {
 
         {showEmojiPicker && (
           <div className="absolute bottom-[40px] right-0 z-50">
-            <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark" />
+            <EmojiPicker 
+            height={350}
+                      width={300}
+            searchDisabled
+                      skinTonesDisabled
+                      previewConfig={{ showPreview: false }}
+            onEmojiClick={handleEmojiClick} theme="dark" />
           </div>
         )}
       </div>

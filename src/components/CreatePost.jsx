@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "@/redux/postSlice";
+import { APP_BASE_URL } from "@/config.js";
 
 function CreatePost({ open, setOpen }) {
   const imageRef = useRef();
@@ -44,7 +45,7 @@ function CreatePost({ open, setOpen }) {
         try {
           setLoading(true);
           const res = await axios.post(
-            "http://localhost:8000/api/v1/post/addpost/image", // Image API endpoint
+            `http://localhost:8000/api/v1/post/addpost/image`, // Image API endpoint
             formData,
             {
               headers: {
@@ -76,7 +77,7 @@ function CreatePost({ open, setOpen }) {
         try {
           setLoading(true);
           const res = await axios.post(
-            "http://localhost:8000/api/v1/post/addpost/video", // Video API endpoint
+            `http://localhost:8000/api/v1/post/addpost/video`, // Video API endpoint
             formData,
             {
               headers: {

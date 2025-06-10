@@ -28,6 +28,7 @@ import {
 } from "@/redux/authSlice";
 import FollowersFollowingDialog from "./FollowersFollowingDialog";
 import CommentSection from "./CommentSection";
+import { APP_BASE_URL } from "@/config.js";
 // import { setSelectedUser } from "@/redux/chatSlice";
 
 function Profile() {

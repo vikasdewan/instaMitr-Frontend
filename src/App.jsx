@@ -18,7 +18,7 @@ import { SearchTab } from "./components/SearchTab";
 import SuggestedUsersPage from "./components/SuggestedUsersPage";
 import Reels from "./components/Reels";
 import Explore from "./components/Explore";
- 
+import { APP_BASE_URL } from "./config";
  
 
   
@@ -84,7 +84,7 @@ function App() {
 
   useEffect(()=>{
     if(user){
-      const socketio = io('http://localhost:8000' , {
+      const socketio = io(`http://localhost:8000` , {
         query:{
           userId:user?._id
         },
