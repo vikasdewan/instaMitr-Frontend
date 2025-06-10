@@ -163,7 +163,7 @@ function Profile() {
       <div className="flex flex-col gap-10 py-8 h-[100%]">
         <div className="md:grid md:grid-cols-2 gap-3">
           {/* Profile Picture Section */}
-          <section className="flex items-center justify-center mt-3 md:ml-80">
+          <section className="flex text-black items-center justify-center mt-3 md:ml-80">
             <Avatar className="h-20 w-20 sm:h-28 sm:w-28 md:h-40 md:w-40">
               <AvatarImage src={userProfile?.profileImage} alt="profile_Img" />
               <AvatarFallback>IM</AvatarFallback>
@@ -432,7 +432,7 @@ function Profile() {
 
 
 
-      //follower and following list
+      {/* follower and following list */}
       {showDialog && (
         <FollowersFollowingDialog
           type={dialogType}

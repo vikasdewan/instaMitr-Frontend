@@ -8,14 +8,18 @@ import Loader from "./Loader.jsx";
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
-  useGetAllPost();
+
+  // ✅ Custom hooks must be called directly at the top level
+  useGetAllPost();        // These hooks should internally manage when to fetch (usually with useEffect inside)
   useGetSuggestUsers();
 
   useEffect(() => {
-    // Simulate a delay for loading content, like fetching data
-    setTimeout(() => {
+    // Simulate a delay to show loader
+    const timer = setTimeout(() => {
       setLoading(false);
-    }, 100); // Adjust the timeout as needed
+    }, 100);
+
+    return () => clearTimeout(timer);
   }, []);
 
   return (

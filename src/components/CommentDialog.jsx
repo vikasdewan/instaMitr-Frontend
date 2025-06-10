@@ -29,10 +29,10 @@ function CommentDialog({ openComment, setOpenComment }) {
 
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
-const handleEmojiClick = (emojiData) => {
-  setText((prev) => prev + emojiData.emoji);
-  setShowEmojiPicker(false);
-};
+  const handleEmojiClick = (emojiData) => {
+    setText((prev) => prev + emojiData.emoji);
+    setShowEmojiPicker(false);
+  };
 
   // Load comments into local state on component mount
   useEffect(() => {
@@ -192,7 +192,7 @@ const handleEmojiClick = (emojiData) => {
           <div className=" w-full md:w-1/2 flex flex-col justify-between">
             <div className="flex items-center justify-between p-4">
               <div className="flex gap-3 items-center">
-                <Link>
+                <Link to={`/profile/${selectedPost?.author?._id}`}>
                   <Avatar>
                     <AvatarImage src={selectedPost?.author?.profileImage} />
                     <AvatarFallback className="bg-black text-white">
@@ -201,7 +201,10 @@ const handleEmojiClick = (emojiData) => {
                   </Avatar>
                 </Link>
                 <div>
-                  <Link className="font-semibold text-xs hover:text-gray-400">
+                  <Link
+                    to={`/profile/${selectedPost?.author?._id}`}
+                    className="font-semibold text-xs hover:text-gray-400"
+                  >
                     {selectedPost?.author?.username}
                   </Link>{" "}
                   &nbsp;
@@ -254,37 +257,37 @@ const handleEmojiClick = (emojiData) => {
                 ))}
               </div>
               <div className="p-4 flex items-center relative">
-  <button
-    onClick={() => setShowEmojiPicker((prev) => !prev)}
-    className="text-gray-200 border-black mr-2"
-  >
-    <Smile size={22} />
-  </button>
+                <button
+                  onClick={() => setShowEmojiPicker((prev) => !prev)}
+                  className="text-gray-200 border-black mr-2"
+                >
+                  <Smile size={22} />
+                </button>
 
-  <input
-    type="text"
-    value={text}
-    onChange={changeEventHandler}
-    placeholder="Add a comment...."
-    className="placeholder-white text-white bg-black text-sm w-full outline-none border-gray-300 p-2 rounded"
-    onKeyDown={handleKeyDown}
-  />
+                <input
+                  type="text"
+                  value={text}
+                  onChange={changeEventHandler}
+                  placeholder="Add a comment...."
+                  className="placeholder-white text-white bg-black text-sm w-full outline-none border-gray-300 p-2 rounded"
+                  onKeyDown={handleKeyDown}
+                />
 
-  <Button
-    disabled={!text.trim()}
-    onClick={sendMessageHandler}
-    variant="outline"
-    className="bg-black text-blue-500 border-none hover:bg-none hover:bg-black hover:text-blue-200 font-bold ml-2"
-  >
-    Send
-  </Button>
+                <Button
+                  disabled={!text.trim()}
+                  onClick={sendMessageHandler}
+                  variant="outline"
+                  className="bg-black text-blue-500 border-none hover:bg-none hover:bg-black hover:text-blue-200 font-bold ml-2"
+                >
+                  Send
+                </Button>
 
-  {showEmojiPicker && (
-    <div className="absolute bottom-[60px] left-2 z-50">
-      <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark" />
-    </div>
-  )}
-</div>
+                {showEmojiPicker && (
+                  <div className="absolute bottom-[60px] left-2 z-50">
+                    <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark" />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>

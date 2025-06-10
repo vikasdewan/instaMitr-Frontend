@@ -47,9 +47,9 @@ function Post({ post }) {
   const videoRef = useRef(null);
 
   const changeEventHandler = (e) => {
-  setText(e.target.value);
-  setShowEmojiPicker(false); // optional
-};
+    setText(e.target.value);
+    setShowEmojiPicker(false); // optional
+  };
 
   const handleVideoPostMute = () => {
     const videoElement = videoRef.current;
@@ -133,7 +133,7 @@ function Post({ post }) {
           withCredentials: true,
         }
       );
-      
+
       if (res.data.success) {
         const updatedCommentData = [...comment, res.data.comment];
         setComment(updatedCommentData);
@@ -189,54 +189,55 @@ function Post({ post }) {
     }
   };
 
-  const handleUnfollow = async () => {
-    try {
-      const response = await axios.post(
-        `http://localhost:8000/api/v1/user/followorunfollow/${post?.author?._id}`,
-        {},
-        {
-          withCredentials: true,
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
+  const handleFollowToggle = async () => {
+  try {
+    const response = await axios.post(
+      `http://localhost:8000/api/v1/user/followorunfollow/${post?.author?._id}`,
+      {},
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+
+    if (response.data.success) {
+      const updatedFollowing = isFollowing
+        ? user?.following?.filter((id) => id !== post?.author?._id)
+        : [...(user?.following || []), post?.author?._id];
+
+      dispatch(setAuthUser({ ...user, following: updatedFollowing }));
+
+      const updatedFollowers = isFollowing
+        ? post?.author?.followers?.filter((id) => id !== user?._id)
+        : [...(post?.author?.followers || []), user?._id];
+
+      dispatch(
+        setUserProfile({ ...post?.author, followers: updatedFollowers })
       );
 
-      if (response.data.success) {
-        const updatedFollowing = isFollowing
-          ? user?.following?.filter((id) => id !== post?.author?._id)
-          : [...user.following, post?.author?._id];
+      const updatedSuggestedUsers = suggestedUsers?.map((suggUser) =>
+        suggUser?._id === post?.author?._id
+          ? {
+              ...suggUser,
+              followers: isFollowing
+                ? suggUser?.followers?.filter((id) => id !== user?._id)
+                : [...(suggUser?.followers || []), user?._id],
+            }
+          : suggUser
+      );
 
-        dispatch(setAuthUser({ ...user, following: updatedFollowing }));
+      dispatch(setSuggestedUsers(updatedSuggestedUsers));
 
-        const updatedFollowers = isFollowing
-          ? post?.author?.followers?.filter((id) => id !== user?._id)
-          : [...post?.author?.followers, user?._id];
-
-        dispatch(
-          setUserProfile({ ...post?.author, followers: updatedFollowers })
-        );
-
-        const updatedSuggestedUsers = suggestedUsers?.map((suggUser) =>
-          suggUser?._id === post?.author?._id
-            ? {
-                ...suggUser,
-                followers: suggUser?.followers?.includes(user?._id)
-                  ? suggUser?.followers?.filter((id) => id !== user?._id)
-                  : [...suggUser?.followers, user?._id],
-              }
-            : suggUser
-        );
-        dispatch(setSuggestedUsers(updatedSuggestedUsers));
-
-        setIsFollowing((prev) => !prev);
-        toast.success(response.data.message);
-      }
-    } catch (error) {
-      console.error("Follow/Unfollow failed:", error);
-      toast.error("Something went wrong!");
+      setIsFollowing((prev) => !prev);
+      toast.success(response.data.message);
     }
-  };
+  } catch (error) {
+    console.error("Follow/Unfollow failed:", error);
+    toast.error("Something went wrong!");
+  }
+};
 
   useEffect(() => {
     setBookmarked(user?.bookmarks?.includes(post._id));
@@ -322,16 +323,18 @@ function Post({ post }) {
             <MoreHorizontal className="cursor-pointer" />
           </DialogTrigger>
           <DialogContent className="bg-black text-white flex flex-col items-center text-sm text-center ">
-            {post.author?._id !== user?._id && isFollowing ? (
+            {post.author?._id !== user?._id && (
               <Button
                 variant="ghost"
-                className="cursor-pointer w-fit text-[#ED4956] font-bold rounded-xl hover:bg-gray-500"
-                onClick={handleUnfollow}
+                className={`cursor-pointer border-none w-fit font-bold rounded-xl    ${
+                  isFollowing ? "text-[#ED4956]" : "text-blue-500"
+                }  ${
+                  isFollowing ? "hover:bg-red-500" : "hover:bg-blue-500"
+                }`}
+                onClick={handleFollowToggle}
               >
-                Unfollow
+                {isFollowing ? "Unfollow" : "Follow"}
               </Button>
-            ) : (
-              ""
             )}
 
             <Link to={`/profile/${post?.author?._id}`}>
@@ -346,10 +349,10 @@ function Post({ post }) {
             {user && user?._id === post?.author?._id && (
               <Button
                 variant="ghost"
-                className="cursor-pointer w-fit rounded-xl font-bold hover:bg-gray-500"
+                className="cursor-pointer w-fit rounded-xl bg-red-500 font-bold hover:bg-red-500"
                 onClick={deletePostHandler}
               >
-                Delete
+                Delete the post
               </Button>
             )}
           </DialogContent>
@@ -438,8 +441,8 @@ function Post({ post }) {
       </div>
       <span className="font-medium text-sm mb-2 block">{postLike} likes</span>
       <p>
-        <span className="font-medium text-sm">{post?.author?.username}</span>{" "}
-          {post?.caption}
+        <span className="font-medium text-sm">{post?.author?.username}</span>  {" "}
+        {post?.caption}
       </p>
       <span
         onClick={() => {
@@ -454,41 +457,40 @@ function Post({ post }) {
         openComment={openComment}
         setOpenComment={setOpenComment}
       />
-     <div className="flex relative">
-  <input
-    type="text"
-    placeholder="Add a comment..."
-    className="outline-none text-sm w-full bg-black mt-3 pr-16"
-    value={text}
-    onChange={changeEventHandler}
-  />
+      <div className="flex relative">
+        <input
+          type="text"
+          placeholder="Add a comment..."
+          className="outline-none text-sm w-full bg-black mt-3 pr-16"
+          value={text}
+          onChange={changeEventHandler}
+        />
 
-  <div className="absolute right-2 top-[14px] flex items-center gap-2">
-    <button
-      onClick={() => setShowEmojiPicker((prev) => !prev)}
-      className="text-gray-200"
-    >
-      <Smile size={18} />
-    </button>
+        <div className="absolute right-2 top-[14px] flex items-center gap-2">
+          <button
+            onClick={() => setShowEmojiPicker((prev) => !prev)}
+            className="text-gray-200"
+          >
+            <Smile size={18} />
+          </button>
 
-    {text && (
-      <span
-        onClick={commentHandler}
-        id="Postbutton"
-        className="text-[#0095F6] text-sm font-bold cursor-pointer"
-      >
-        Post
-      </span>
-    )}
-  </div>
+          {text && (
+            <span
+              onClick={commentHandler}
+              id="Postbutton"
+              className="text-[#0095F6] text-sm font-bold cursor-pointer"
+            >
+              Post
+            </span>
+          )}
+        </div>
 
-  {showEmojiPicker && (
-    <div className="absolute bottom-[40px] right-0 z-50">
-      <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark" />
-    </div>
-  )}
-</div>
-
+        {showEmojiPicker && (
+          <div className="absolute bottom-[40px] right-0 z-50">
+            <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark" />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

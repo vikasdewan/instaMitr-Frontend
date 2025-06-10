@@ -1,24 +1,83 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import useGetAllMessage from "@/hooks/useGetAllMessage";
 import useGetRealTimeMsg from "@/hooks/useGetRealTimeMsg";
+import { updateMessageReaction } from "@/redux/chatSlice";
+import EmojiPicker from "emoji-picker-react";
+import { Smile } from "lucide-react";
 
 export const Messages = () => {
   useGetRealTimeMsg();
   useGetAllMessage();
-  
+
+  const { socket } = useSelector((store) => store.socketio);
   const { user } = useSelector((store) => store.auth);
   const { messages, selectedUser } = useSelector((store) => store.chat);
-  
-  const bottomRef = useRef(null);
 
-  // Auto scroll to the latest message
+  const dispatch = useDispatch();
+  const bottomRef = useRef(null);
+  const [hoveredMsgId, setHoveredMsgId] = useState(null);
+  const [openEmojiPickerMsgId, setOpenEmojiPickerMsgId] = useState(null);
+
+  const prevMsgCountRef = useRef(messages?.length || 0);
+
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior:"smooth" });
+    const newMsgCount = messages?.length || 0;
+    const prevMsgCount = prevMsgCountRef.current;
+
+    // Only scroll when new messages are added
+    if (newMsgCount > prevMsgCount) {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+
+    prevMsgCountRef.current = newMsgCount;
   }, [messages]);
+
+  const handleReact = async (messageId, emoji) => {
+    try {
+      const res = await fetch(
+        `http://localhost:8000/api/v1/message/react/${messageId}`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ emoji }),
+        }
+      );
+
+      const text = await res.text();
+      if (!text) throw new Error("Empty response from server");
+
+      const data = JSON.parse(text);
+      if (!data.success) {
+        console.log("Reaction failed:", data.message);
+        return;
+      }
+    } catch (error) {
+      console.log("Reaction failed:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (!socket) return;
+    const handler = (updatedMessage) => {
+      dispatch(updateMessageReaction(updatedMessage));
+    };
+    socket.on("messageReaction", handler);
+    return () => socket.off("messageReaction", handler);
+  }, [dispatch, socket]);
+
+  const groupReactions = (reactions) => {
+    if (!reactions || reactions.length === 0) return [];
+    const grouped = reactions.reduce((acc, reaction) => {
+      acc[reaction.emoji] = (acc[reaction.emoji] || 0) + 1;
+      return acc;
+    }, {});
+    return Object.entries(grouped).map(([emoji, count]) => ({ emoji, count }));
+  };
 
   return (
     <div className="overflow-y-auto flex-1 p-4">
@@ -38,25 +97,96 @@ export const Messages = () => {
         </div>
       </div>
 
-      <div className="flex flex-col gap-3">
-        {messages &&
-          messages.map((msg) => (
+      <div className="flex flex-col gap-3 mt-4">
+        {messages?.map((msg) => {
+          const groupedReactions = groupReactions(msg.reactions);
+          const isSender = msg.senderId === user._id;
+
+          return (
             <div
-              key={msg?._id}
-              className={`flex ${
-                msg.senderId === user?._id ? "justify-end" : "justify-start"
+              key={msg._id}
+              className={`flex flex-col ${
+                isSender ? "items-end" : "items-start"
               }`}
+              onMouseEnter={() => setHoveredMsgId(msg._id)}
+              onMouseLeave={() => setHoveredMsgId(null)}
             >
-              <div
-                className={`p-2 rounded-lg max-w-xs break-words ${
-                  msg.senderId === user?._id ? "bg-blue-500" : "bg-gray-600"
-                }`}
-              >
-                {msg.message}
+              <div className="relative flex  ">
+                {isSender && hoveredMsgId === msg._id && (
+                  <button
+                    onClick={() =>
+                      setOpenEmojiPickerMsgId(
+                        openEmojiPickerMsgId === msg._id ? null : msg._id
+                      )
+                    }
+                    className="text-white opacity-80 hover:opacity-100 mr-2"
+                  >
+                    <Smile size={18} />
+                  </button>
+                )}
+
+                <div
+                  className={`p-2 rounded-lg max-w-xs break-words  ${
+                    isSender
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-800 text-white"
+                  }`}
+                >
+                  {msg.message}
+                </div>
+
+                {!isSender && hoveredMsgId === msg._id && (
+                  <button
+                    onClick={() =>
+                      setOpenEmojiPickerMsgId(
+                        openEmojiPickerMsgId === msg._id ? null : msg._id
+                      )
+                    }
+                    className="text-white opacity-80 hover:opacity-100 ml-2"
+                  >
+                    <Smile size={18} />
+                  </button>
+                )}
+
+                {/* Emoji Picker */}
+                {openEmojiPickerMsgId === msg._id && (
+                  <div
+                    className={`absolute z-50 -top-40 ${
+                      isSender ? "right-20 md:right-40" : "md:left-40 left-20 "
+                    }`}
+                  >
+                    <EmojiPicker
+                      theme="dark"
+                      height={350}
+                      width={300}
+                      onEmojiClick={(e) => {
+                        handleReact(msg._id, e.emoji);
+                        setOpenEmojiPickerMsgId(null);
+                      }}
+                    />
+                  </div>
+                )}
               </div>
+
+              {/* Reactions Display */}
+              {groupedReactions.length > 0 && (
+                <div className="relative -mt-2 z-10">
+                  <div className="flex gap-2 bg-gray-800  px-[4px] py-[1px] rounded-full text-black shadow-md border border-gray-700 w-fit  ">
+                    {groupedReactions.map(({ emoji, count }) => (
+                      <span
+                        key={emoji}
+                        className="flex items-center text-white text-base select-none"
+                        title={`${count} reaction${count > 1 ? "s" : ""}`}
+                      >
+                        {emoji} {count > 1 ? count : ""}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
-          ))}
-        {/* 👇 Scroll here */}
+          );
+        })}
         <div ref={bottomRef} />
       </div>
     </div>

@@ -99,7 +99,7 @@ const Explore = () => {
           <div className="md:hidden flex justify-center mb-6">
             <input
               type="text"
-              className="w-full p-3 font-bold text-white rounded-md border bg-gray-800 border-gray-600"
+              className="w-full p-3 font-bold text-white rounded-md border bg-black border-gray-600"
               placeholder="🔍Search"
               onClick={handleSearchClick} // Navigate to search page on click
             />
@@ -115,7 +115,7 @@ const Explore = () => {
               posts.map((post) => (
                 <div
                   key={post?._id}
-                  className="relative group cursor-pointer bg-gray-800 rounded-sm shadow-lg overflow-hidden"
+                  className="relative group cursor-pointer bg-black rounded-sm shadow-lg overflow-hidden"
                   onClick={() => openDialog(post)} // Open the dialog with the selected post
                 >
                   {/* Add symbol for video or image */}
@@ -176,7 +176,7 @@ const Explore = () => {
               loop
             />
             <button
-              className="absolute bottom-3 right-3 bg-gray-700 text-white rounded-full p-2"
+              className="absolute bottom-3 right-3 bg-black text-white rounded-full p-2"
               onClick={() => setIsMuted(!isMuted)}
             >
               {isMuted ? (
