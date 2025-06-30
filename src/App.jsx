@@ -1,23 +1,27 @@
 import "./App.css";
-import Signup from "./components/Signup.jsx";
-import Login from "./components/Login.jsx";
-import Home from "./components/Home.jsx";
-import MainLayout from "./components/MainLayout";
-import Profile from "./components/Profile.jsx";
+import {
+  Login,
+  Signup,
+  Home,
+  Profile,
+  MainLayout,
+  EditProfile,
+  ChatPage,
+  ProtectedRoutes,
+  SearchTab,
+  SuggestedUsersPage,
+  Reels,
+  Explore,
+} from "./components/index.js";
 import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
-import { EditProfile } from "./components/EditProfile";
-import { ChatPage } from "./components/ChatPage";
 import { io } from "socket.io-client";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setSocket } from "./redux/socketSlice";
-import { setOnlineUsers } from "./redux/chatSlice";
-import { setlikeNotiList  } from "./redux/realTimeNotiSlice";
-import { ProtectedRoutes } from "./components/ProtectedRoutes";
-import { SearchTab } from "./components/SearchTab";
-import SuggestedUsersPage from "./components/SuggestedUsersPage";
-import Reels from "./components/Reels";
-import Explore from "./components/Explore";
+import {
+  setSocket,
+  setOnlineUsers,
+  setlikeNotiList
+} from "@/redux/index.js"
 import { APP_BASE_URL } from "./config";
  
 
@@ -26,15 +30,15 @@ import { APP_BASE_URL } from "./config";
 const browserRouter = createBrowserRouter([
   {
     path: "/",
-    element: <ProtectedRoutes><MainLayout /></ProtectedRoutes>,
+    element: <ProtectedRoutes><MainLayout/></ProtectedRoutes>,
     children: [
       {
         path: "/",
-        element:<ProtectedRoutes><Home /></ProtectedRoutes>,
+        element:<ProtectedRoutes><Home/></ProtectedRoutes>,
       },
       {
         path: "/profile/:id",
-        element: <ProtectedRoutes><Profile /></ProtectedRoutes>,
+        element: <ProtectedRoutes><Profile/></ProtectedRoutes>,
       },
       {
         path: "/account/edit",
