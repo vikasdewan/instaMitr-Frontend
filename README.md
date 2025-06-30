@@ -7,7 +7,7 @@ A full-fledged **Instagram Clone** built using the **MERN Stack**, designed to r
 
 ## 🚀 Live Demo
 
-🔗 [Click here to visit InstaMitr](https://instamitr-deploy-1.onrender.com)
+🔗 [Click here to visit the  InstaMitr](https://instamitr-deploy-1.onrender.com)
 
 🧪 **Demo Credentials**  
 - 📧 Email: `demo@gmail.com`  
