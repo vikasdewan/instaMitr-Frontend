@@ -1,9 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { Dialog, DialogContent, DialogTrigger,Avatar, AvatarFallback, AvatarImage ,Button } from "../ui/index.js";
- 
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  Button,
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "../ui/index.js";
+
 import { Link } from "react-router-dom";
 import { MoreHorizontal } from "lucide-react";
- 
+
 import { useDispatch, useSelector } from "react-redux";
 import Comment from "./Comment.jsx";
 import axios from "axios";
@@ -175,16 +188,39 @@ function CommentDialog({ openComment, setOpenComment }) {
           <div className="hidden md:block w-1/2 min-h-96">
             {selectedPost?.video ? (
               <video
-                className="rounded-sm h-full  p-2 w-full aspect-square object-cover"
+                className="rounded-sm h-full p-2 w-full aspect-square object-cover"
                 autoPlay
                 loop
                 src={selectedPost?.video}
                 alt="post_video"
               />
+            ) : selectedPost?.images?.length > 1 ? (
+              <div className="w-full h-full max-h-[500px] aspect-square overflow-hidden rounded-lg">
+                <Carousel className="flex items-center justify-center mt-3 w-full h-full">
+                  <CarouselContent className="h-full">
+                    {selectedPost.images.map((img, idx) => (
+                      <CarouselItem
+                        key={idx}
+                        className="flex justify-center items-center h-full"
+                      >
+                        <div className="h-full w-full flex items-center justify-center">
+                          <img
+                            src={img}
+                            alt={`post_image_${idx}`}
+                            className="max-h-full max-w-full object-cover rounded-lg"
+                          />
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious className="left-2" />
+                  <CarouselNext className="right-2" />
+                </Carousel>
+              </div>
             ) : (
               <img
                 className="rounded-sm h-full pb-5 my-2 w-full aspect-square object-cover"
-                src={selectedPost?.image}
+                src={selectedPost?.image || selectedPost?.images[0]}
                 alt="post_image"
               />
             )}
@@ -240,7 +276,7 @@ function CommentDialog({ openComment, setOpenComment }) {
                   {user && user?._id === selectedPost?.author?._id && (
                     <Button
                       variant="ghost"
-                      className="cursor-pointer w-fit rounded-xl font-bold hover:bg-gray-500"
+                      className="cursor-pointer bg-red-500   w-fit rounded-xl font-bold hover:bg-red-700"
                       onClick={deletePostHandler}
                     >
                       Delete
@@ -286,12 +322,14 @@ function CommentDialog({ openComment, setOpenComment }) {
                 {showEmojiPicker && (
                   <div className="absolute bottom-[60px] left-2 z-50">
                     <EmojiPicker
-                    height={350}
+                      height={350}
                       width={300}
-                    searchDisabled
+                      searchDisabled
                       skinTonesDisabled
                       previewConfig={{ showPreview: false }}
-                    onEmojiClick={handleEmojiClick} theme="dark" />
+                      onEmojiClick={handleEmojiClick}
+                      theme="dark"
+                    />
                   </div>
                 )}
               </div>
