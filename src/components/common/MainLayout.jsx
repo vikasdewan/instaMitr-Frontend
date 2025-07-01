@@ -6,13 +6,13 @@ import {
 } from "../layout/index.js";
 import Loader from "./Loader.jsx";
 
+
 function MainLayout() {
   const [loading, setLoading] = useState(true);
   useEffect(() => { 
     // Simulate a delay for loading content, like fetching data 
     setTimeout(() => { setLoading(false); }, 100); // Adjust the timeout as needed 
     }, []);
-
 
   return (
     <>
