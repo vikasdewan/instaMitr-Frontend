@@ -8,7 +8,7 @@ import {
   EditProfile,
   ChatPage,
   ProtectedRoutes,
-  SearchTab,
+ 
   SuggestedUsersPage,
   Reels,
   Explore,
@@ -23,6 +23,7 @@ import {
   setlikeNotiList
 } from "@/redux/index.js"
 import { APP_BASE_URL } from "./config";
+ 
  
 
   
@@ -47,10 +48,6 @@ const browserRouter = createBrowserRouter([
       {
         path: "/chat",
         element: <ProtectedRoutes><ChatPage/></ProtectedRoutes> ,
-      },
-      {
-        path: "/search",
-        element: <ProtectedRoutes><SearchTab/></ProtectedRoutes> ,
       },
       {
         path: "/suggestedusers",

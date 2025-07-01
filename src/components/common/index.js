@@ -6,6 +6,7 @@ import { ProtectedRoutes } from "./ProtectedRoutes.jsx";
 import { SearchTab } from "./SearchTab.jsx";
 import SuggestedUsers from "./SuggestedUsers.jsx";
 import SuggestedUsersPage from "./SuggestedUsersPage.jsx";
+ 
 
 export{
     CommentSection,
@@ -16,4 +17,5 @@ export{
     SearchTab,
     SuggestedUsers,
     SuggestedUsersPage,
+    
 };

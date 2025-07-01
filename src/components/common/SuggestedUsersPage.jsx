@@ -13,7 +13,7 @@ function SuggestedUsersPage() {
    
 
   return (
-    <div className="flex px-2 flex-col items-start justify-center min-h-screen bg-black text-white md:hidden">
+    <div className="flex px-2 flex-col items-start justify-start min-h-screen bg-black text-white md:hidden">
       <div className="flex items-center gap-2 mb-4 pt-6 pl-2">
         <Link to={`/profile/${user?._id}`}>
           <Avatar className="text-black">
