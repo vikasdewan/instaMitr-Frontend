@@ -1,5 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Dialog, DialogContent, DialogHeader,Avatar, AvatarFallback, AvatarImage, Textarea,Button} from "../ui/index.js";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  Textarea,
+  Button,
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "../ui/index.js";
 import { readFileAsDataURL } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -10,39 +24,41 @@ import { APP_BASE_URL } from "@/config.js";
 
 function CreatePost({ open, setOpen }) {
   const imageRef = useRef();
+  const [files, setFiles] = useState([]);
   const [file, setFile] = useState(null);
   const [caption, setCaption] = useState("");
-  const [imagePreview, setImagePreview] = useState("");
+  const [imagePreviews, setImagePreviews] = useState([]);
   const [loading, setLoading] = useState(false);
   const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
   const { posts } = useSelector((store) => store.post);
 
   const fileChangeHandler = async (e) => {
-    const file = e.target.files[0];
-
-    if (file) {
-      setFile(file);
-      const dataUrl = await readFileAsDataURL(file);
-      setImagePreview(dataUrl);
-    }
+    const selectedFiles = Array.from(e.target.files).slice(0, 3);
+    setFiles(selectedFiles);
+    setFile(selectedFiles[0]);
+    const previews = await Promise.all(
+      selectedFiles.map(async (file) => await readFileAsDataURL(file))
+    );
+    setImagePreviews(previews);
   };
 
   const createPostHandler = async (e) => {
-    e.preventDefault(); // Ensure the form submission is prevented
+    e.preventDefault();
 
     const formData = new FormData();
     formData.append("caption", caption);
 
     if (file) {
-      // Check if the file is an image
       if (file.type.startsWith("image/")) {
-        formData.append("image", file);
+        files.forEach((f) => {
+          formData.append("images", f);
+        });
 
         try {
           setLoading(true);
           const res = await axios.post(
-            `http://localhost:8000/api/v1/post/addpost/image`, // Image API endpoint
+            `${APP_BASE_URL}/api/v1/post/addpost/image`,
             formData,
             {
               headers: {
@@ -56,25 +72,22 @@ function CreatePost({ open, setOpen }) {
             dispatch(setPosts([res.data.post, ...posts]));
             toast.success(res.data.message);
             setOpen(false);
-            // Clear inputs for next use
             setCaption("");
-            setImagePreview("");
+            setImagePreviews([]);
+            setFiles([]);
             setFile(null);
           }
         } catch (error) {
-          toast.error(error.response.data.message);
+          toast.error(error.response?.data?.message);
         } finally {
           setLoading(false);
         }
-      }
-      // Check if the file is a video
-      else if (file.type.startsWith("video/")) {
-        console.log("file Details:", file);
+      } else if (file.type.startsWith("video/")) {
         formData.append("video", file);
         try {
           setLoading(true);
           const res = await axios.post(
-            `http://localhost:8000/api/v1/post/addpost/video`, // Video API endpoint
+            `${APP_BASE_URL}/api/v1/post/addpost/video`,
             formData,
             {
               headers: {
@@ -83,18 +96,17 @@ function CreatePost({ open, setOpen }) {
               withCredentials: true,
             }
           );
-          console.log(res);
 
           if (res.data.success) {
             dispatch(setPosts([res.data.post, ...posts]));
             toast.success(res.data.message);
             setOpen(false);
-            // Clear inputs for next use
             setCaption("");
+            setFiles([]);
             setFile(null);
           }
         } catch (error) {
-          toast.error(error.response.data.message);
+          toast.error(error.response?.data?.message);
         } finally {
           setLoading(false);
         }
@@ -108,92 +120,100 @@ function CreatePost({ open, setOpen }) {
     }
   };
 
-  // Scroll to the top of the page when the dialog opens
   useEffect(() => {
     if (open) {
-      window.scrollTo(0, 0); // Scrolls to the top of the page
+      window.scrollTo(0, 0);
     }
   }, [open]);
 
   return (
-    <>
-      <Dialog open={open}>
-        <DialogContent
-          onInteractOutside={() => setOpen(false)}
-          className="bg-black text-white"
-        >
-          <DialogHeader className="flex items-center font-bold text-lg">
-            Create New Post
-          </DialogHeader>
-          <div className="flex gap-3 items-center ">
-            <Avatar>
-              <AvatarImage src={user?.profileImage} alt="user_Image" />
-              <AvatarFallback className="text-white bg-pink-700">
-                IM
-              </AvatarFallback>
-            </Avatar>
-            <div>
-              <h1 className="font-semibold text-xs">{user?.username}</h1>
-              <span className="text-gray-600 text-xs">Bio Here...</span>
-            </div>
+    <Dialog open={open}>
+      <DialogContent
+        onInteractOutside={() => setOpen(false)}
+        className="bg-black text-white"
+      >
+        <DialogHeader className="flex items-center font-bold text-lg">
+          Create New Post
+        </DialogHeader>
+        <div className="flex gap-3 items-center ">
+          <Avatar>
+            <AvatarImage src={user?.profileImage} alt="user_Image" />
+            <AvatarFallback className="text-white bg-pink-700">
+              IM
+            </AvatarFallback>
+          </Avatar>
+          <div>
+            <h1 className="font-semibold text-xs">{user?.username}</h1>
+            <span className="text-gray-600 text-xs">Bio Here...</span>
           </div>
-          <Textarea
-            value={caption}
-            onChange={(e) => setCaption(e.target.value)}
-            className="focus-visible:ring-transparent border-none bg-black text-xs"
-            placeholder="Write a caption..."
-          ></Textarea>
+        </div>
+        <Textarea
+          value={caption}
+          onChange={(e) => setCaption(e.target.value)}
+          className="focus-visible:ring-transparent border-none bg-black text-xs"
+          placeholder="Write a caption..."
+        ></Textarea>
 
-          {imagePreview && file && (
-            <div className="w-full h-64 flex items-center justify-center">
-              {/* Display image preview */}
-              {file.type.startsWith("image/") && (
-                <img
-                  src={imagePreview}
-                  alt="preview_img"
-                  className="object-cover h-full w-full rounded-lg"
-                />
-              )}
-              {/* Display video preview */}
-              {file.type.startsWith("video/") && (
-                <video
-                  controls
-                  src={imagePreview}
-                  className="object-cover h-full w-full rounded-lg"
-                />
-              )}
-            </div>
-          )}
-
-          <input
-            ref={imageRef}
-            type="file"
-            className="hidden"
-            onChange={fileChangeHandler}
-          />
-          <Button
-            onClick={() => imageRef.current.click()}
-            className="font-bold rounded-full  w-fit mx-auto bg-[#0095f6] hover:bg-[#1470ae]"
+        {imagePreviews.length > 0 && file && file.type.startsWith("image/") && (
+  <div className="w-full aspect-[4/3] max-h-72 overflow-hidden rounded-lg">
+    <Carousel className="w-full h-full">
+      <CarouselContent className="h-full">
+        {imagePreviews.map((preview, index) => (
+          <CarouselItem
+            key={index}
+            className="flex justify-center items-center h-full"
           >
-            Select from Computer
-          </Button>
-          {imagePreview &&
-            (loading ? (
-              <Button>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait...
-              </Button>
-            ) : (
-              <Button
-                onClick={createPostHandler}
-                type="submit"
-                className="w-full"
-              >
-                Post
-              </Button>
-            ))}
-        </DialogContent>
-      </Dialog>
-    </>
+            <img
+              src={preview}
+              alt={`preview_${index}`}
+              className="object-contain h-full w-full rounded-lg"
+            />
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+      <CarouselPrevious className="left-2" />
+      <CarouselNext className="right-2" />
+    </Carousel>
+  </div>
+)}
+
+
+        {imagePreviews.length === 1 && file && file.type.startsWith("video/") && (
+          <div className="w-full h-64 flex items-center justify-center">
+            <video
+              controls
+              src={imagePreviews[0]}
+              className="object-cover h-full w-full rounded-lg"
+            />
+          </div>
+        )}
+
+        <input
+          ref={imageRef}
+          type="file"
+          className="hidden"
+          onChange={fileChangeHandler}
+          accept="image/*,video/*"
+          multiple
+        />
+        <Button
+          onClick={() => imageRef.current.click()}
+          className="font-bold rounded-full  w-fit mx-auto bg-[#0095f6] hover:bg-[#1470ae]"
+        >
+          Select up to 3 Images or 1 Video
+        </Button>
+        {imagePreviews.length > 0 &&
+          (loading ? (
+            <Button disabled>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait...
+            </Button>
+          ) : (
+            <Button onClick={createPostHandler} type="submit" className="w-full">
+              Post
+            </Button>
+          ))}
+      </DialogContent>
+    </Dialog>
   );
 }
 

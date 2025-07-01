@@ -1,9 +1,23 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Avatar, AvatarFallback, AvatarImage,Button ,Badge} from "../ui/index.js";
-import {useGetUserProfile} from "@/hooks/index.js";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  Button,
+  Badge,
+} from "../ui/index.js";
+import { useGetUserProfile } from "@/hooks/index.js";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
- 
+
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "../ui/index";
+
 import {
   AtSign,
   Bookmark,
@@ -17,7 +31,7 @@ import {
   User,
   UserSquare,
 } from "lucide-react";
- 
+
 import { FaComment, FaHeart } from "react-icons/fa";
 import { toast } from "sonner";
 import axios from "axios";
@@ -27,7 +41,7 @@ import {
   setUserProfile,
 } from "@/redux/authSlice";
 import FollowersFollowingDialog from "./FollowersFollowingDialog.jsx";
-import {CommentSection} from "../common/index.js";
+import { CommentSection } from "../common/index.js";
 import { APP_BASE_URL } from "@/config.js";
 // import { setSelectedUser } from "@/redux/chatSlice";
 
@@ -346,7 +360,7 @@ function Profile() {
                   />
                 ) : (
                   <img
-                    src={post?.image}
+                    src={post?.image || post?.images[0]}
                     alt="Post"
                     className="rounded-sm my-2 w-full aspect-square object-cover"
                   />
@@ -375,63 +389,82 @@ function Profile() {
           </div>
         </div>
       </div>
-               {openPostDialog && selectedPost && (
-  <div
-    className="fixed inset-0 bg-transparent bg-opacity-75 flex justify-center items-center z-50"
-    onClick={closeDialog} // Close dialog on clicking outside
-  >
-    <div
-      className="bg-black rounded-lg shadow-xl w-fit max-w-4xl flex flex-col md:flex-row m-4 md:m-8 overflow-hidden"
-      onClick={(e) => e.stopPropagation()} // Prevent closing when interacting inside dialog
-    >
-      {/* Post Section */}
-      <div className="flex-1 p-4 md:p-6">
-        <h3 className="text-xl font-semibold text-white mb-4">
-          {selectedPost?.title}
-        </h3>
+      {openPostDialog && selectedPost && (
+        <div
+          className="fixed inset-0 bg-transparent bg-opacity-75 flex justify-center items-center z-50"
+          onClick={closeDialog} // Close dialog on clicking outside
+        >
+          <div
+            className="bg-black rounded-lg shadow-xl w-fit max-w-4xl flex flex-col md:flex-row m-4 md:m-8 overflow-hidden"
+            onClick={(e) => e.stopPropagation()} // Prevent closing when interacting inside dialog
+          >
+            {/* Post Section */}
+            <div className="flex-1 p-4 md:p-6">
+               
 
-        {selectedPost?.video ? (
-          <div className="relative">
-            <video
-              src={selectedPost?.video}
-              className="w-full h-[450px] md:h-[500px] object-contain rounded-lg mb-4"
-              muted={isMuted}
-              ref={videoRef}
-              onClick={handleVideoPostPlayNPause}
-              autoPlay
-              loop
-            />
-            <button
-              className="absolute bottom-3 right-3 bg-gray-700 text-white rounded-full p-2"
-              onClick={() => setIsMuted(!isMuted)}
-            >
-              {isMuted ? (
-                <i className="fas fa-volume-mute"></i>
-              ) : (
-                <i className="fas fa-volume-up"></i>
-              )}
-            </button>
+              {selectedPost?.video ? (
+                <div className="relative">
+                  <video
+                    src={selectedPost?.video}
+                    className="w-full h-[450px] md:h-[500px] object-contain rounded-lg mb-4"
+                    muted={isMuted}
+                    ref={videoRef}
+                    onClick={handleVideoPostPlayNPause}
+                    autoPlay
+                    loop
+                  />
+                  <button
+                    className="absolute bottom-3 right-3 bg-gray-700 text-white rounded-full p-2"
+                    onClick={() => setIsMuted(!isMuted)}
+                  >
+                    {isMuted ? (
+                      <i className="fas fa-volume-mute"></i>
+                    ) : (
+                      <i className="fas fa-volume-up"></i>
+                    )}
+                  </button>
+                </div>
+              ) : selectedPost?.images?.length > 1 ? (
+                <div className="w-full max-h-[500px] aspect-square overflow-hidden rounded-lg mb-4">
+                  <Carousel className="w-full h-full flex items-center justify-center">
+                    <CarouselContent className="h-full">
+                      {selectedPost.images.map((img, idx) => (
+                        <CarouselItem
+                          key={idx}
+                          className="flex justify-center items-center h-full"
+                        >
+                          <div className="h-full w-full flex items-center justify-center">
+                            <img
+                              src={img}
+                              alt={`profile_post_image_${idx}`}
+                              className="max-h-full max-w-full object-contain"
+                            />
+                          </div>
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                    <CarouselPrevious className="left-2" />
+                    <CarouselNext className="right-2" />
+                  </Carousel>
+                </div>
+              ) : selectedPost?.image || selectedPost?.images ? (
+                <img
+                  src={selectedPost.image || selectedPost.images[0]}
+                  alt={selectedPost?.title}
+                  className="w-full h-[250px] md:h-[500px] object-contain rounded-lg mb-4"
+                />
+              ) : null}
+
+              <p className="text-gray-400 mb-2">{selectedPost?.caption}</p>
+            </div>
+
+            {/* Comment Section (hidden on mobile) */}
+            <div className="hidden md:flex md:w-[400px] bg-black border-l border-gray-700 flex-col max-h-[600px] p-4 overflow-y-auto">
+              <CommentSection postId={selectedPost?._id} />
+            </div>
           </div>
-        ) : (
-          <img
-            src={selectedPost?.image}
-            alt={selectedPost?.title}
-            className="w-full h-[250px] md:h-[500px] object-contain rounded-lg mb-4"
-          />
-        )}
-
-        <p className="text-gray-400 mb-2">{selectedPost?.description}</p>
-      </div>
-
-      {/* Comment Section (hidden on mobile) */}
-      <div className="hidden md:flex md:w-[400px] bg-black border-l border-gray-700 flex-col max-h-[600px] p-4 overflow-y-auto">
-        <CommentSection postId={selectedPost?._id} />
-      </div>
-    </div>
-  </div>
-)}
-
-
+        </div>
+      )}
 
       {/* follower and following list */}
       {showDialog && (

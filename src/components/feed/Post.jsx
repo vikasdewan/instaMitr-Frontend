@@ -29,6 +29,14 @@ import EmojiPicker from "emoji-picker-react";
 import { Smile } from "lucide-react";
 import { APP_BASE_URL } from "@/config.js";
 
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "../ui/index";  
+
 function Post({ post }) {
   const [text, setText] = useState("");
   const [openComment, setOpenComment] = useState(false);
@@ -377,14 +385,39 @@ function Post({ post }) {
             loop
             autoPlay
           />
+        ) : Array.isArray(post?.images) && post?.images?.length > 1 ? (
+          <div className="w-full aspect-square max-h-[560px] overflow-hidden rounded-sm my-2">
+            <Carousel className="w-full h-full flex items-center justify-center">
+              <CarouselContent className="h-full">
+                {post.images.map((img, idx) => (
+                  <CarouselItem
+                    key={idx}
+                    className="flex justify-center items-center h-full"
+                  >
+                    <div className="h-full w-full flex items-center justify-center">
+                      <img
+                        src={img}
+                        alt={`post_image_${idx}`}
+                        className="max-h-full max-w-full object-contain"
+                        onDoubleClick={handleDoubleClick}
+                      />
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="left-2" />
+              <CarouselNext className="right-2" />
+            </Carousel>
+          </div>
         ) : (
           <img
             className="rounded-sm my-2 w-full aspect-square object-contain"
-            src={post?.image}
+            src={post?.image || post?.images}
             alt="post_image"
             onDoubleClick={handleDoubleClick}
           />
         )}
+
         {post?.video ? (
           <button
             onClick={handleVideoPostMute}

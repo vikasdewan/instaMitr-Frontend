@@ -25,7 +25,7 @@ import {
   BottomBar,
   LeftSideBar,
   RightSideBar,
-  RightSideBarModal,
+  RightSideBarModel,
 } from "./layout/index.js";
 import {
   EditProfile,
@@ -59,7 +59,7 @@ export {
   BottomBar,
   LeftSideBar,
   RightSideBar,
-  RightSideBarModal,
+  RightSideBarModel,
   EditProfile,
   FollowersFollowingDialog,
   Profile,
