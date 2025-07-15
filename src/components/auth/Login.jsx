@@ -1,42 +1,34 @@
-
-import React, { useEffect } from "react";
-import {
-  Input ,
-  Button 
-} from "../ui/index.js";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Input, Button } from "../ui/index.js";
 import { toast } from "sonner";
 import axios from "axios";
-import { Link } from "react-router-dom";
-import { Loader2 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Loader2, Eye, EyeOff } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthUser } from "@/redux/index.js";
-import {Loader} from "../common/index.js";
+import { Loader } from "../common/index.js";
+import InstaImage from "../../assets/image.png";
 import { APP_BASE_URL } from "@/config.js";
 
 function Login() {
   const [input, setInput] = useState({ email: "", password: "" });
+  const [loading, setloading] = useState(false);
+  const [webLoading, setWebLoading] = useState(true);
+  const [showPassword, setShowPassword] = useState(false); // 👈 added
   const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
-
-  const [loading, setloading] = useState(false);
-  const [webLoading, setWebLoading] = useState(true);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-   
-
- 
 
   const loginHandler = async (e) => {
     e.preventDefault();
     try {
       setloading(true);
       const res = await axios.post(
-        `http://localhost:8000/api/v1/user/login`,
+        `${APP_BASE_URL}/api/v1/user/login`,
         input,
         {
           headers: {
@@ -52,107 +44,93 @@ function Login() {
         toast.success(res.data.message);
       }
     } catch (error) {
-      console.log(error);
-      toast.error(error.response.data.message);
-      setInput({
-        email: "",
-        password: "",
-      });
+      toast.error(error.response?.data?.message || "Login failed");
+      setInput({ email: "", password: "" });
     } finally {
       setloading(false);
     }
   };
 
   useEffect(() => {
-    if (user) {
-      navigate("/");
-    }
+    if (user) navigate("/");
   }, [user, navigate]);
 
   useEffect(() => {
-    // Simulate a delay for loading content, like fetching data
-    setTimeout(() => {
-      setWebLoading(false);
-    }, 1200); // Adjust the timeout as needed
+    setTimeout(() => setWebLoading(false), 1000);
   }, []);
 
-  return (
-    <>
-      {webLoading ? (
-        <Loader />
-      ) : (
-       <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-800 via-purple-900 to-indigo-800 p-4">
-  <div className="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl overflow-hidden max-w-4xl w-full grid grid-cols-1 md:grid-cols-2">
-    
-    {/* Left: Vector Illustration */}
-    <div className="hidden md:flex items-center justify-center bg-white/5 p-6">
-      <img
-        src="https://cdni.iconscout.com/illustration/premium/thumb/cloud-computing-service-4658252-3880447.png"  
-        alt="Login Illustration"
-        className="w-4/5 h-auto object-contain animate-float"
-      />
-    </div>
-
-    {/* Right: Login Form */}
-    <div className="p-8 md:p-12 flex flex-col justify-center">
-      <h1 className="text-3xl font-extrabold text-pink-400 mb-4">InstaMitr</h1>
-      <form onSubmit={loginHandler} className="space-y-4">
-        <Input
-          className="w-full px-4 py-3 rounded-lg font-medium focus:outline-none focus:ring-2 bg-white/90 placeholder-gray-600"
-         placeholder="you@example.com"
-          name="email"
-          value={input.email}
-          onChange={changeEventHandler}
-        />
-        <Input
-          type="password"
-          className="w-full px-4 py-3 rounded-lg font-medium focus:outline-none focus:ring-2 bg-white/90 placeholder-gray-600"
-          placeholder="••••••••"
-          name="password"
-          value={input.password}
-          onChange={changeEventHandler}
-        />
-
-        {/* 
-        <div className="flex justify-between items-center text-sm text-gray-200">
-          <label className="inline-flex items-center">
-            <input type="checkbox" className="form-checkbox h-4 w-4 text-pink-400" />
-            <span className="ml-2">Remember me</span>
-          </label>
-          <Link to="/forgot-password" className="underline hover:text-pink-200">Forgot?</Link>
+  return webLoading ? (
+    <Loader />
+  ) : (
+    <div className="min-h-screen bg-black flex items-center justify-center px-4">
+      <div className="flex flex-col md:flex-row items-center justify-center max-w-6xl w-full gap-12">
+        {/* Left - larger image */}
+        <div className="hidden md:block relative w-[720px] h-[620px] drop-shadow-xl">
+          <img
+            src={InstaImage}
+            alt="Instagram preview"
+            className="w-full h-full object-contain rounded-xl"
+          />
         </div>
-        */}
 
-        
+        {/* Right - login form */}
+        <div className="w-full max-w-sm bg-[#111111] border border-zinc-800 rounded-2xl shadow-[0_0_30px_rgba(255,255,255,0.05)] p-10 backdrop-blur-sm">
+          <h1 className="text-white text-4xl font-logo text-center mb-6 tracking-wide">
+            I<span className="font-serif">nsta</span>M<span className="font-serif">itr</span>
+          </h1>
 
-          {loading ? (
-                <Button className="w-full bg-pink-500 hover:bg-pink-600 py-3 font-bold">
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
-                </Button>
+          <form onSubmit={loginHandler} className="space-y-4">
+            <Input
+              name="email"
+              placeholder="Phone number, username, or email"
+              className="font-inter w-full bg-zinc-900 text-white border border-zinc-700 placeholder:text-zinc-400 rounded-lg focus:ring-2 focus:ring-blue-500"
+              value={input.email}
+              onChange={changeEventHandler}
+            />
+
+            {/* Password input with toggle icon */}
+            <div className="relative">
+              <Input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Password"
+                className="font-inter w-full pr-12 bg-zinc-900 text-white border border-zinc-700 placeholder:text-zinc-400 rounded-lg focus:ring-2 focus:ring-blue-500"
+                value={input.password}
+                onChange={changeEventHandler}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute top-2 right-3 transform -translate-y-1/2 text-zinc-400 hover:text-white"
+              >
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
+            </div>
+
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg py-3 transition-all duration-200"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" /> Please wait
+                </>
               ) : (
-                <Button
-                  type="submit"
-                  className="w-full bg-pink-500 hover:bg-pink-600 py-3 font-bold"
-                >
-                  Login
-                </Button>
+                "Log in"
               )}
-      </form>
+            </Button>
+          </form>
 
-      <p className="text-gray-300 text-center mt-6 font-bold text-sm">
-        Don't have an account?{' '}
-        <Link to="/signup" className="text-pink-400 hover:underline">Sign up</Link>
-      </p>
+          <div className="text-center text-sm text-zinc-400 mt-6">
+            Don't have an account?{" "}
+            <Link to="/signup" className="text-blue-400 hover:underline font-medium">
+              Sign up
+            </Link>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-
-
-
-
-
-      )}
-    </>
   );
 }
 
