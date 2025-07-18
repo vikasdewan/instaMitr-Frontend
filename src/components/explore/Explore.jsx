@@ -162,19 +162,20 @@ const Explore = () => {
           {/* Modal Dialog for Post Details */}
           {openPostDialog && selectedPost && (
             <div
-              className="fixed inset-0 bg-transparent bg-opacity-75 flex justify-center items-center z-50"
+              className="fixed inset-0 bg-transparent bg-opacity-80 flex justify-center items-center z-50"
               onClick={closeDialog}
             >
               <div
-                className="bg-black rounded-lg shadow-xl w-fit max-w-4xl flex flex-col md:flex-row m-4 md:m-8 overflow-hidden"
+                className="bg-black shadow-xl md:w-[56vw] w-[90vw] md:h-[90vh] h-[70vh] max-w-6xl flex flex-col md:flex-row overflow-hidden"
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="flex-1 p-4 md:p-6">
+                {/* Left: Media Section */}
+                <div className="flex-1 w-full h-[50vh] md:h-full relative">
                   {selectedPost?.video ? (
-                    <div className="relative">
+                    <div className="w-full h-full relative">
                       <video
                         src={selectedPost?.video}
-                        className="w-full h-[450px] md:h-[500px] object-contain rounded-lg mb-4"
+                        className="w-full h-full object-cover"
                         muted={isMuted}
                         ref={videoRef}
                         onClick={handleVideoPostPlayNPause}
@@ -182,7 +183,7 @@ const Explore = () => {
                         loop
                       />
                       <button
-                        className="absolute bottom-3 right-3 bg-gray-700 text-white rounded-full p-2"
+                        className="absolute bottom-4 right-4 bg-gray-800 text-white rounded-full p-2 z-10"
                         onClick={() => setIsMuted(!isMuted)}
                       >
                         {isMuted ? (
@@ -193,7 +194,7 @@ const Explore = () => {
                       </button>
                     </div>
                   ) : selectedPost?.images?.length > 1 ? (
-                    <div className="w-full max-h-[500px] aspect-square overflow-hidden rounded-lg mb-4">
+                    <div className="w-full h-full">
                       <Carousel className="w-full h-full flex items-center justify-center">
                         <CarouselContent className="h-full">
                           {selectedPost.images.map((img, idx) => (
@@ -201,13 +202,11 @@ const Explore = () => {
                               key={idx}
                               className="flex justify-center items-center h-full"
                             >
-                              <div className="h-full w-full flex items-center justify-center">
-                                <img
-                                  src={img}
-                                  alt={`profile_post_image_${idx}`}
-                                  className="max-h-full max-w-full object-contain"
-                                />
-                              </div>
+                              <img
+                                src={img}
+                                alt={`profile_post_image_${idx}`}
+                                className="w-full h-full object-cover"
+                              />
                             </CarouselItem>
                           ))}
                         </CarouselContent>
@@ -219,14 +218,13 @@ const Explore = () => {
                     <img
                       src={selectedPost.image || selectedPost.images[0]}
                       alt={selectedPost?.title}
-                      className="w-full h-[250px] md:h-[500px] object-contain rounded-lg mb-4"
+                      className="w-full h-full object-contain"
                     />
                   ) : null}
-
-                  <p className="text-gray-400 mb-2">{selectedPost?.caption}</p>
                 </div>
 
-                <div className="hidden md:flex md:w-[400px] bg-black border-l border-gray-700 flex-col max-h-[600px] p-4 overflow-y-auto">
+                {/* Right: Comments Section (hidden on small screens) */}
+                <div className="hidden md:flex md:w-[500px] bg-black border-l border-gray-700 flex-col h-full p-4 overflow-y-auto">
                   <CommentSection postId={selectedPost?._id} />
                 </div>
               </div>
