@@ -85,7 +85,7 @@ const ReelComments = ({ reel, onClose, user }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-black/50">
+    <div className="fixed inset-0 z-50 flex justify-end bg-transparent">
       <div
         ref={panelRef}
         className="h-1/2 w-full max-w-full md:max-w-md bottom-10 md:bottom-0 bg-black flex flex-col border-l border-neutral-800
