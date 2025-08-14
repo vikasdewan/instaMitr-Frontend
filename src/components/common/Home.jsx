@@ -9,7 +9,8 @@ import {Loader} from "../common/index.js";
 const Home = () => {
   const [loading, setLoading] = useState(true);
 
-  // ✅ Custom hooks must be called directly at the top level
+  // ✅ Custom hooks must be called directly at the top level 
+
   useGetAllPost();        // These hooks should internally manage when to fetch (usually with useEffect inside)
   useGetSuggestUsers();
 
