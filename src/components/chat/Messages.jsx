@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {useGetAllMessage,useGetRealTimeMsg} from "@/hooks/index.js";
  
-import { updateMessageReaction } from "@/redux/chatSlice";
+import {updateMessageReaction} from "@/redux/chatSlice";
 import EmojiPicker from "emoji-picker-react";
 import { Smile } from "lucide-react";
 import { APP_BASE_URL } from "@/config.js";
