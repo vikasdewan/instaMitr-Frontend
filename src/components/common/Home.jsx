@@ -17,18 +17,18 @@ const Home = () => {
   useEffect(() => {
     // Simulate a delay to show loader
     const timer = setTimeout(() => {
-      setLoading(false);
+      setLoading(false) ;
     }, 100);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [] );
 
   return (
     <>
       {loading ? (
         <Loader />
       ) : (
-        <div className="text-white flex">
+        <div  className="text-white flex">
           <div className="flex-grow bg-black text-white">
             <Feed />
             <Outlet />
