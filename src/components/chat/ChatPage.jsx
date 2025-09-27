@@ -38,7 +38,7 @@ export const ChatPage = () => {
   const sendMessageHandler = async (recieverId) => {
     try {
       const res = await axios.post(
-        `http://localhost:8000/api/v1/message/send/${recieverId}`,
+        `https://instamitr-backend.onrender.com0/api/v1/message/send/${recieverId}`,
         { textMessage },
         {
           headers: {
@@ -76,7 +76,7 @@ export const ChatPage = () => {
       if (selectedUser) {
         try {
           const res = await axios.get(
-            `http://localhost:8000/api/v1/message/all/${selectedUser?._id}`,
+            `https://instamitr-backend.onrender.com0/api/v1/message/all/${selectedUser?._id}`,
             { withCredentials: true }
           );
 

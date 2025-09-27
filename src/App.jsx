@@ -90,7 +90,7 @@ function App() {
 
   useEffect(()=>{
     if(user){
-      const socketio = io(`http://localhost:8000` , {
+      const socketio = io(`https://instamitr-backend.onrender.com0` , {
         query:{
           userId:user?._id
         },

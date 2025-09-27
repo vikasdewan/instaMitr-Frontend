@@ -49,7 +49,7 @@ const ReelComments = ({ reel, onClose, user }) => {
     if (!newComment.trim()) return;
     try {
       const res = await axios.post(
-        `http://localhost:8000/api/v1/post/${reel?._id}/comment`,
+        `https://instamitr-backend.onrender.com0/api/v1/post/${reel?._id}/comment`,
         { text: newComment },
         {
           headers: {
