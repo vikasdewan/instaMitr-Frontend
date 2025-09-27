@@ -2,6 +2,7 @@ import "./App.css";
 import {
   Login,
   Signup,
+  ResetPassword,
   Home,
   Profile,
   MainLayout,
@@ -72,6 +73,10 @@ const browserRouter = createBrowserRouter([
     path: "/signup",
     element: <Signup />,
   },
+  {
+    path:"/reset-password/:token",
+    element:<ResetPassword/>
+  }
    
  
   

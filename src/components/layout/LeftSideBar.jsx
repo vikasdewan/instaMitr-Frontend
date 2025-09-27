@@ -42,22 +42,41 @@ function LeftSideBar() {
   const [showPopover, setShowPopover] = useState(true);
   const [openSearch, setOpenSearch] = useState(false);
 
-  const logoutHandler = async () => {
-    try {
-      const res = await axios.get(`http://localhost:8000/api/v1/user/logout`, {
-        withCredentials: true,
-      });
-      if (res?.data.status) {
-        dispatch(setAuthUser(null));
-        dispatch(setSelectedPost(null));
-        dispatch(setPosts([]));
-        navigate("/login");
-        toast.success(res.data.message);
+ const logoutHandler = async () => {
+  try {
+    const res = await axios.get(`http://localhost:8000/api/v1/user/logout`, {
+      withCredentials: true,
+    });
+
+    if (res?.data.status) {
+      // clear Redux/local state
+      dispatch(setAuthUser(null));
+      dispatch(setSelectedPost(null));
+      dispatch(setPosts([]));
+      localStorage.removeItem("authUser");
+
+      // ---- GOOGLE LOGOUT FIX ----
+      if (window.google?.accounts?.id) {
+        // Stop auto-login
+        window.google.accounts.id.disableAutoSelect();
+
+        // Revoke token for this email (important!)
+        if (res.data.user?.email) {
+          window.google.accounts.id.revoke(res.data.user.email, () => {
+            console.log("Google session revoked");
+          });
+        }
       }
-    } catch (error) {
-      toast.error(error.response?.data?.message);
+
+      navigate("/login");
+      toast.success(res.data.message);
     }
-  };
+  } catch (error) {
+    toast.error(error.response?.data?.message || "Logout failed");
+  }
+};
+
+
 
   const sidebarHandler = (textType) => {
     console.log(`sidebarHandler called with textType: ${textType}`);
@@ -93,7 +112,7 @@ function LeftSideBar() {
     {
       icon: (
         <Avatar className="w-8 h-8">
-          <AvatarImage src={user?.profileImage} alt="@shadcn" />
+          <AvatarImage src={user?.profileImage} alt="@shadcn"/>
           <AvatarFallback>IM</AvatarFallback>
         </Avatar>
       ),

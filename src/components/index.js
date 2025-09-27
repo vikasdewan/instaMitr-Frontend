@@ -1,4 +1,4 @@
-import { Login, Signup } from "./auth/index.js";
+import { Login, Signup , ResetPassword } from "./auth/index.js";
 import { ChatPage, Messages } from "./chat/index.js";
 import {
   CommentSection,
@@ -38,6 +38,7 @@ import { ReelComments, Reels } from "./reels/index.js";
 export {
   Login,
   Signup,
+  ResetPassword,
   ChatPage,
   Messages,
   CommentSection,
