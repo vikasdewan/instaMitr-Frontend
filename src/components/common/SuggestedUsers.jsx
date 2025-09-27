@@ -18,7 +18,7 @@ function SuggestedUsers() {
   const handleFollow = async (suggUserId) => {
     try {
       const response = await axios.post(
-        `https://instamitr-backend.onrender.com0/api/v1/user/followorunfollow/${suggUserId}`,
+        `https://instamitr-backend.onrender.com/api/v1/user/followorunfollow/${suggUserId}`,
         {},
         {
           withCredentials: true,

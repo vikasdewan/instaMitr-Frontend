@@ -41,7 +41,7 @@ import { APP_BASE_URL } from "@/config.js";
   const handleReact = async (messageId, emoji) => {
     try {
       const res = await fetch(
-        `https://instamitr-backend.onrender.com0/api/v1/message/react/${messageId}`,
+        `https://instamitr-backend.onrender.com/api/v1/message/react/${messageId}`,
         {
           method: "POST",
           credentials: "include",

@@ -44,7 +44,7 @@ function LeftSideBar() {
 
  const logoutHandler = async () => {
   try {
-    const res = await axios.get(`https://instamitr-backend.onrender.com0/api/v1/user/logout`, {
+    const res = await axios.get(`https://instamitr-backend.onrender.com/api/v1/user/logout`, {
       withCredentials: true,
     });
 
