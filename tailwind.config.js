@@ -28,6 +28,10 @@ export default {
       },
 
       colors: {},
+      fontFamily: {
+      logo: ['Cinzel', 'serif'],
+      inter: ['Inter', 'sans-serif'],
+    },
     },
 
     variants: {

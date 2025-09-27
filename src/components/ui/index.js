@@ -37,7 +37,21 @@ import {
   SheetFooter,
   SheetTitle,
   SheetDescription,
-} from "./sheet.jsx"
+} from "./sheet.jsx";
+
+import {
+  Card,
+  CardHeader,
+  CardFooter,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "./card.jsx";
+
+import {
+  ScrollArea,
+  ScrollBar,
+} from "./scroll-area.jsx";
 
 export {
   Avatar,
@@ -79,4 +93,12 @@ export {
   SheetFooter,
   SheetTitle,
   SheetDescription,
+  Card,
+  CardHeader,
+  CardFooter,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  ScrollArea,
+  ScrollBar,
 };
