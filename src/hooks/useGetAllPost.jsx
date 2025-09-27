@@ -2,7 +2,7 @@ import { setPosts } from "@/redux/postSlice";
 import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
- 
+import { APP_BASE_URL } from "@/config.js"; 
 
 const useGetAllPost = () => {
   const dispatch = useDispatch(); //basically kuch chij bhejne ka kaam karta hai
@@ -20,7 +20,7 @@ const useGetAllPost = () => {
   useEffect(() => {
     const fetchAllPost = async () => {
       try {
-        const res = await axios.get(`process.env.BACKEND_URL/api/v1/post/all`, {
+        const res = await axios.get(`process.env.${APP_BASE_URL}/api/v1/post/all`, {
           withCredentials: true,
         });
         

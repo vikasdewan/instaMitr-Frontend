@@ -29,7 +29,7 @@ import {
 } from "@/redux/authSlice";
 import { Smile } from "lucide-react";
 import EmojiPicker from "emoji-picker-react";
- 
+import { APP_BASE_URL } from "@/config.js";  
 
 function CommentDialog({ openComment, setOpenComment }) {
   const [text, setText] = useState("");
@@ -63,7 +63,7 @@ function CommentDialog({ openComment, setOpenComment }) {
   const sendMessageHandler = async () => {
     try {
       const res = await axios.post(
-        `process.env.BACKEND_URL/api/v1/post/${selectedPost?._id}/comment`,
+        `process.env.${APP_BASE_URL}/api/v1/post/${selectedPost?._id}/comment`,
         { text },
         {
           headers: {
@@ -107,7 +107,7 @@ function CommentDialog({ openComment, setOpenComment }) {
     try {
       // console.log("follow/unfollow button clicked")
       const response = await axios.post(
-        `process.env.BACKEND_URL/api/v1/user/followorunfollow/${selectedPost?.author?._id}`,
+        `process.env.${APP_BASE_URL}/api/v1/user/followorunfollow/${selectedPost?.author?._id}`,
         {}, // No body data required
         {
           withCredentials: true, // Send cookies with the request
@@ -162,7 +162,7 @@ function CommentDialog({ openComment, setOpenComment }) {
   const deletePostHandler = async () => {
     try {
       const res = await axios.delete(
-        `process.env.BACKEND_URL/api/v1/post/delete/${post?._id}`,
+        `process.env.${APP_BASE_URL}/api/v1/post/delete/${post?._id}`,
         { withCredentials: true }
       );
       if (res.data.success) {

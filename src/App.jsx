@@ -24,7 +24,7 @@ import {
   setlikeNotiList
 } from "@/redux/index.js"
  
- 
+ import { APP_BASE_URL } from "@/config.js"; 
  
 
   
@@ -90,7 +90,7 @@ function App() {
 
   useEffect(()=>{
     if(user){
-      const socketio = io(`process.env.BACKEND_URL` , {
+      const socketio = io(`${APP_BASE_URL}` , {
         query:{
           userId:user?._id
         },

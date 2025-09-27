@@ -27,7 +27,7 @@ import { setAuthUser } from "@/redux/authSlice";
 import { CreatePost } from "../feed/index.js";
 import { useState } from "react";
 import { setPosts, setSelectedPost } from "@/redux/postSlice";
-
+import { APP_BASE_URL } from "@/config.js"; 
  
 
 export function BottomBar() {
@@ -40,7 +40,7 @@ export function BottomBar() {
 
   const logoutHandler = async () => {
     try {
-      const res = await axios.get(`process.env.BACKEND_URL/api/v1/user/logout`, {
+      const res = await axios.get(`process.env.${APP_BASE_URL}/api/v1/user/logout`, {
         withCredentials: true,
       });
       if (res?.data.status) {

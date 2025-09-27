@@ -42,7 +42,7 @@ import {
 } from "@/redux/authSlice";
 import FollowersFollowingDialog from "./FollowersFollowingDialog.jsx";
 import { CommentSection } from "../common/index.js";
- 
+import { APP_BASE_URL } from "@/config.js"; 
 // import { setSelectedUser } from "@/redux/chatSlice";
 
 function Profile() {
@@ -87,7 +87,7 @@ function Profile() {
     try {
       // console.log("follow/unfollow button clicked")
       const response = await axios.post(
-        `process.env.BACKEND_URL/api/v1/user/followorunfollow/${userProfile?._id}`,
+        `process.env.${APP_BASE_URL}/api/v1/user/followorunfollow/${userProfile?._id}`,
         {}, // No body data required
         {
           withCredentials: true, // Send cookies with the request

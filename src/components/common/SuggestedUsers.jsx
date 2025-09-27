@@ -5,7 +5,7 @@ import { setAuthUser, setSuggestedUsers } from "@/redux/authSlice";
 import { toast } from "sonner";
 import axios from "axios";
 import { useState } from "react";
- 
+ import { APP_BASE_URL } from "@/config.js"; 
 
 function SuggestedUsers() {
   const { suggestedUsers, user } = useSelector((store) => store.auth);
@@ -18,7 +18,7 @@ function SuggestedUsers() {
   const handleFollow = async (suggUserId) => {
     try {
       const response = await axios.post(
-        `process.env.BACKEND_URL/api/v1/user/followorunfollow/${suggUserId}`,
+        `process.env.${APP_BASE_URL}/api/v1/user/followorunfollow/${suggUserId}`,
         {},
         {
           withCredentials: true,

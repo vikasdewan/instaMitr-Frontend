@@ -14,6 +14,7 @@ import { setPosts } from "@/redux/postSlice";
 import { toast } from "sonner";
 import EmojiPicker from "emoji-picker-react";
 import { Link } from "react-router-dom";
+import { APP_BASE_URL } from "@/config.js"; 
 
 const ReelComments = ({ reel, onClose, user }) => {
   const [comments, setComments] = useState(reel?.comments || []);
@@ -49,7 +50,7 @@ const ReelComments = ({ reel, onClose, user }) => {
     if (!newComment.trim()) return;
     try {
       const res = await axios.post(
-        `process.env.BACKEND_URL/api/v1/post/${reel?._id}/comment`,
+        `process.env.${APP_BASE_URL}/api/v1/post/${reel?._id}/comment`,
         { text: newComment },
         {
           headers: {

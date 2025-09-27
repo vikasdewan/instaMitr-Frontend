@@ -14,6 +14,7 @@ import {
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/index";
 import { SearchTab } from "../index.js";
 import { Search } from "lucide-react";
+import { APP_BASE_URL } from "@/config.js"; 
 
 const Explore = () => {
   const [posts, setPosts] = useState([]);
@@ -41,7 +42,7 @@ const Explore = () => {
     const fetchPosts = async () => {
       try {
         const response = await axios.get(
-          `process.env.BACKEND_URL/api/v1/post/all`,
+          `process.env.${APP_BASE_URL}/api/v1/post/all`,
           {
             withCredentials: true,
           }

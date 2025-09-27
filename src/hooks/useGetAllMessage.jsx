@@ -3,7 +3,7 @@ import { setPosts } from "@/redux/postSlice";
 import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
- 
+import { APP_BASE_URL } from "@/config.js";  
 
 const useGetAllMessage = () => {
   const {selectedUser} = useSelector(store => store.chat)
@@ -11,7 +11,7 @@ const useGetAllMessage = () => {
   useEffect(() => {
     const fetchAllMessage = async () => {
       try {
-        const res = await axios.get(`process.env.BACKEND_URL/api/v1/message/all/${selectedUser?._id}`, {
+        const res = await axios.get(`process.env.${APP_BASE_URL}/api/v1/message/all/${selectedUser?._id}`, {
           withCredentials: true,
         });
         if (res.data.success) {

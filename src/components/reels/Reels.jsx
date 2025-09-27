@@ -12,7 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/index.js";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "@/redux/postSlice";
 import ReelComments from "./ReelComments";
- 
+import { APP_BASE_URL } from "@/config.js"; 
 
 const Reels = () => {
   const dispatch = useDispatch();
@@ -49,7 +49,7 @@ const Reels = () => {
   useEffect(() => {
     const fetchReels = async () => {
       try {
-        const res = await axios.get(`process.env.BACKEND_URL/api/v1/post/all`, {
+        const res = await axios.get(`process.env.${APP_BASE_URL}/api/v1/post/all`, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -153,7 +153,7 @@ const Reels = () => {
       const action = isLiked ? "dislike" : "like";
 
       const res = await axios.get(
-        `process.env.BACKEND_URL/api/v1/post/${currentReel._id}/${action}`,
+        `process.env.${APP_BASE_URL}/api/v1/post/${currentReel._id}/${action}`,
         { withCredentials: true }
       );
 
