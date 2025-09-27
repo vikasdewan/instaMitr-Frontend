@@ -41,7 +41,7 @@ const Explore = () => {
     const fetchPosts = async () => {
       try {
         const response = await axios.get(
-          `https://instamitr-backend.onrender.com/api/v1/post/all`,
+          `process.env.BACKEND_URL/api/v1/post/all`,
           {
             withCredentials: true,
           }

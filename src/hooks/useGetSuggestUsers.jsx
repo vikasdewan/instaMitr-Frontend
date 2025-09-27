@@ -10,7 +10,7 @@ const useGetSuggestUsers = () => {
   useEffect(() => {
     const fetchSuggestedUsers = async () => {
       try {
-        const res = await axios.get(`https://instamitr-backend.onrender.com/api/v1/user/suggested`, {
+        const res = await axios.get(`process.env.BACKEND_URL/api/v1/user/suggested`, {
           withCredentials: true,
         });
         if (res.data.success) {

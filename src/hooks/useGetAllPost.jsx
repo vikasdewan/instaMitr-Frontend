@@ -20,7 +20,7 @@ const useGetAllPost = () => {
   useEffect(() => {
     const fetchAllPost = async () => {
       try {
-        const res = await axios.get(`https://instamitr-backend.onrender.com/api/v1/post/all`, {
+        const res = await axios.get(`process.env.BACKEND_URL/api/v1/post/all`, {
           withCredentials: true,
         });
         

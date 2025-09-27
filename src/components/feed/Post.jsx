@@ -96,7 +96,7 @@ function Post({ post }) {
     try {
       const action = liked ? "dislike" : "like";
       const res = await axios.get(
-        `https://instamitr-backend.onrender.com/api/v1/post/${post?._id}/${action}`,
+        `process.env.BACKEND_URL/api/v1/post/${post?._id}/${action}`,
         { withCredentials: true }
       );
       if (res.data.success) {
@@ -141,7 +141,7 @@ function Post({ post }) {
   const commentHandler = async () => {
     try {
       const res = await axios.post(
-        `https://instamitr-backend.onrender.com/api/v1/post/${post?._id}/comment`,
+        `process.env.BACKEND_URL/api/v1/post/${post?._id}/comment`,
         { text },
         {
           headers: {
@@ -171,7 +171,7 @@ function Post({ post }) {
   const deletePostHandler = async () => {
     try {
       const res = await axios.delete(
-        `https://instamitr-backend.onrender.com/api/v1/post/delete/${post?._id}`,
+        `process.env.BACKEND_URL/api/v1/post/delete/${post?._id}`,
         { withCredentials: true }
       );
       if (res.data.success) {
@@ -190,7 +190,7 @@ function Post({ post }) {
   const bookmarkHandler = async () => {
     try {
       const res = await axios.get(
-        `https://instamitr-backend.onrender.com/api/v1/post/${post?._id}/bookmark`,
+        `process.env.BACKEND_URL/api/v1/post/${post?._id}/bookmark`,
         { withCredentials: true }
       );
 
@@ -209,7 +209,7 @@ function Post({ post }) {
   const handleFollowToggle = async () => {
     try {
       const response = await axios.post(
-        `https://instamitr-backend.onrender.com/api/v1/user/followorunfollow/${post?.author?._id}`,
+        `process.env.BACKEND_URL/api/v1/user/followorunfollow/${post?.author?._id}`,
         {},
         {
           withCredentials: true,

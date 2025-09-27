@@ -27,7 +27,7 @@ const CommentSection = ({ postId }) => {
     const fetchComments = async () => {
       try {
         const res = await axios.get(
-          `https://instamitr-backend.onrender.com/api/v1/post/${postId}/comment/all`,
+          `process.env.BACKEND_URL/api/v1/post/${postId}/comment/all`,
           { withCredentials: true }
         );
         dispatch(setComments(res.data.comments || []));
@@ -44,7 +44,7 @@ const CommentSection = ({ postId }) => {
     if (!input.trim()) return;
     try {
       const res = await axios.post(
-        `https://instamitr-backend.onrender.com/api/v1/post/${postId}/comment`,
+        `process.env.BACKEND_URL/api/v1/post/${postId}/comment`,
         { text: input },
         {
           headers: { "Content-Type": "application/json" },
