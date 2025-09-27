@@ -42,7 +42,7 @@ const Explore = () => {
     const fetchPosts = async () => {
       try {
         const response = await axios.get(
-          `process.env.${APP_BASE_URL}/api/v1/post/all`,
+          `${APP_BASE_URL}/api/v1/post/all`,
           {
             withCredentials: true,
           }

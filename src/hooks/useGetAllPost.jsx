@@ -20,7 +20,7 @@ const useGetAllPost = () => {
   useEffect(() => {
     const fetchAllPost = async () => {
       try {
-        const res = await axios.get(`process.env.${APP_BASE_URL}/api/v1/post/all`, {
+        const res = await axios.get(`${APP_BASE_URL}/api/v1/post/all`, {
           withCredentials: true,
         });
         

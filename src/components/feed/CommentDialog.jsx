@@ -63,7 +63,7 @@ function CommentDialog({ openComment, setOpenComment }) {
   const sendMessageHandler = async () => {
     try {
       const res = await axios.post(
-        `process.env.${APP_BASE_URL}/api/v1/post/${selectedPost?._id}/comment`,
+        `${APP_BASE_URL}/api/v1/post/${selectedPost?._id}/comment`,
         { text },
         {
           headers: {
@@ -107,7 +107,7 @@ function CommentDialog({ openComment, setOpenComment }) {
     try {
       // console.log("follow/unfollow button clicked")
       const response = await axios.post(
-        `process.env.${APP_BASE_URL}/api/v1/user/followorunfollow/${selectedPost?.author?._id}`,
+        `${APP_BASE_URL}/api/v1/user/followorunfollow/${selectedPost?.author?._id}`,
         {}, // No body data required
         {
           withCredentials: true, // Send cookies with the request
@@ -162,7 +162,7 @@ function CommentDialog({ openComment, setOpenComment }) {
   const deletePostHandler = async () => {
     try {
       const res = await axios.delete(
-        `process.env.${APP_BASE_URL}/api/v1/post/delete/${post?._id}`,
+        `${APP_BASE_URL}/api/v1/post/delete/${post?._id}`,
         { withCredentials: true }
       );
       if (res.data.success) {

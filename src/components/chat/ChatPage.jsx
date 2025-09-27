@@ -38,7 +38,7 @@ export const ChatPage = () => {
   const sendMessageHandler = async (recieverId) => {
     try {
       const res = await axios.post(
-        `process.env.${APP_BASE_URL}/api/v1/message/send/${recieverId}`,
+        `${APP_BASE_URL}/api/v1/message/send/${recieverId}`,
         { textMessage },
         {
           headers: {
@@ -76,7 +76,7 @@ export const ChatPage = () => {
       if (selectedUser) {
         try {
           const res = await axios.get(
-            `process.env.${APP_BASE_URL}/api/v1/message/all/${selectedUser?._id}`,
+            `${APP_BASE_URL}/api/v1/message/all/${selectedUser?._id}`,
             { withCredentials: true }
           );
 

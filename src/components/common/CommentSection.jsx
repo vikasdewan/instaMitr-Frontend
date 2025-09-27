@@ -28,7 +28,7 @@ const CommentSection = ({ postId }) => {
     const fetchComments = async () => {
       try {
         const res = await axios.get(
-          `process.env.${APP_BASE_URL}/api/v1/post/${postId}/comment/all`,
+          `${APP_BASE_URL}/api/v1/post/${postId}/comment/all`,
           { withCredentials: true }
         );
         dispatch(setComments(res.data.comments || []));
@@ -45,7 +45,7 @@ const CommentSection = ({ postId }) => {
     if (!input.trim()) return;
     try {
       const res = await axios.post(
-        `process.env.${APP_BASE_URL}/api/v1/post/${postId}/comment`,
+        `${APP_BASE_URL}/api/v1/post/${postId}/comment`,
         { text: input },
         {
           headers: { "Content-Type": "application/json" },

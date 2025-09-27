@@ -87,7 +87,7 @@ function Profile() {
     try {
       // console.log("follow/unfollow button clicked")
       const response = await axios.post(
-        `process.env.${APP_BASE_URL}/api/v1/user/followorunfollow/${userProfile?._id}`,
+        `${APP_BASE_URL}/api/v1/user/followorunfollow/${userProfile?._id}`,
         {}, // No body data required
         {
           withCredentials: true, // Send cookies with the request

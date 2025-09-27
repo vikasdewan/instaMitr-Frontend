@@ -44,7 +44,7 @@ function LeftSideBar() {
 
  const logoutHandler = async () => {
   try {
-    const res = await axios.get(`process.env.${APP_BASE_URL}/api/v1/user/logout`, {
+    const res = await axios.get(`${APP_BASE_URL}/api/v1/user/logout`, {
       withCredentials: true,
     });
 

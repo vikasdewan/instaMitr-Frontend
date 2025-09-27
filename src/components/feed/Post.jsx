@@ -97,7 +97,7 @@ function Post({ post }) {
     try {
       const action = liked ? "dislike" : "like";
       const res = await axios.get(
-        `process.env.${APP_BASE_URL}/api/v1/post/${post?._id}/${action}`,
+        `${APP_BASE_URL}/api/v1/post/${post?._id}/${action}`,
         { withCredentials: true }
       );
       if (res.data.success) {
@@ -142,7 +142,7 @@ function Post({ post }) {
   const commentHandler = async () => {
     try {
       const res = await axios.post(
-        `process.env.${APP_BASE_URL}/api/v1/post/${post?._id}/comment`,
+        `${APP_BASE_URL}/api/v1/post/${post?._id}/comment`,
         { text },
         {
           headers: {
@@ -172,7 +172,7 @@ function Post({ post }) {
   const deletePostHandler = async () => {
     try {
       const res = await axios.delete(
-        `process.env.${APP_BASE_URL}/api/v1/post/delete/${post?._id}`,
+        `${APP_BASE_URL}/api/v1/post/delete/${post?._id}`,
         { withCredentials: true }
       );
       if (res.data.success) {
@@ -191,7 +191,7 @@ function Post({ post }) {
   const bookmarkHandler = async () => {
     try {
       const res = await axios.get(
-        `process.env.${APP_BASE_URL}/api/v1/post/${post?._id}/bookmark`,
+        `${APP_BASE_URL}/api/v1/post/${post?._id}/bookmark`,
         { withCredentials: true }
       );
 
@@ -210,7 +210,7 @@ function Post({ post }) {
   const handleFollowToggle = async () => {
     try {
       const response = await axios.post(
-        `process.env.${APP_BASE_URL}/api/v1/user/followorunfollow/${post?.author?._id}`,
+        `${APP_BASE_URL}/api/v1/user/followorunfollow/${post?.author?._id}`,
         {},
         {
           withCredentials: true,

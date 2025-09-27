@@ -10,7 +10,7 @@ const useGetUserProfile = (userId) => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const res = await axios.get(`process.env.${APP_BASE_URL}/api/v1/user/${userId}/profile`, {
+        const res = await axios.get(`${APP_BASE_URL}/api/v1/user/${userId}/profile`, {
           withCredentials: true,
         });
         if (res.data.success) {

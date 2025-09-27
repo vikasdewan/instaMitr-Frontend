@@ -41,7 +41,7 @@ import { Smile } from "lucide-react";
   const handleReact = async (messageId, emoji) => {
     try {
       const res = await fetch(
-        `process.env.${APP_BASE_URL}/api/v1/message/react/${messageId}`,
+        `${APP_BASE_URL}/api/v1/message/react/${messageId}`,
         {
           method: "POST",
           credentials: "include",

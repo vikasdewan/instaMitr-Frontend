@@ -18,7 +18,7 @@ function SuggestedUsers() {
   const handleFollow = async (suggUserId) => {
     try {
       const response = await axios.post(
-        `process.env.${APP_BASE_URL}/api/v1/user/followorunfollow/${suggUserId}`,
+        `${APP_BASE_URL}/api/v1/user/followorunfollow/${suggUserId}`,
         {},
         {
           withCredentials: true,

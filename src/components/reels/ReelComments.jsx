@@ -50,7 +50,7 @@ const ReelComments = ({ reel, onClose, user }) => {
     if (!newComment.trim()) return;
     try {
       const res = await axios.post(
-        `process.env.${APP_BASE_URL}/api/v1/post/${reel?._id}/comment`,
+        `${APP_BASE_URL}/api/v1/post/${reel?._id}/comment`,
         { text: newComment },
         {
           headers: {

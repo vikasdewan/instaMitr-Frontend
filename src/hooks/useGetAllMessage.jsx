@@ -11,7 +11,7 @@ const useGetAllMessage = () => {
   useEffect(() => {
     const fetchAllMessage = async () => {
       try {
-        const res = await axios.get(`process.env.${APP_BASE_URL}/api/v1/message/all/${selectedUser?._id}`, {
+        const res = await axios.get(`${APP_BASE_URL}/api/v1/message/all/${selectedUser?._id}`, {
           withCredentials: true,
         });
         if (res.data.success) {

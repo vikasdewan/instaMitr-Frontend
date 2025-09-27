@@ -25,9 +25,9 @@ import {
 } from "@/redux/index.js"
  
  import { APP_BASE_URL } from "@/config.js"; 
- 
+ import dotenv from "dotenv";
 
-  
+ 
 
 const browserRouter = createBrowserRouter([
   {
