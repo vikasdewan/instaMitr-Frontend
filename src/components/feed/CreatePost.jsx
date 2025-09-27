@@ -20,7 +20,7 @@ import { toast } from "sonner";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "@/redux/postSlice";
-import { APP_BASE_URL } from "@/config.js";
+ 
 
 function CreatePost({ open, setOpen }) {
   const imageRef = useRef();

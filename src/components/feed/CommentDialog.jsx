@@ -29,7 +29,7 @@ import {
 } from "@/redux/authSlice";
 import { Smile } from "lucide-react";
 import EmojiPicker from "emoji-picker-react";
-import { APP_BASE_URL } from "@/config.js";
+ 
 
 function CommentDialog({ openComment, setOpenComment }) {
   const [text, setText] = useState("");

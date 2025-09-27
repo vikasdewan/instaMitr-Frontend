@@ -11,7 +11,7 @@ import { Messages } from "./index.js";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import EmojiPicker from "emoji-picker-react";
-import { APP_BASE_URL } from "@/config.js";
+ 
 
 export const ChatPage = () => {
   const [textMessage, setTextMessage] = useState("");

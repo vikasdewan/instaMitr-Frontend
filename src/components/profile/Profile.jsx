@@ -42,7 +42,7 @@ import {
 } from "@/redux/authSlice";
 import FollowersFollowingDialog from "./FollowersFollowingDialog.jsx";
 import { CommentSection } from "../common/index.js";
-import { APP_BASE_URL } from "@/config.js";
+ 
 // import { setSelectedUser } from "@/redux/chatSlice";
 
 function Profile() {

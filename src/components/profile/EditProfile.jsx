@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
 import { setAuthUser } from "@/redux/authSlice";
-import { APP_BASE_URL } from "@/config.js";
+ 
 
 export const EditProfile = () => {
   const [loading, setLoading] = useState(false);

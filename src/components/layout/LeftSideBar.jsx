@@ -31,7 +31,7 @@ import { CreatePost } from "../feed/index.js";
 import { setPosts, setSelectedPost } from "@/redux/postSlice";
 import { SearchTab } from "../index.js";
 import { setlikeNotiList } from "@/redux/realTimeNotiSlice";
-import { APP_BASE_URL } from "@/config.js";
+ 
 
 function LeftSideBar() {
   const navigate = useNavigate();

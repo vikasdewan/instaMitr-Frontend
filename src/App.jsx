@@ -23,7 +23,7 @@ import {
   setOnlineUsers,
   setlikeNotiList
 } from "@/redux/index.js"
-import { APP_BASE_URL } from "./config";
+ 
  
  
 

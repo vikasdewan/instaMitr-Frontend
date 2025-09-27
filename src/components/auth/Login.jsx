@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAuthUser } from "@/redux/index.js";
 import { Loader } from "../common/index.js";
 import InstaImage from "../../assets/image.png";
-import { APP_BASE_URL } from "@/config.js";
+ 
 import {
   Dialog,
   DialogContent,
@@ -38,7 +38,7 @@ function Login() {
     e.preventDefault();
     try {
       setloading(true);
-      const res = await axios.post(`${APP_BASE_URL}/api/v1/user/login`, input, {
+      const res = await axios.post(`${process.env.BACKEND_URL}/api/v1/user/login`, input, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });

@@ -12,7 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/index.js";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "@/redux/postSlice";
 import ReelComments from "./ReelComments";
-import { APP_BASE_URL } from "@/config.js";
+ 
 
 const Reels = () => {
   const dispatch = useDispatch();

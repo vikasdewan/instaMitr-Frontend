@@ -4,7 +4,7 @@ import { Input, Button } from "../ui/index.js";
 import { toast } from "sonner";
 import axios from "axios";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { APP_BASE_URL } from "@/config.js";
+ 
 
 function ResetPassword() {
   const { token } = useParams(); // 👈 get token from URL

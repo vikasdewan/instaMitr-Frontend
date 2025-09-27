@@ -2,7 +2,7 @@ import { setPosts } from "@/redux/postSlice";
 import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { APP_BASE_URL } from "@/config";
+ 
 
 const useGetAllPost = () => {
   const dispatch = useDispatch(); //basically kuch chij bhejne ka kaam karta hai

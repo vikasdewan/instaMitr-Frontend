@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Loader2, Eye, EyeOff, X } from "lucide-react";
 import { useSelector } from "react-redux";
 import InstaImage from "../../assets/image.png";
-import { APP_BASE_URL } from "@/config.js";
+ 
 
 function Signup() {
   const [input, setInput] = useState({ username: "", password: "", email: "" });

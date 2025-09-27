@@ -28,8 +28,7 @@ import { CreatePost } from "../feed/index.js";
 import { useState } from "react";
 import { setPosts, setSelectedPost } from "@/redux/postSlice";
 
-import { setlikeNotiList } from "@/redux/realTimeNotiSlice";
-import { APP_BASE_URL } from "@/config.js";
+ 
 
 export function BottomBar() {
   const navigate = useNavigate();

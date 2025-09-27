@@ -10,7 +10,7 @@ import {
   CarouselPrevious,
 
 } from "../ui/index";
-import { APP_BASE_URL } from "@/config.js";
+ 
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/index";
 import { SearchTab } from "../index.js";
 import { Search } from "lucide-react";
